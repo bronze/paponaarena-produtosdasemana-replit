@@ -45,8 +45,8 @@ export default function Dashboard() {
   const statCards = [
     { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500" },
     { label: "Produtos", value: stats.totalProducts, icon: Package, color: "text-green-500" },
-    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, color: "text-purple-500" },
     { label: "Pessoas", value: stats.totalPeople, icon: Users, color: "text-orange-500" },
+    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, color: "text-purple-500" },
   ];
 
   return (
