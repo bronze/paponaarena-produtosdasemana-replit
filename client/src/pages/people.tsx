@@ -92,6 +92,10 @@ function PeopleList() {
                   </span>
                 </div>
               </div>
+              <div className="flex flex-col items-center shrink-0">
+                <span className="text-lg font-bold" data-testid={`text-mentions-${person.id}`}>{person.mentionCount}</span>
+                <span className="text-[10px] text-muted-foreground leading-tight">menções</span>
+              </div>
             </div>
           </Link>
         ))}
