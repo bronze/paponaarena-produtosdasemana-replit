@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ExternalLink, Mic, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,18 +12,42 @@ import {
   getParticipantsForEpisode,
 } from "@/lib/data-utils";
 
+const YEAR_FILTERS = ["Todos", "2026", "2025", "2024"] as const;
+
 function EpisodeList() {
+  const [selectedYear, setSelectedYear] = useState<string>("Todos");
   const sorted = [...episodes].sort((a, b) => b.date.localeCompare(a.date));
+  const filtered = selectedYear === "Todos"
+    ? sorted
+    : sorted.filter((ep) => ep.date.startsWith(selectedYear));
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Episódios</h1>
-        <p className="text-muted-foreground">{episodes.length} episódios do podcast</p>
+        <p className="text-muted-foreground">
+          {selectedYear === "Todos"
+            ? `${episodes.length} episódios do podcast`
+            : `${filtered.length} de ${episodes.length} episódios`}
+        </p>
+      </div>
+
+      <div className="flex gap-2">
+        {YEAR_FILTERS.map((year) => (
+          <Button
+            key={year}
+            variant={selectedYear === year ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSelectedYear(year)}
+            data-testid={`button-filter-${year.toLowerCase()}`}
+          >
+            {year}
+          </Button>
+        ))}
       </div>
 
       <div className="grid gap-3">
-        {sorted.map((ep) => {
+        {filtered.map((ep) => {
           const mentionCount = getMentionsForEpisode(ep.id).length;
           const participants = getParticipantsForEpisode(ep.id);
           return (
