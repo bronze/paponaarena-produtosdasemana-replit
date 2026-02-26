@@ -1,10 +1,18 @@
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ExternalLink, TrendingUp } from "lucide-react";
+import { ArrowLeft, ExternalLink, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useState, useMemo } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -22,15 +30,67 @@ import {
   getChildProducts,
 } from "@/lib/data-utils";
 
+type SortColumn = "name" | "mentions" | "episodes";
+type SortDir = "asc" | "desc";
+
 function ProductList() {
   const [search, setSearch] = useState("");
-  const allProducts = getLeaderboardProducts();
+  const [sortCol, setSortCol] = useState<SortColumn>("mentions");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const productsWithEpisodes = useMemo(() => {
+    const all = getLeaderboardProducts();
+    return all.map((p) => {
+      const m = getMentionsForProduct(p.id);
+      const uniqueEpisodes = new Set(m.map((x) => x.episodeId));
+      return { ...p, episodeCount: uniqueEpisodes.size };
+    });
+  }, []);
+
   const filtered = search
-    ? allProducts.filter((p) =>
+    ? productsWithEpisodes.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.category.toLowerCase().includes(search.toLowerCase())
       )
-    : allProducts;
+    : productsWithEpisodes;
+
+  const sorted = useMemo(() => {
+    const arr = [...filtered];
+    arr.sort((a, b) => {
+      let cmp = 0;
+      if (sortCol === "name") {
+        cmp = a.name.localeCompare(b.name, "pt-BR");
+      } else if (sortCol === "mentions") {
+        cmp = a.mentionCount - b.mentionCount;
+      } else {
+        cmp = a.episodeCount - b.episodeCount;
+      }
+      if (cmp === 0 && sortCol !== "mentions") {
+        cmp = a.mentionCount - b.mentionCount;
+      }
+      if (cmp === 0 && sortCol !== "episodes") {
+        cmp = a.episodeCount - b.episodeCount;
+      }
+      return sortDir === "desc" ? -cmp : cmp;
+    });
+    return arr;
+  }, [filtered, sortCol, sortDir]);
+
+  function handleSort(col: SortColumn) {
+    if (sortCol === col) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortCol(col);
+      setSortDir(col === "name" ? "asc" : "desc");
+    }
+  }
+
+  function SortIcon({ col }: { col: SortColumn }) {
+    if (sortCol !== col) return <ArrowUpDown className="ml-1 h-3 w-3 opacity-40" />;
+    return sortDir === "asc"
+      ? <ArrowUp className="ml-1 h-3 w-3" />
+      : <ArrowDown className="ml-1 h-3 w-3" />;
+  }
 
   return (
     <div className="space-y-6">
@@ -47,32 +107,62 @@ function ProductList() {
         data-testid="input-search"
       />
 
-      <div className="grid gap-2">
-        {filtered.map((product, i) => (
-          <Link key={product.id} href={`/products/${product.id}`}>
-            <div
-              className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
-              data-testid={`card-product-${product.id}`}
-            >
-              <span className="text-lg font-bold text-muted-foreground w-8 text-right">
-                {i + 1}
-              </span>
-              <div className="flex-1 min-w-0">
-                <span className="font-medium text-sm">{product.name}</span>
-                <div className="flex items-center gap-2 mt-0.5">
+      <div className="rounded-lg border border-border/60">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-12 text-center">#</TableHead>
+              <TableHead>
+                <button
+                  className="flex items-center text-xs font-medium uppercase tracking-wide"
+                  onClick={() => handleSort("name")}
+                  data-testid="sort-name"
+                >
+                  Nome <SortIcon col="name" />
+                </button>
+              </TableHead>
+              <TableHead className="hidden sm:table-cell">Categoria</TableHead>
+              <TableHead className="text-right">
+                <button
+                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  onClick={() => handleSort("mentions")}
+                  data-testid="sort-mentions"
+                >
+                  Menções <SortIcon col="mentions" />
+                </button>
+              </TableHead>
+              <TableHead className="text-right">
+                <button
+                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  onClick={() => handleSort("episodes")}
+                  data-testid="sort-episodes"
+                >
+                  Episódios <SortIcon col="episodes" />
+                </button>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sorted.map((product, i) => (
+              <TableRow key={product.id} className="cursor-pointer" data-testid={`row-product-${product.id}`}>
+                <TableCell className="text-center font-bold text-muted-foreground">{i + 1}</TableCell>
+                <TableCell>
+                  <Link href={`/products/${product.id}`} className="font-medium text-sm hover:underline" data-testid={`link-product-${product.id}`}>
+                    {product.name}
+                  </Link>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
                   <Badge variant="outline" className="text-xs">{product.category}</Badge>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <TrendingUp className="h-3 w-3 text-muted-foreground" />
-                <span className="text-sm font-semibold">{product.mentionCount}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
+                </TableCell>
+                <TableCell className="text-right font-semibold">{product.mentionCount}</TableCell>
+                <TableCell className="text-right text-muted-foreground">{product.episodeCount}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
-      {filtered.length === 0 && (
+      {sorted.length === 0 && (
         <p className="text-center text-muted-foreground py-8">Nenhum produto encontrado.</p>
       )}
     </div>
