@@ -1,4 +1,4 @@
-import { Link, useParams } from "wouter";
+import { Link, useParams, useLocation } from "wouter";
 import { ArrowLeft, ExternalLink, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +34,7 @@ type SortColumn = "name" | "mentions" | "episodes";
 type SortDir = "asc" | "desc";
 
 function ProductList() {
+  const [, navigate] = useLocation();
   const [search, setSearch] = useState("");
   const [sortCol, setSortCol] = useState<SortColumn>("mentions");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -144,12 +145,10 @@ function ProductList() {
           </TableHeader>
           <TableBody>
             {sorted.map((product, i) => (
-              <TableRow key={product.id} className="cursor-pointer" data-testid={`row-product-${product.id}`}>
+              <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/products/${product.id}`)} data-testid={`row-product-${product.id}`}>
                 <TableCell className="text-center font-bold text-muted-foreground">{i + 1}</TableCell>
-                <TableCell>
-                  <Link href={`/products/${product.id}`} className="font-medium text-sm hover:underline" data-testid={`link-product-${product.id}`}>
-                    {product.name}
-                  </Link>
+                <TableCell className="font-medium text-sm" data-testid={`link-product-${product.id}`}>
+                  {product.name}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   <Badge variant="outline" className="text-xs">{product.category}</Badge>
