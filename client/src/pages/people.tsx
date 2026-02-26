@@ -1,10 +1,11 @@
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ExternalLink, TrendingUp } from "lucide-react";
+import { ArrowLeft, ExternalLink, User, Package, Mic } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useState, useMemo } from "react";
 import {
   people,
   getMentionsForPerson,
@@ -12,14 +13,33 @@ import {
   getEpisode,
   getPersonMentionCount,
 } from "@/lib/data-utils";
+import arthurImg from "@assets/arthur_1772132984125.png";
+import aquisImg from "@assets/aiquis_1772132984122.png";
+
+const hostAvatars: Record<string, string> = {
+  arthur: arthurImg,
+  aiquis: aquisImg,
+};
 
 function PeopleList() {
   const [search, setSearch] = useState("");
 
-  const sorted = [...people]
-    .map((p) => ({ ...p, mentionCount: getPersonMentionCount(p.id) }))
-    .filter((p) => p.mentionCount > 0)
-    .sort((a, b) => b.mentionCount - a.mentionCount);
+  const sorted = useMemo(() => {
+    return [...people]
+      .map((p) => {
+        const m = getMentionsForPerson(p.id);
+        const uniqueProducts = new Set(m.map((x) => x.productId));
+        const uniqueEpisodes = new Set(m.map((x) => x.episodeId));
+        return {
+          ...p,
+          mentionCount: m.length,
+          productCount: uniqueProducts.size,
+          episodeCount: uniqueEpisodes.size,
+        };
+      })
+      .filter((p) => p.mentionCount > 0)
+      .sort((a, b) => b.mentionCount - a.mentionCount);
+  }, []);
 
   const filtered = search
     ? sorted.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
@@ -40,24 +60,39 @@ function PeopleList() {
         data-testid="input-search"
       />
 
-      <div className="grid gap-2">
+      <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((person, i) => (
           <Link key={person.id} href={`/people/${person.id}`}>
             <div
               className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
               data-testid={`card-person-${person.id}`}
             >
-              <span className="text-lg font-bold text-muted-foreground w-8 text-right">{i + 1}</span>
+              <span className="text-lg font-bold text-muted-foreground w-8 text-right shrink-0">{i + 1}</span>
+              <Avatar className="h-12 w-12 shrink-0">
+                {hostAvatars[person.id] ? (
+                  <AvatarImage src={hostAvatars[person.id]} alt={person.name} />
+                ) : null}
+                <AvatarFallback className="text-sm font-semibold">
+                  {person.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
               <div className="flex-1 min-w-0">
-                <span className="font-medium text-sm">{person.name}</span>
-                {(person.id === "arthur" || person.id === "aiquis") && (
-                  <Badge variant="secondary" className="ml-2 text-xs">Host</Badge>
-                )}
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-sm truncate">{person.name}</span>
+                  {(person.id === "arthur" || person.id === "aiquis") && (
+                    <Badge variant="secondary" className="text-xs shrink-0">Host</Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1" data-testid={`text-products-${person.id}`}>
+                    <Package className="h-3 w-3" /> {person.productCount} produtos
+                  </span>
+                  <span className="flex items-center gap-1" data-testid={`text-episodes-${person.id}`}>
+                    <Mic className="h-3 w-3" /> {person.episodeCount} eps
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <TrendingUp className="h-3 w-3 text-muted-foreground" />
-                <span className="text-sm font-semibold">{person.mentionCount}</span>
-              </div>
+              <span className="text-sm font-semibold shrink-0" data-testid={`text-mentions-${person.id}`}>{person.mentionCount}</span>
             </div>
           </Link>
         ))}
