@@ -227,7 +227,7 @@ function PersonDetail() {
             <CardTitle className="text-base">Episódios ({episodesParticipated.size})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2">
               {Array.from(episodesParticipated)
                 .sort((a, b) => b - a)
                 .map((epId) => {
