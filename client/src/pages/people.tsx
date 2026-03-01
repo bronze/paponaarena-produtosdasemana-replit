@@ -8,6 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useState, useMemo } from "react";
 import {
   people,
+  episodes,
   getMentionsForPerson,
   getProduct,
   getEpisode,
@@ -21,10 +22,15 @@ const hostAvatars: Record<string, string> = {
   aiquis: aquisImg,
 };
 
+type PeopleSortMode = "mentions" | "alpha";
+
 function PeopleList() {
   const [search, setSearch] = useState("");
+  const [sortMode, setSortMode] = useState<PeopleSortMode>("mentions");
 
-  const sorted = useMemo(() => {
+  const totalEpisodes = episodes.length;
+
+  const allPeople = useMemo(() => {
     return [...people]
       .map((p) => {
         const m = getMentionsForPerson(p.id);
@@ -37,28 +43,54 @@ function PeopleList() {
           episodeCount: uniqueEpisodes.size,
         };
       })
-      .filter((p) => p.mentionCount > 0)
-      .sort((a, b) => b.mentionCount - a.mentionCount);
+      .filter((p) => p.mentionCount > 0);
   }, []);
 
-  const filtered = search
-    ? sorted.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
-    : sorted;
+  const filtered = useMemo(() => {
+    let list = allPeople;
+    if (search) {
+      list = list.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
+    }
+    if (sortMode === "alpha") {
+      return [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+    }
+    return [...list].sort((a, b) => b.mentionCount - a.mentionCount);
+  }, [allPeople, search, sortMode]);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Pessoas</h1>
-        <p className="text-muted-foreground">{sorted.length} participantes do podcast</p>
+        <p className="text-muted-foreground">{allPeople.length} participantes do podcast</p>
       </div>
 
-      <Input
-        placeholder="Buscar pessoa..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="max-w-sm"
-        data-testid="input-search"
-      />
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+        <Input
+          placeholder="Buscar pessoa..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-sm"
+          data-testid="input-search"
+        />
+        <div className="flex gap-1">
+          <Button
+            variant={sortMode === "mentions" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSortMode("mentions")}
+            data-testid="sort-mentions"
+          >
+            Mais menções
+          </Button>
+          <Button
+            variant={sortMode === "alpha" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSortMode("alpha")}
+            data-testid="sort-alpha"
+          >
+            Alfabética
+          </Button>
+        </div>
+      </div>
 
       <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((person, i) => (
@@ -88,7 +120,7 @@ function PeopleList() {
                     <Package className="h-3 w-3" /> {person.productCount} produtos
                   </span>
                   <span className="flex items-center gap-1" data-testid={`text-episodes-${person.id}`}>
-                    <Mic className="h-3 w-3" /> {person.episodeCount} eps
+                    <Mic className="h-3 w-3" /> {person.episodeCount} / {totalEpisodes} eps
                   </span>
                 </div>
               </div>
