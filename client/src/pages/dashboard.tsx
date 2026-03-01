@@ -50,10 +50,10 @@ export default function Dashboard() {
   const latestProductCount = new Set(latestMentions.map((m) => m.productId)).size;
 
   const statCards = [
-    { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500" },
-    { label: "Produtos", value: stats.totalProducts, icon: Package, color: "text-green-500" },
-    { label: "Pessoas", value: stats.totalPeople, icon: Users, color: "text-orange-500" },
-    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, color: "text-purple-500" },
+    { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500", href: "/episodes" },
+    { label: "Produtos", value: stats.totalProducts, icon: Package, color: "text-green-500", href: "/products" },
+    { label: "Pessoas", value: stats.totalPeople, icon: Users, color: "text-orange-500", href: "/people" },
+    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, color: "text-purple-500", href: "/products" },
   ];
 
   return (
@@ -86,17 +86,19 @@ export default function Dashboard() {
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className="text-2xl font-bold" data-testid={`stat-${stat.label.toLowerCase()}`}>{stat.value}</p>
+          <Link key={stat.label} href={stat.href}>
+            <Card className="cursor-pointer transition-colors hover:bg-accent/50">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                    <p className="text-2xl font-bold" data-testid={`stat-${stat.label.toLowerCase()}`}>{stat.value}</p>
+                  </div>
+                  <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
                 </div>
-                <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
