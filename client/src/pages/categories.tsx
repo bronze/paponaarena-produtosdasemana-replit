@@ -1,8 +1,10 @@
 import { Link, useParams } from "wouter";
-import { ArrowLeft, TrendingUp } from "lucide-react";
+import { ArrowLeft, ChevronRight, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState, useMemo } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -13,59 +15,99 @@ import {
 } from "recharts";
 import { getCategoryStats, getProductsForCategory } from "@/lib/data-utils";
 
+type SortMode = "mentions" | "alpha";
+
 function CategoryList() {
-  const stats = getCategoryStats();
+  const [search, setSearch] = useState("");
+  const [sortMode, setSortMode] = useState<SortMode>("mentions");
+
+  const statsWithProducts = useMemo(() => {
+    return getCategoryStats().map((cat) => {
+      const products = getProductsForCategory(cat.category);
+      return { ...cat, productCount: products.length, topProducts: products.slice(0, 3) };
+    });
+  }, []);
+
+  const filtered = useMemo(() => {
+    let list = statsWithProducts;
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(
+        (cat) =>
+          cat.category.toLowerCase().includes(q) ||
+          cat.topProducts.some((p) => p.name.toLowerCase().includes(q))
+      );
+    }
+    if (sortMode === "alpha") {
+      list = [...list].sort((a, b) => a.category.localeCompare(b.category, "pt-BR"));
+    }
+    return list;
+  }, [statsWithProducts, search, sortMode]);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Categorias</h1>
-        <p className="text-muted-foreground">{stats.length} categorias de produtos</p>
+        <p className="text-muted-foreground">Categorias de produtos mencionados no podcast</p>
       </div>
 
-      <Card>
-        <CardContent className="pt-6">
-          <ResponsiveContainer width="100%" height={Math.max(300, stats.length * 30)}>
-            <BarChart data={stats} layout="vertical" margin={{ left: 0, right: 16 }}>
-              <XAxis type="number" />
-              <YAxis
-                type="category"
-                dataKey="category"
-                width={130}
-                tick={{ fontSize: 11 }}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: 8,
-                  color: "hsl(var(--card-foreground))",
-                }}
-              />
-              <Bar dataKey="count" fill="hsl(var(--chart-3))" radius={[0, 4, 4, 0]} name="Menções" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+        <Input
+          placeholder="Buscar categoria ou produto..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-sm"
+          data-testid="input-search"
+        />
+        <div className="flex gap-1">
+          <Button
+            variant={sortMode === "mentions" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSortMode("mentions")}
+            data-testid="sort-mentions"
+          >
+            Mais menções
+          </Button>
+          <Button
+            variant={sortMode === "alpha" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSortMode("alpha")}
+            data-testid="sort-alpha"
+          >
+            Alfabética
+          </Button>
+        </div>
+      </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((cat) => (
+      <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        {filtered.map((cat) => (
           <Link key={cat.category} href={`/categories/${encodeURIComponent(cat.category)}`}>
             <div
-              className="p-4 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
+              className="flex items-center gap-3 p-4 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer h-full"
               data-testid={`card-category-${cat.category}`}
             >
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium text-sm">{cat.category}</h3>
-                <div className="flex items-center gap-1">
-                  <TrendingUp className="h-3 w-3 text-muted-foreground" />
-                  <span className="text-sm font-semibold">{cat.count}</span>
+              <div className="flex-1 min-w-0 space-y-2">
+                <h3 className="font-semibold text-sm">{cat.category}</h3>
+                <p className="text-xs text-muted-foreground">
+                  {cat.count} menções · {cat.productCount} produtos
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {cat.topProducts.map((p) => (
+                    <Badge key={p.id} variant="secondary" className="text-[10px] font-normal">
+                      {p.name} ({p.mentionCount})
+                    </Badge>
+                  ))}
                 </div>
               </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
             </div>
           </Link>
         ))}
       </div>
+
+      {filtered.length === 0 && (
+        <p className="text-center text-muted-foreground py-8">Nenhuma categoria encontrada.</p>
+      )}
     </div>
   );
 }
