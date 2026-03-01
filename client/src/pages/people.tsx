@@ -227,16 +227,31 @@ function PersonDetail() {
             <CardTitle className="text-base">Episódios ({episodesParticipated.size})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {Array.from(episodesParticipated)
                 .sort((a, b) => b - a)
                 .map((epId) => {
                   const episode = getEpisode(epId);
+                  const epMentions = personMentions.filter((m) => m.episodeId === epId);
                   return (
                     <Link key={epId} href={`/episodes/${epId}`}>
-                      <div className="flex items-center gap-2 py-1.5 border-b border-border/50 last:border-0 cursor-pointer hover:bg-accent/30 -mx-2 px-2 rounded">
-                        <Badge variant="outline" className="text-xs shrink-0">#{epId}</Badge>
-                        <span className="text-sm truncate">{episode?.title || `Episódio ${epId}`}</span>
+                      <div className="py-2 border-b border-border/50 last:border-0 cursor-pointer hover:bg-accent/30 -mx-2 px-2 rounded space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs shrink-0">#{epId}</Badge>
+                          <span className="text-sm truncate">{episode?.title || `Episódio ${epId}`}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1 pl-1">
+                          {epMentions.map((m) => {
+                            const product = getProduct(m.productId);
+                            const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
+                            return (
+                              <Badge key={m.id} variant="secondary" className="text-[10px] font-normal">
+                                {product?.name || m.productId}
+                                {isCombo && <span className="ml-1 opacity-60">(combo)</span>}
+                              </Badge>
+                            );
+                          })}
+                        </div>
                       </div>
                     </Link>
                   );
