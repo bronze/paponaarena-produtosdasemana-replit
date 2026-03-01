@@ -1,5 +1,5 @@
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ExternalLink, User, Package, Mic } from "lucide-react";
+import { ArrowLeft, ExternalLink, User, Package, Mic, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -168,34 +168,56 @@ function PersonDetail() {
 
   const episodesParticipated = new Set(personMentions.map((m) => m.episodeId));
 
+  const statCards = [
+    { label: "Total de Menções", value: personMentions.length, icon: TrendingUp, color: "text-purple-500" },
+    { label: "Produtos Únicos", value: topProducts.length, icon: Package, color: "text-green-500" },
+    { label: "Episódios", value: episodesParticipated.size, icon: Mic, color: "text-blue-500" },
+  ];
+
   return (
     <div className="space-y-6">
-      <div className="flex items-start gap-2">
+      <div className="flex items-center gap-4">
         <Link href="/people">
           <Button variant="ghost" size="icon" data-testid="button-back">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
+        <Avatar className="h-12 w-12 shrink-0">
+          {hostAvatars[person.id] ? (
+            <AvatarImage src={hostAvatars[person.id]} alt={person.name} />
+          ) : null}
+          <AvatarFallback className="text-sm font-semibold">
+            {person.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
         <div>
-          <h1 className="text-xl font-bold tracking-tight" data-testid="text-person-name">{person.name}</h1>
-          <div className="flex items-center gap-2 mt-1">
-            {(person.id === "arthur" || person.id === "aiquis") && (
-              <Badge variant="secondary">Host</Badge>
-            )}
-            <span className="text-sm text-muted-foreground">
-              {personMentions.length} menções em {episodesParticipated.size} episódios
-            </span>
-          </div>
+          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-person-name">{person.name}</h1>
+          <p className="text-sm text-muted-foreground">Análise do participante</p>
+          {person.linkedinUrl && (
+            <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+              <Badge variant="outline" className="mt-1 cursor-pointer text-xs" data-testid="link-linkedin">
+                <ExternalLink className="mr-1 h-3 w-3" /> LinkedIn
+              </Badge>
+            </a>
+          )}
         </div>
       </div>
 
-      {person.linkedinUrl && (
-        <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" data-testid="link-linkedin">
-            <ExternalLink className="mr-1 h-3 w-3" /> LinkedIn
-          </Button>
-        </a>
-      )}
+      <div className="grid gap-4 grid-cols-3">
+        {statCards.map((stat) => (
+          <Card key={stat.label}>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className="text-2xl font-bold">{stat.value}</p>
+                </div>
+                <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
