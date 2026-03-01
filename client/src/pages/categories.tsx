@@ -1,9 +1,17 @@
-import { Link, useParams } from "wouter";
-import { ArrowLeft, ChevronRight, TrendingUp } from "lucide-react";
+import { Link, useParams, useLocation } from "wouter";
+import { ArrowLeft, ChevronRight, TrendingUp, Mic, Package, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useState, useMemo } from "react";
 import {
   ResponsiveContainer,
@@ -13,7 +21,7 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import { getCategoryStats, getProductsForCategory } from "@/lib/data-utils";
+import { getCategoryStats, getProductsForCategory, getMentionsForProduct, episodes } from "@/lib/data-utils";
 
 type SortMode = "mentions" | "alpha";
 
@@ -112,11 +120,69 @@ function CategoryList() {
   );
 }
 
+type DetailSortColumn = "name" | "mentions" | "episodes";
+type SortDir = "asc" | "desc";
+
 function CategoryDetail() {
   const { name } = useParams<{ name: string }>();
+  const [, navigate] = useLocation();
   const category = decodeURIComponent(name!);
   const productsInCat = getProductsForCategory(category);
   const totalMentions = productsInCat.reduce((sum, p) => sum + p.mentionCount, 0);
+
+  const [sortCol, setSortCol] = useState<DetailSortColumn>("mentions");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const productsWithEpisodes = useMemo(() => {
+    return productsInCat.map((p) => {
+      const m = getMentionsForProduct(p.id);
+      const uniqueEpisodes = new Set(m.map((x) => x.episodeId));
+      return { ...p, episodeCount: uniqueEpisodes.size };
+    });
+  }, [category]);
+
+  const categoryEpisodeCount = useMemo(() => {
+    const allEpIds = new Set<number>();
+    productsWithEpisodes.forEach((p) => {
+      const m = getMentionsForProduct(p.id);
+      m.forEach((x) => allEpIds.add(x.episodeId));
+    });
+    return allEpIds.size;
+  }, [category]);
+
+  const sorted = useMemo(() => {
+    const arr = [...productsWithEpisodes];
+    arr.sort((a, b) => {
+      let cmp = 0;
+      if (sortCol === "name") {
+        cmp = a.name.localeCompare(b.name, "pt-BR");
+      } else if (sortCol === "mentions") {
+        cmp = a.mentionCount - b.mentionCount;
+      } else {
+        cmp = a.episodeCount - b.episodeCount;
+      }
+      if (cmp === 0 && sortCol !== "mentions") cmp = a.mentionCount - b.mentionCount;
+      if (cmp === 0 && sortCol !== "episodes") cmp = a.episodeCount - b.episodeCount;
+      return sortDir === "desc" ? -cmp : cmp;
+    });
+    return arr;
+  }, [productsWithEpisodes, sortCol, sortDir]);
+
+  function handleSort(col: DetailSortColumn) {
+    if (sortCol === col) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortCol(col);
+      setSortDir(col === "name" ? "asc" : "desc");
+    }
+  }
+
+  function DetailSortIcon({ col }: { col: DetailSortColumn }) {
+    if (sortCol !== col) return <ArrowUpDown className="ml-1 h-3 w-3 opacity-40" />;
+    return sortDir === "asc"
+      ? <ArrowUp className="ml-1 h-3 w-3" />
+      : <ArrowDown className="ml-1 h-3 w-3" />;
+  }
 
   if (productsInCat.length === 0) {
     return (
@@ -131,6 +197,12 @@ function CategoryDetail() {
     );
   }
 
+  const statCards = [
+    { label: "Total de Menções", value: totalMentions, icon: TrendingUp, color: "text-purple-500" },
+    { label: "Produtos", value: productsInCat.length, icon: Package, color: "text-green-500" },
+    { label: "Episódios", value: `${categoryEpisodeCount}/${episodes.length}`, icon: Mic, color: "text-blue-500" },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
@@ -141,14 +213,33 @@ function CategoryDetail() {
         </Link>
         <div>
           <h1 className="text-xl font-bold tracking-tight" data-testid="text-category-name">{category}</h1>
-          <p className="text-sm text-muted-foreground">{productsInCat.length} produtos · {totalMentions} menções</p>
+          <p className="text-sm text-muted-foreground">Visão geral da categoria</p>
         </div>
       </div>
 
+      <div className="grid gap-4 grid-cols-3">
+        {statCards.map((stat) => (
+          <Card key={stat.label}>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className="text-2xl font-bold">{stat.value}</p>
+                </div>
+                <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       <Card>
-        <CardContent className="pt-6">
-          <ResponsiveContainer width="100%" height={Math.max(200, productsInCat.length * 30)}>
-            <BarChart data={productsInCat.slice(0, 20)} layout="vertical" margin={{ left: 0, right: 16 }}>
+        <CardHeader>
+          <CardTitle className="text-base">Top Produtos em {category}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={Math.max(200, Math.min(productsInCat.length, 10) * 30)}>
+            <BarChart data={productsWithEpisodes.slice(0, 10)} layout="vertical" margin={{ left: 0, right: 16 }}>
               <XAxis type="number" />
               <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 11 }} />
               <Tooltip
@@ -165,22 +256,51 @@ function CategoryDetail() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-2">
-        {productsInCat.map((product, i) => (
-          <Link key={product.id} href={`/products/${product.id}`}>
-            <div
-              className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
-              data-testid={`card-product-${product.id}`}
-            >
-              <span className="text-lg font-bold text-muted-foreground w-8 text-right">{i + 1}</span>
-              <span className="font-medium text-sm flex-1">{product.name}</span>
-              <div className="flex items-center gap-1 shrink-0">
-                <TrendingUp className="h-3 w-3 text-muted-foreground" />
-                <span className="text-sm font-semibold">{product.mentionCount}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
+      <div className="rounded-lg border border-border/60">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-12 text-center">#</TableHead>
+              <TableHead>
+                <button
+                  className="flex items-center text-xs font-medium uppercase tracking-wide"
+                  onClick={() => handleSort("name")}
+                  data-testid="sort-name"
+                >
+                  Produto <DetailSortIcon col="name" />
+                </button>
+              </TableHead>
+              <TableHead className="text-right">
+                <button
+                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  onClick={() => handleSort("mentions")}
+                  data-testid="sort-mentions"
+                >
+                  Menções <DetailSortIcon col="mentions" />
+                </button>
+              </TableHead>
+              <TableHead className="text-right">
+                <button
+                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  onClick={() => handleSort("episodes")}
+                  data-testid="sort-episodes"
+                >
+                  Episódios <DetailSortIcon col="episodes" />
+                </button>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sorted.map((product, i) => (
+              <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/products/${product.id}`)} data-testid={`row-product-${product.id}`}>
+                <TableCell className="text-center font-bold text-muted-foreground">{i + 1}</TableCell>
+                <TableCell className="font-medium text-sm">{product.name}</TableCell>
+                <TableCell className="text-right font-semibold">{product.mentionCount}</TableCell>
+                <TableCell className="text-right text-muted-foreground">{product.episodeCount}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
