@@ -253,24 +253,37 @@ function PersonDetail() {
               {Array.from(episodesParticipated)
                 .sort((a, b) => b - a)
                 .map((epId) => {
-                  const episode = getEpisode(epId);
                   const epMentions = personMentions.filter((m) => m.episodeId === epId);
                   return (
-                    <Link key={epId} href={`/episodes/${epId}`}>
-                      <div className="flex items-center gap-2 flex-wrap py-2 border-b border-border/50 last:border-0 cursor-pointer hover:bg-accent/30 -mx-2 px-2 rounded">
-                        <Badge variant="outline" className="text-xs shrink-0">#{epId}</Badge>
-                        {epMentions.map((m) => {
-                          const product = getProduct(m.productId);
-                          const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
-                          return (
-                            <Badge key={m.id} variant="secondary" className="text-xs font-normal">
+                    <div key={epId} className="flex items-center gap-2 flex-wrap py-2 border-b border-border/50 last:border-0 -mx-2 px-2 rounded">
+                      <Link href={`/episodes/${epId}`}>
+                        <Badge variant="outline" className="text-xs shrink-0 cursor-pointer hover:bg-accent">#{epId}</Badge>
+                      </Link>
+                      {epMentions.map((m) => {
+                        const product = getProduct(m.productId);
+                        const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
+                        if (isCombo) {
+                          return product!.alsoCredits!.map((creditId) => {
+                            const credited = getProduct(creditId);
+                            return (
+                              <Link key={`${m.id}-${creditId}`} href={`/products/${creditId}`}>
+                                <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
+                                  {credited?.name || creditId}
+                                  <span className="ml-1 opacity-60">(combo)</span>
+                                </Badge>
+                              </Link>
+                            );
+                          });
+                        }
+                        return (
+                          <Link key={m.id} href={`/products/${m.productId}`}>
+                            <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
                               {product?.name || m.productId}
-                              {isCombo && <span className="ml-1 opacity-60">(combo)</span>}
                             </Badge>
-                          );
-                        })}
-                      </div>
-                    </Link>
+                          </Link>
+                        );
+                      })}
+                    </div>
                   );
                 })}
             </div>
