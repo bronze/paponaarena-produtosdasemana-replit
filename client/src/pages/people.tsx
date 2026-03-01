@@ -172,7 +172,10 @@ function PersonDetail() {
   for (const m of personMentions) {
     productCounts.set(m.productId, (productCounts.get(m.productId) || 0) + 1);
   }
-  const topProducts = Array.from(productCounts.entries()).sort((a, b) => b[1] - a[1]);
+  const topProducts = Array.from(productCounts.entries()).sort((a, b) => {
+    if (b[1] !== a[1]) return b[1] - a[1];
+    return (getProduct(a[0])?.name || a[0]).localeCompare(getProduct(b[0])?.name || b[0], "pt-BR");
+  });
 
   const episodesParticipated = new Set(personMentions.map((m) => m.episodeId));
 
