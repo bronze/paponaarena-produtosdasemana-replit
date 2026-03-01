@@ -126,18 +126,18 @@ function EpisodeDetail() {
 
       <p className="text-sm text-muted-foreground">{episode.description}</p>
 
-      <div className="flex gap-2">
+      <div className="flex gap-3 mt-2">
         {episode.youtubeLink && (
           <a href={episode.youtubeLink} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" size="sm" className="border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10" data-testid="link-youtube">
-              <SiYoutube className="mr-1.5 h-3.5 w-3.5" /> YouTube
+            <Button variant="outline" size="default" className="border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10 px-5" data-testid="link-youtube">
+              <SiYoutube className="mr-2 h-4 w-4" /> YouTube
             </Button>
           </a>
         )}
         {episode.spotifyLink && (
           <a href={episode.spotifyLink} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" size="sm" className="border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10" data-testid="link-spotify">
-              <SiSpotify className="mr-1.5 h-3.5 w-3.5" /> Spotify
+            <Button variant="outline" size="default" className="border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10 px-5" data-testid="link-spotify">
+              <SiSpotify className="mr-2 h-4 w-4" /> Spotify
             </Button>
           </a>
         )}

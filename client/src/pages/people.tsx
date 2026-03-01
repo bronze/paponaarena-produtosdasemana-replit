@@ -196,8 +196,8 @@ function PersonDetail() {
           <p className="text-sm text-muted-foreground">Análise do participante</p>
           {person.linkedinUrl && (
             <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <Badge variant="outline" className="mt-1 cursor-pointer text-xs border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/10" data-testid="link-linkedin">
-                <SiLinkedin className="mr-1 h-3 w-3" /> LinkedIn
+              <Badge variant="outline" className="mt-2 cursor-pointer text-sm px-3 py-1 border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/10" data-testid="link-linkedin">
+                <SiLinkedin className="mr-1.5 h-4 w-4" /> LinkedIn
               </Badge>
             </a>
           )}
