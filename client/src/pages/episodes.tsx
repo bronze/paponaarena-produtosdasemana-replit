@@ -107,6 +107,35 @@ function EpisodeDetail() {
   const epMentions = getMentionsForEpisode(episodeId);
   const participants = getParticipantsForEpisode(episodeId);
 
+  const productMentionCounts = epMentions.reduce((acc, m) => {
+    acc.set(m.productId, (acc.get(m.productId) || 0) + 1);
+    return acc;
+  }, new Map<string, number>());
+
+  const sortedEpisodeProducts = Array.from(productMentionCounts.entries())
+    .map(([productId, count]) => ({ productId, count, product: getProduct(productId) }))
+    .filter(({ product }) => !product?.alsoCredits?.length)
+    .sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return (a.product?.name || a.productId).localeCompare(b.product?.name || b.productId);
+    });
+
+  const HOSTS = ["aiquis", "arthur"];
+  const sortedParticipants = [...participants].sort((a, b) => {
+    const aHost = HOSTS.indexOf(a.id);
+    const bHost = HOSTS.indexOf(b.id);
+    if (aHost !== -1 || bHost !== -1) return (aHost === -1 ? 99 : aHost) - (bHost === -1 ? 99 : bHost);
+    return a.name.localeCompare(b.name, "pt");
+  });
+
+  const participantWithProducts = sortedParticipants.map((p) => ({
+    person: p,
+    products: epMentions.filter((m) => m.personId === p.id).map((m) => ({
+      mention: m,
+      product: getProduct(m.productId),
+    })),
+  }));
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
@@ -146,27 +175,20 @@ function EpisodeDetail() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Menções ({epMentions.length})</CardTitle>
+            <CardTitle className="text-base">Produtos ({sortedEpisodeProducts.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {epMentions.map((m) => {
-                const product = getProduct(m.productId);
-                const person = getPerson(m.personId);
-                return (
-                  <div key={m.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-border/50 last:border-0" data-testid={`mention-${m.id}`}>
-                    <div>
-                      <Link href={`/products/${m.productId}`} className="text-sm font-medium hover:underline">
-                        {product?.name || m.productId}
-                      </Link>
-                      {m.context && <span className="text-sm text-muted-foreground ml-2">({m.context})</span>}
-                    </div>
-                    <Link href={`/people/${m.personId}`} className="text-sm text-muted-foreground hover:underline shrink-0">
-                      {person?.name || m.personId}
-                    </Link>
-                  </div>
-                );
-              })}
+            <div className="space-y-1">
+              {sortedEpisodeProducts.map(({ productId, count, product }) => (
+                <div key={productId} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
+                  <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
+                    {product?.name || productId}
+                  </Link>
+                  {count > 1 && (
+                    <span className="text-xs text-muted-foreground shrink-0 ml-2">{count}×</span>
+                  )}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -176,13 +198,38 @@ function EpisodeDetail() {
             <CardTitle className="text-base">Participantes ({participants.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {participants.map((p) => p && (
-                <Link key={p.id} href={`/people/${p.id}`}>
-                  <Badge variant="outline" className="cursor-pointer hover:bg-accent" data-testid={`badge-person-${p.id}`}>
-                    {p.name}
-                  </Badge>
-                </Link>
+            <div className="space-y-3">
+              {participantWithProducts.map(({ person, products }) => (
+                <div key={person.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <Link href={`/people/${person.id}`} className="text-sm font-medium hover:underline shrink-0" data-testid={`badge-person-${person.id}`}>
+                    {person.name}
+                  </Link>
+                  <div className="flex flex-wrap gap-1">
+                    {products.map(({ mention, product }) =>
+                      product?.alsoCredits?.length ? (
+                        <span key={mention.id} className="flex items-center gap-0.5">
+                          <span className="text-xs text-muted-foreground italic mr-0.5">combo</span>
+                          {product.alsoCredits.map((id, i) => (
+                            <span key={id} className="flex items-center gap-0.5">
+                              {i > 0 && <span className="text-xs text-muted-foreground">+</span>}
+                              <Link href={`/products/${id}`}>
+                                <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent border-dashed">
+                                  {getProduct(id)?.name || id}
+                                </Badge>
+                              </Link>
+                            </span>
+                          ))}
+                        </span>
+                      ) : (
+                        <Link key={mention.id} href={`/products/${mention.productId}`}>
+                          <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
+                            {product?.name || mention.productId}
+                          </Badge>
+                        </Link>
+                      )
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </CardContent>
