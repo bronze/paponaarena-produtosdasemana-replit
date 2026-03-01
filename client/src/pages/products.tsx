@@ -38,6 +38,7 @@ function ProductList() {
   const [search, setSearch] = useState("");
   const [sortCol, setSortCol] = useState<SortColumn>("mentions");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [showAll, setShowAll] = useState(false);
 
   const productsWithEpisodes = useMemo(() => {
     const all = getLeaderboardProducts();
@@ -93,6 +94,11 @@ function ProductList() {
       : <ArrowDown className="ml-1 h-3 w-3" />;
   }
 
+  const rankedSorted = sorted.map((p, i) => ({ ...p, rank: i + 1 }));
+  const primary = rankedSorted.filter((p) => p.mentionCount > 2);
+  const secondary = rankedSorted.filter((p) => p.mentionCount <= 2);
+  const displayed = search ? rankedSorted : showAll ? rankedSorted : primary;
+
   return (
     <div className="space-y-6">
       <div>
@@ -144,9 +150,9 @@ function ProductList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sorted.map((product, i) => (
+            {displayed.map((product) => (
               <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/products/${product.id}`)} data-testid={`row-product-${product.id}`}>
-                <TableCell className="text-center font-bold text-muted-foreground">{i + 1}</TableCell>
+                <TableCell className="text-center font-bold text-muted-foreground">{product.rank}</TableCell>
                 <TableCell className="font-medium text-sm" data-testid={`link-product-${product.id}`}>
                   {product.name}
                 </TableCell>
@@ -161,7 +167,17 @@ function ProductList() {
         </Table>
       </div>
 
-      {sorted.length === 0 && (
+      {!search && secondary.length > 0 && (
+        <div className="flex justify-center pt-2">
+          <Button variant="outline" onClick={() => setShowAll((s) => !s)}>
+            {showAll
+              ? "Ver menos"
+              : `Ver mais (${secondary.length} produto${secondary.length !== 1 ? "s" : ""})`}
+          </Button>
+        </div>
+      )}
+
+      {displayed.length === 0 && (
         <p className="text-center text-muted-foreground py-8">Nenhum produto encontrado.</p>
       )}
     </div>
