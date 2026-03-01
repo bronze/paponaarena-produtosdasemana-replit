@@ -11,6 +11,7 @@ import {
   getProduct,
   getPerson,
   getParticipantsForEpisode,
+  resolveParent,
 } from "@/lib/data-utils";
 
 const YEAR_FILTERS = ["Todos", "2026", "2025", "2024"] as const;
@@ -108,7 +109,8 @@ function EpisodeDetail() {
   const participants = getParticipantsForEpisode(episodeId);
 
   const productMentionCounts = epMentions.reduce((acc, m) => {
-    acc.set(m.productId, (acc.get(m.productId) || 0) + 1);
+    const resolvedId = resolveParent(m.productId);
+    acc.set(resolvedId, (acc.get(resolvedId) || 0) + 1);
     return acc;
   }, new Map<string, number>());
 
@@ -212,7 +214,7 @@ function EpisodeDetail() {
                           {product.alsoCredits.map((id, i) => (
                             <span key={id} className="flex items-center gap-0.5">
                               {i > 0 && <span className="text-xs text-muted-foreground">+</span>}
-                              <Link href={`/products/${id}`}>
+                              <Link href={`/products/${resolveParent(id)}`}>
                                 <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent border-dashed">
                                   {getProduct(id)?.name || id}
                                 </Badge>
@@ -221,7 +223,7 @@ function EpisodeDetail() {
                           ))}
                         </span>
                       ) : (
-                        <Link key={mention.id} href={`/products/${mention.productId}`}>
+                        <Link key={mention.id} href={`/products/${resolveParent(mention.productId)}`}>
                           <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
                             {product?.name || mention.productId}
                           </Badge>

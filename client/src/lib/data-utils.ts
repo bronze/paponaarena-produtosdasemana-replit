@@ -15,7 +15,7 @@ export function getPerson(id: string) {
   return personMap.get(id);
 }
 
-function resolveParent(productId: string): string {
+export function resolveParent(productId: string): string {
   const product = productMap.get(productId);
   if (!product) return productId;
   if (product.parentId) {
