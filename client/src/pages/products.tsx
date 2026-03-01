@@ -205,7 +205,10 @@ function ProductDetail() {
     personCounts.set(m.personId, (personCounts.get(m.personId) || 0) + 1);
   }
   const topPeople = Array.from(personCounts.entries())
-    .sort((a, b) => b[1] - a[1])
+    .sort((a, b) => {
+      if (b[1] !== a[1]) return b[1] - a[1];
+      return (getPerson(a[0])?.name || a[0]).localeCompare(getPerson(b[0])?.name || b[0], "pt");
+    })
     .slice(0, 10);
 
   return (
@@ -218,20 +221,19 @@ function ProductDetail() {
         </Link>
         <div>
           <h1 className="text-xl font-bold tracking-tight" data-testid="text-product-name">{product.name}</h1>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1.5">
             <Badge variant="secondary">{product.category}</Badge>
             <span className="text-sm text-muted-foreground">{allMentions.length} menções</span>
+            {product.url && (
+              <a href={product.url} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm" data-testid="link-product-url">
+                  <ExternalLink className="mr-1 h-3 w-3" /> Visitar site
+                </Button>
+              </a>
+            )}
           </div>
         </div>
       </div>
-
-      {product.url && (
-        <a href={product.url} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" data-testid="link-product-url">
-            <ExternalLink className="mr-1 h-3 w-3" /> Visitar site
-          </Button>
-        </a>
-      )}
 
       {children.length > 0 && (
         <Card>
@@ -300,8 +302,11 @@ function ProductDetail() {
             <CardTitle className="text-base">Todas as menções</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
-              {allMentions.map((m) => {
+            <div className="space-y-2">
+              {[...allMentions].sort((a, b) => {
+                if (b.episodeId !== a.episodeId) return b.episodeId - a.episodeId;
+                return (getPerson(a.personId)?.name || a.personId).localeCompare(getPerson(b.personId)?.name || b.personId, "pt");
+              }).map((m) => {
                 const person = getPerson(m.personId);
                 const episode = getEpisode(m.episodeId);
                 return (
