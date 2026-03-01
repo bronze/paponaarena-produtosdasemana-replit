@@ -1,8 +1,7 @@
 import { Link } from "wouter";
-import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight, Play } from "lucide-react";
+import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   ResponsiveContainer,
   BarChart,
@@ -114,24 +113,26 @@ export default function Dashboard() {
         </Card>
 
         <div className="space-y-6">
-          <div className="rounded-lg bg-primary p-5 text-primary-foreground" data-testid="card-latest-episode">
-            <div className="space-y-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-primary-foreground/20 text-primary-foreground border-0">Último Episódio</Badge>
-                <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
+          <Link href={`/episodes/${latestEpisode.id}`}>
+            <div className="rounded-lg bg-primary p-5 text-primary-foreground cursor-pointer transition-opacity hover:opacity-90" data-testid="card-latest-episode">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge className="bg-primary-foreground/20 text-primary-foreground border-0">Último Episódio</Badge>
+                  <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
+                </div>
+                <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1 text-sm opacity-80">
+                    <Package className="h-3.5 w-3.5" />
+                    <span data-testid="text-latest-products">{latestProductCount} produtos mencionados</span>
+                  </div>
+                  <span className="text-sm font-medium opacity-80 flex items-center gap-1">
+                    Ver Episódio <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </div>
               </div>
-              <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
-              <div className="flex items-center gap-1 text-sm opacity-80">
-                <Package className="h-3.5 w-3.5" />
-                <span data-testid="text-latest-products">{latestProductCount} produtos mencionados</span>
-              </div>
-              <Link href={`/episodes/${latestEpisode.id}`}>
-                <Button variant="secondary" className="gap-2 mt-1" data-testid="button-latest-episode">
-                  <Play className="h-4 w-4" /> Ver Episódio
-                </Button>
-              </Link>
             </div>
-          </div>
+          </Link>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
