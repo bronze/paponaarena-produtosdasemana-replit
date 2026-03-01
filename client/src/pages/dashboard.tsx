@@ -1,7 +1,8 @@
 import { Link } from "wouter";
-import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight } from "lucide-react";
+import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight, Play } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ResponsiveContainer,
   BarChart,
@@ -14,6 +15,7 @@ import {
   Cell,
 } from "recharts";
 import {
+  episodes,
   getTotalStats,
   getLeaderboardProducts,
   getCategoryStats,
@@ -22,6 +24,7 @@ import {
   getProduct,
   getPerson,
   getEpisode,
+  getMentionsForEpisode,
 } from "@/lib/data-utils";
 
 const COLORS = [
@@ -42,6 +45,10 @@ export default function Dashboard() {
   const trend = getMentionsPerEpisodeTrend();
   const recentMentions = getRecentMentions(8);
 
+  const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
+  const latestMentions = getMentionsForEpisode(latestEpisode.id);
+  const latestProductCount = new Set(latestMentions.map((m) => m.productId)).size;
+
   const statCards = [
     { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500" },
     { label: "Produtos", value: stats.totalProducts, icon: Package, color: "text-green-500" },
@@ -54,6 +61,27 @@ export default function Dashboard() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Papo na Arena Radar</h1>
         <p className="text-muted-foreground">Dashboard de produtos e serviços mencionados no podcast</p>
+      </div>
+
+      <div className="rounded-lg bg-primary p-5 text-primary-foreground" data-testid="card-latest-episode">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1 space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge className="bg-primary-foreground/20 text-primary-foreground border-0">Último Episódio</Badge>
+              <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
+            </div>
+            <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
+            <div className="flex items-center gap-1 text-sm opacity-80">
+              <Package className="h-3.5 w-3.5" />
+              <span data-testid="text-latest-products">{latestProductCount} produtos mencionados</span>
+            </div>
+          </div>
+          <Link href={`/episodes/${latestEpisode.id}`}>
+            <Button variant="secondary" className="gap-2 shrink-0" data-testid="button-latest-episode">
+              <Play className="h-4 w-4" /> Ver Episódio
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
