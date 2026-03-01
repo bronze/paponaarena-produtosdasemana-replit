@@ -263,17 +263,25 @@ function PersonDetail() {
                         const product = getProduct(m.productId);
                         const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
                         if (isCombo) {
-                          return product!.alsoCredits!.map((creditId) => {
-                            const credited = getProduct(creditId);
-                            return (
-                              <Link key={`${m.id}-${creditId}`} href={`/products/${creditId}`}>
-                                <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
-                                  {credited?.name || creditId}
-                                  <span className="ml-1 opacity-60">(combo)</span>
-                                </Badge>
-                              </Link>
-                            );
-                          });
+                          const credits = product!.alsoCredits!;
+                          return (
+                            <span key={m.id} className="inline-flex items-center gap-1.5">
+                              {credits.map((creditId, idx) => {
+                                const credited = getProduct(creditId);
+                                return (
+                                  <span key={creditId} className="inline-flex items-center gap-1.5">
+                                    {idx > 0 && <span className="text-xs text-muted-foreground">+</span>}
+                                    <Link href={`/products/${creditId}`}>
+                                      <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
+                                        {credited?.name || creditId}
+                                      </Badge>
+                                    </Link>
+                                  </span>
+                                );
+                              })}
+                              <Badge variant="outline" className="text-xs font-normal text-muted-foreground">combo</Badge>
+                            </span>
+                          );
                         }
                         return (
                           <Link key={m.id} href={`/products/${m.productId}`}>
