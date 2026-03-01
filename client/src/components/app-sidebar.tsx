@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { BarChart3, Mic, Package, Grid3X3, Users, Sun, Moon } from "lucide-react";
+import { BarChart3, Mic, Package, FolderOpen, Users, Sun, Moon } from "lucide-react";
 import { SiSpotify, SiYoutube } from "react-icons/si";
 import {
   Sidebar,
@@ -20,7 +20,7 @@ const navItems = [
   { title: "Dashboard", path: "/", icon: BarChart3 },
   { title: "Episódios", path: "/episodes", icon: Mic },
   { title: "Produtos", path: "/products", icon: Package },
-  { title: "Categorias", path: "/categories", icon: Grid3X3 },
+  { title: "Categorias", path: "/categories", icon: FolderOpen },
   { title: "Pessoas", path: "/people", icon: Users },
 ];
 
