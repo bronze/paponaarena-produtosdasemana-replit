@@ -310,10 +310,10 @@ function ProductDetail() {
                       <Link href={`/people/${m.personId}`} className="text-sm hover:underline">
                         {person?.name || m.personId}
                       </Link>
-                      {m.context && <span className="text-xs text-muted-foreground ml-2">({m.context})</span>}
+                      {m.context && <span className="text-sm text-muted-foreground ml-2">({m.context})</span>}
                     </div>
                     <Link href={`/episodes/${m.episodeId}`}>
-                      <Badge variant="outline" className="text-xs cursor-pointer">
+                      <Badge variant="outline" className="text-sm cursor-pointer">
                         #{m.episodeId}
                       </Badge>
                     </Link>

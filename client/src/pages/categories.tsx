@@ -96,12 +96,12 @@ function CategoryList() {
             >
               <div className="flex-1 min-w-0 space-y-2">
                 <h3 className="font-semibold text-sm">{cat.category}</h3>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   {cat.count} menções · {cat.productCount} produtos
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {cat.topProducts.map((p) => (
-                    <Badge key={p.id} variant="secondary" className="text-[10px] font-normal">
+                    <Badge key={p.id} variant="secondary" className="text-xs font-normal">
                       {p.name} ({p.mentionCount})
                     </Badge>
                   ))}

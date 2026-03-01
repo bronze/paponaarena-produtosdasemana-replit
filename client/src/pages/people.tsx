@@ -115,7 +115,7 @@ function PeopleList() {
                     <Badge variant="secondary" className="text-xs shrink-0">Host</Badge>
                   )}
                 </div>
-                <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1" data-testid={`text-products-${person.id}`}>
                     <Package className="h-3 w-3" /> {person.productCount} produtos
                   </span>
@@ -126,7 +126,7 @@ function PeopleList() {
               </div>
               <div className="flex flex-col items-center shrink-0">
                 <span className="text-lg font-bold" data-testid={`text-mentions-${person.id}`}>{person.mentionCount}</span>
-                <span className="text-[10px] text-muted-foreground leading-tight">menções</span>
+                <span className="text-xs text-muted-foreground leading-tight">menções</span>
               </div>
             </div>
           </Link>
@@ -263,7 +263,7 @@ function PersonDetail() {
                           const product = getProduct(m.productId);
                           const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
                           return (
-                            <Badge key={m.id} variant="secondary" className="text-[10px] font-normal">
+                            <Badge key={m.id} variant="secondary" className="text-xs font-normal">
                               {product?.name || m.productId}
                               {isCombo && <span className="ml-1 opacity-60">(combo)</span>}
                             </Badge>

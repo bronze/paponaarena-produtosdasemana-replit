@@ -224,7 +224,7 @@ export default function Dashboard() {
                       <Link href={`/products/${mention.productId}`} className="text-sm font-medium truncate hover:underline">
                         {product?.name || mention.productId}
                       </Link>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-sm text-muted-foreground">
                         por{" "}
                         <Link href={`/people/${mention.personId}`} className="hover:underline">
                           {person?.name || mention.personId}
@@ -238,7 +238,7 @@ export default function Dashboard() {
                         #{mention.episodeId}
                       </Link>
                     </Badge>
-                    <span className="text-xs text-muted-foreground">{episodeDate}</span>
+                    <span className="text-sm text-muted-foreground">{episodeDate}</span>
                   </div>
                 </div>
               );

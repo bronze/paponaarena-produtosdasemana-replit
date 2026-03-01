@@ -60,18 +60,18 @@ function EpisodeList() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <Badge variant="secondary" className="shrink-0 text-xs">#{ep.id}</Badge>
-                      <span className="text-xs text-muted-foreground">{ep.date}</span>
+                      <span className="text-sm text-muted-foreground">{ep.date}</span>
                     </div>
                     <h3 className="font-medium text-sm leading-snug mb-1">{ep.title}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-1">{ep.description}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-1">{ep.description}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Mic className="h-3 w-3" />
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <Mic className="h-3.5 w-3.5" />
                       <span>{mentionCount} menções</span>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Users className="h-3 w-3" />
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <Users className="h-3.5 w-3.5" />
                       <span>{participants.length}</span>
                     </div>
                   </div>
@@ -158,9 +158,9 @@ function EpisodeDetail() {
                       <Link href={`/products/${m.productId}`} className="text-sm font-medium hover:underline">
                         {product?.name || m.productId}
                       </Link>
-                      {m.context && <span className="text-xs text-muted-foreground ml-2">({m.context})</span>}
+                      {m.context && <span className="text-sm text-muted-foreground ml-2">({m.context})</span>}
                     </div>
-                    <Link href={`/people/${m.personId}`} className="text-xs text-muted-foreground hover:underline shrink-0">
+                    <Link href={`/people/${m.personId}`} className="text-sm text-muted-foreground hover:underline shrink-0">
                       {person?.name || m.personId}
                     </Link>
                   </div>
