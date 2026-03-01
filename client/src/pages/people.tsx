@@ -1,5 +1,6 @@
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ExternalLink, User, Package, Mic, TrendingUp } from "lucide-react";
+import { ArrowLeft, User, Package, Mic, TrendingUp } from "lucide-react";
+import { SiLinkedin } from "react-icons/si";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -195,8 +196,8 @@ function PersonDetail() {
           <p className="text-sm text-muted-foreground">Análise do participante</p>
           {person.linkedinUrl && (
             <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <Badge variant="outline" className="mt-1 cursor-pointer text-xs" data-testid="link-linkedin">
-                <ExternalLink className="mr-1 h-3 w-3" /> LinkedIn
+              <Badge variant="outline" className="mt-1 cursor-pointer text-xs border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/10" data-testid="link-linkedin">
+                <SiLinkedin className="mr-1 h-3 w-3" /> LinkedIn
               </Badge>
             </a>
           )}
