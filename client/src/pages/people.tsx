@@ -238,7 +238,6 @@ function PersonDetail() {
                       <div className="py-2 border-b border-border/50 last:border-0 cursor-pointer hover:bg-accent/30 -mx-2 px-2 rounded space-y-1.5">
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-xs shrink-0">#{epId}</Badge>
-                          <span className="text-sm truncate">{episode?.title || `Episódio ${epId}`}</span>
                         </div>
                         <div className="flex flex-wrap gap-1 pl-1">
                           {epMentions.map((m) => {
