@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { BarChart3, Mic, Package, Grid3X3, Users, Sun, Moon } from "lucide-react";
+import { SiSpotify, SiYoutube } from "react-icons/si";
 import {
   Sidebar,
   SidebarContent,
@@ -63,6 +64,18 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <div className="flex gap-2 px-2 pt-2">
+          <a href="https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ" target="_blank" rel="noopener noreferrer" className="flex-1">
+            <Button variant="outline" size="sm" className="w-full gap-2 border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10">
+              <SiSpotify className="h-4 w-4" /> Spotify
+            </Button>
+          </a>
+          <a href="https://www.youtube.com/@PaponaArena" target="_blank" rel="noopener noreferrer" className="flex-1">
+            <Button variant="outline" size="sm" className="w-full gap-2 border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10">
+              <SiYoutube className="h-4 w-4" /> YouTube
+            </Button>
+          </a>
+        </div>
         <div className="px-2 py-2">
           <Button
             variant="ghost"
