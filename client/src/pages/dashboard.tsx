@@ -63,27 +63,6 @@ export default function Dashboard() {
         <p className="text-muted-foreground">Dashboard de produtos e serviços mencionados no podcast</p>
       </div>
 
-      <div className="rounded-lg bg-primary p-5 text-primary-foreground" data-testid="card-latest-episode">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <div className="flex-1 space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge className="bg-primary-foreground/20 text-primary-foreground border-0">Último Episódio</Badge>
-              <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
-            </div>
-            <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
-            <div className="flex items-center gap-1 text-sm opacity-80">
-              <Package className="h-3.5 w-3.5" />
-              <span data-testid="text-latest-products">{latestProductCount} produtos mencionados</span>
-            </div>
-          </div>
-          <Link href={`/episodes/${latestEpisode.id}`}>
-            <Button variant="secondary" className="gap-2 shrink-0" data-testid="button-latest-episode">
-              <Play className="h-4 w-4" /> Ver Episódio
-            </Button>
-          </Link>
-        </div>
-      </div>
-
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => (
           <Link key={stat.label} href={stat.href}>
@@ -134,44 +113,65 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">Categorias</CardTitle>
-            <Link href="/categories" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-categories">
-              Ver todas <ArrowRight className="h-3 w-3" />
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={categoryStats}
-                  dataKey="count"
-                  nameKey="category"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={({ category, percent }) =>
-                    `${category} (${(percent * 100).toFixed(0)}%)`
-                  }
-                  labelLine={false}
-                >
-                  {categoryStats.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: 8,
-                    color: "hsl(var(--card-foreground))",
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <div className="space-y-6">
+          <div className="rounded-lg bg-primary p-5 text-primary-foreground" data-testid="card-latest-episode">
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge className="bg-primary-foreground/20 text-primary-foreground border-0">Último Episódio</Badge>
+                <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
+              </div>
+              <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
+              <div className="flex items-center gap-1 text-sm opacity-80">
+                <Package className="h-3.5 w-3.5" />
+                <span data-testid="text-latest-products">{latestProductCount} produtos mencionados</span>
+              </div>
+              <Link href={`/episodes/${latestEpisode.id}`}>
+                <Button variant="secondary" className="gap-2 mt-1" data-testid="button-latest-episode">
+                  <Play className="h-4 w-4" /> Ver Episódio
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base">Categorias</CardTitle>
+              <Link href="/categories" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-categories">
+                Ver todas <ArrowRight className="h-3 w-3" />
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={categoryStats}
+                    dataKey="count"
+                    nameKey="category"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ category, percent }) =>
+                      `${category} (${(percent * 100).toFixed(0)}%)`
+                    }
+                    labelLine={false}
+                  >
+                    {categoryStats.map((_, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: 8,
+                      color: "hsl(var(--card-foreground))",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Card>
