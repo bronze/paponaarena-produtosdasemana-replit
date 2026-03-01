@@ -235,22 +235,18 @@ function PersonDetail() {
                   const epMentions = personMentions.filter((m) => m.episodeId === epId);
                   return (
                     <Link key={epId} href={`/episodes/${epId}`}>
-                      <div className="py-2 border-b border-border/50 last:border-0 cursor-pointer hover:bg-accent/30 -mx-2 px-2 rounded space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs shrink-0">#{epId}</Badge>
-                        </div>
-                        <div className="flex flex-wrap gap-1 pl-1">
-                          {epMentions.map((m) => {
-                            const product = getProduct(m.productId);
-                            const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
-                            return (
-                              <Badge key={m.id} variant="secondary" className="text-[10px] font-normal">
-                                {product?.name || m.productId}
-                                {isCombo && <span className="ml-1 opacity-60">(combo)</span>}
-                              </Badge>
-                            );
-                          })}
-                        </div>
+                      <div className="flex items-center gap-2 flex-wrap py-2 border-b border-border/50 last:border-0 cursor-pointer hover:bg-accent/30 -mx-2 px-2 rounded">
+                        <Badge variant="outline" className="text-xs shrink-0">#{epId}</Badge>
+                        {epMentions.map((m) => {
+                          const product = getProduct(m.productId);
+                          const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
+                          return (
+                            <Badge key={m.id} variant="secondary" className="text-[10px] font-normal">
+                              {product?.name || m.productId}
+                              {isCombo && <span className="ml-1 opacity-60">(combo)</span>}
+                            </Badge>
+                          );
+                        })}
                       </div>
                     </Link>
                   );
