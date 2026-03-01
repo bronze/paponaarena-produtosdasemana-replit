@@ -1,22 +1,18 @@
-import { Link, useParams } from "wouter";
-import { ArrowLeft, User, Package, Mic, TrendingUp } from "lucide-react";
-import { SiLinkedin } from "react-icons/si";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useState, useMemo } from "react";
-import {
-  people,
-  episodes,
-  getMentionsForPerson,
-  getProduct,
-  getEpisode,
-  getPersonMentionCount,
-} from "@/lib/data-utils";
+import {Link, useParams} from "wouter";
+import {ArrowLeft, User, Package, Mic, TrendingUp} from "lucide-react";
+import {SiLinkedin} from "react-icons/si";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
+import {useState, useMemo, useRef} from "react";
+import {people, episodes, getMentionsForPerson, getProduct, getEpisode, getPersonMentionCount} from "@/lib/data-utils";
 import arthurImg from "@assets/arthur_1772132984125.png";
 import aquisImg from "@assets/aiquis_1772132984122.png";
+import arthurAudio from "@assets/audio/audio-arthur.mp3";
+import aquisAudio from "@assets/audio/audio-aiquis.mp3";
+import aquisCaraAudio from "@assets/audio/audio-aiquis-cara.mp3";
 
 const hostAvatars: Record<string, string> = {
   arthur: arthurImg,
@@ -61,33 +57,19 @@ function PeopleList() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Pessoas</h1>
+        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">
+          Pessoas
+        </h1>
         <p className="text-muted-foreground">{allPeople.length} participantes do podcast</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-        <Input
-          placeholder="Buscar pessoa..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-          data-testid="input-search"
-        />
+        <Input placeholder="Buscar pessoa..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-sm" data-testid="input-search" />
         <div className="flex gap-1">
-          <Button
-            variant={sortMode === "mentions" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSortMode("mentions")}
-            data-testid="sort-mentions"
-          >
+          <Button variant={sortMode === "mentions" ? "default" : "outline"} size="sm" onClick={() => setSortMode("mentions")} data-testid="sort-mentions">
             Mais menções
           </Button>
-          <Button
-            variant={sortMode === "alpha" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSortMode("alpha")}
-            data-testid="sort-alpha"
-          >
+          <Button variant={sortMode === "alpha" ? "default" : "outline"} size="sm" onClick={() => setSortMode("alpha")} data-testid="sort-alpha">
             Alfabética
           </Button>
         </div>
@@ -98,22 +80,26 @@ function PeopleList() {
           <Link key={person.id} href={`/people/${person.id}`}>
             <div
               className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
-              data-testid={`card-person-${person.id}`}
-            >
+              data-testid={`card-person-${person.id}`}>
               <span className="text-lg font-bold text-muted-foreground w-8 text-right shrink-0">{i + 1}</span>
               <Avatar className="h-12 w-12 shrink-0">
-                {hostAvatars[person.id] ? (
-                  <AvatarImage src={hostAvatars[person.id]} alt={person.name} />
-                ) : null}
+                {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
                 <AvatarFallback className="text-sm font-semibold">
-                  {person.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+                  {person.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-sm truncate">{person.name}</span>
                   {(person.id === "arthur" || person.id === "aiquis") && (
-                    <Badge variant="secondary" className="text-xs shrink-0">Host</Badge>
+                    <Badge variant="secondary" className="text-xs shrink-0">
+                      Host
+                    </Badge>
                   )}
                 </div>
                 <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
@@ -126,7 +112,9 @@ function PeopleList() {
                 </div>
               </div>
               <div className="flex flex-col items-center shrink-0">
-                <span className="text-lg font-bold" data-testid={`text-mentions-${person.id}`}>{person.mentionCount}</span>
+                <span className="text-lg font-bold" data-testid={`text-mentions-${person.id}`}>
+                  {person.mentionCount}
+                </span>
                 <span className="text-xs text-muted-foreground leading-tight">menções</span>
               </div>
             </div>
@@ -134,15 +122,13 @@ function PeopleList() {
         ))}
       </div>
 
-      {filtered.length === 0 && (
-        <p className="text-center text-muted-foreground py-8">Nenhuma pessoa encontrada.</p>
-      )}
+      {filtered.length === 0 && <p className="text-center text-muted-foreground py-8">Nenhuma pessoa encontrada.</p>}
     </div>
   );
 }
 
 function PersonDetail() {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const person = people.find((p) => p.id === id);
 
   if (!person) {
@@ -158,21 +144,42 @@ function PersonDetail() {
     );
   }
 
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const aquisAudios = [aquisAudio, aquisCaraAudio];
+
+  const audioSrc = useMemo(() => {
+    if (person.id === "arthur") return arthurAudio;
+    if (person.id === "aiquis") return aquisAudio;
+    return null;
+  }, [person.id]);
+
+  const playSound = () => {
+    const audio = audioRef.current;
+    if (!audio || !audioSrc) return;
+    if (person.id === "aiquis") {
+      audio.src = aquisAudios[Math.floor(Math.random() * aquisAudios.length)];
+    }
+    const wasEnded = audio.ended;
+    audio.pause();
+    audio.currentTime = 0;
+    if (wasEnded) audio.load();
+    audio.play().catch(() => {});
+  };
+
   const personMentions = getMentionsForPerson(person.id);
 
   const productCounts = new Map<string, number>();
   for (const m of personMentions) {
     productCounts.set(m.productId, (productCounts.get(m.productId) || 0) + 1);
   }
-  const topProducts = Array.from(productCounts.entries())
-    .sort((a, b) => b[1] - a[1]);
+  const topProducts = Array.from(productCounts.entries()).sort((a, b) => b[1] - a[1]);
 
   const episodesParticipated = new Set(personMentions.map((m) => m.episodeId));
 
   const statCards = [
-    { label: "Total de Menções", value: personMentions.length, icon: TrendingUp, color: "text-purple-500" },
-    { label: "Produtos Únicos", value: topProducts.length, icon: Package, color: "text-green-500" },
-    { label: "Episódios", value: episodesParticipated.size, icon: Mic, color: "text-blue-500" },
+    {label: "Total de Menções", value: personMentions.length, icon: TrendingUp, color: "text-purple-500"},
+    {label: "Produtos Únicos", value: topProducts.length, icon: Package, color: "text-green-500"},
+    {label: "Episódios", value: episodesParticipated.size, icon: Mic, color: "text-blue-500"},
   ];
 
   return (
@@ -183,20 +190,32 @@ function PersonDetail() {
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <Avatar className="h-12 w-12 shrink-0">
-          {hostAvatars[person.id] ? (
-            <AvatarImage src={hostAvatars[person.id]} alt={person.name} />
-          ) : null}
+        <Avatar
+          className={`h-12 w-12 shrink-0 ${audioSrc ? "select-none active:scale-95 transition-transform cursor-pointer" : ""}`}
+          onPointerUp={audioSrc ? playSound : undefined}
+          style={{ touchAction: "manipulation" }}>
+          {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
           <AvatarFallback className="text-sm font-semibold">
-            {person.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+            {person.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}
           </AvatarFallback>
         </Avatar>
+        {audioSrc && <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />}
         <div>
-          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-person-name">{person.name}</h1>
+          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-person-name">
+            {person.name}
+          </h1>
           <p className="text-sm text-muted-foreground">Análise do participante</p>
           {person.linkedinUrl && (
             <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <Badge variant="outline" className="mt-2 cursor-pointer text-sm px-3 py-1 border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/10" data-testid="link-linkedin">
+              <Badge
+                variant="outline"
+                className="mt-2 cursor-pointer text-sm px-3 py-1 border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/10"
+                data-testid="link-linkedin">
                 <SiLinkedin className="mr-1.5 h-4 w-4" /> LinkedIn
               </Badge>
             </a>
@@ -220,6 +239,29 @@ function PersonDetail() {
         ))}
       </div>
 
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-purple-500" /> Top Produtos Mencionados
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            {topProducts.slice(0, 8).map(([productId, count]) => {
+              const product = getProduct(productId);
+              return (
+                <Link key={productId} href={`/products/${productId}`}>
+                  <Badge variant="secondary" className="cursor-pointer hover:bg-accent text-sm px-3 py-1">
+                    {product?.name || productId}
+                    {count > 1 && <span className="ml-1.5 font-bold text-muted-foreground">{count}x</span>}
+                  </Badge>
+                </Link>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
@@ -235,7 +277,11 @@ function PersonDetail() {
                       {product?.name || productId}
                     </Link>
                     <div className="flex items-center gap-2 shrink-0">
-                      {product && <Badge variant="outline" className="text-xs">{product.category}</Badge>}
+                      {product && (
+                        <Badge variant="outline" className="text-xs">
+                          {product.category}
+                        </Badge>
+                      )}
                       {count > 1 && <span className="text-xs font-semibold text-muted-foreground">{count}x</span>}
                     </div>
                   </div>
@@ -258,7 +304,9 @@ function PersonDetail() {
                   return (
                     <div key={epId} className="flex items-center gap-2 flex-wrap py-2 border-b border-border/50 last:border-0 -mx-2 px-2 rounded">
                       <Link href={`/episodes/${epId}`}>
-                        <Badge variant="outline" className="text-xs shrink-0 cursor-pointer hover:bg-accent">#{epId}</Badge>
+                        <Badge variant="outline" className="text-xs shrink-0 cursor-pointer hover:bg-accent">
+                          #{epId}
+                        </Badge>
                       </Link>
                       {epMentions.map((m) => {
                         const product = getProduct(m.productId);
@@ -280,7 +328,9 @@ function PersonDetail() {
                                   </span>
                                 );
                               })}
-                              <Badge variant="outline" className="text-xs font-normal text-muted-foreground">combo</Badge>
+                              <Badge variant="outline" className="text-xs font-normal text-muted-foreground">
+                                combo
+                              </Badge>
                             </span>
                           );
                         }
@@ -304,7 +354,7 @@ function PersonDetail() {
 }
 
 export default function PeoplePage() {
-  const params = useParams<{ id: string }>();
+  const params = useParams<{id: string}>();
   if (params.id) return <PersonDetail />;
   return <PeopleList />;
 }
