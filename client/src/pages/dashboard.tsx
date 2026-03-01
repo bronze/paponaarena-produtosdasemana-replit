@@ -166,6 +166,7 @@ export default function Dashboard() {
                       borderRadius: 8,
                       color: "hsl(var(--card-foreground))",
                     }}
+                    itemStyle={{ color: "hsl(var(--card-foreground))" }}
                   />
                 </PieChart>
               </ResponsiveContainer>
