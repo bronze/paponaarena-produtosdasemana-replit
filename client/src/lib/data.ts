@@ -647,7 +647,7 @@ export const products: Product[] = [
   { id: "combo-gemini-vercel", name: "Gemini + Vercel", category: "AI Tools", alsoCredits: ["gemini", "vercel"] },
   { id: "dwarkesh-podcast", name: "Dwarkesh Podcast", category: "Entertainment", url: "https://www.dwarkesh.com/" },
   { id: "colossus", name: "Colossus.com", category: "Entertainment", url: "https://colossus.com/" },
-  { id: "centene", name: "Centene", category: "Business", url: "https://centene.com.br" },
+  { id: "centene", name: "Centeni", category: "Business", url: "https://centeni.com.br/" },
   { id: "genspark", name: "Genspark", category: "AI Tools" },
   { id: "chatgpt-go", name: "ChatGPT Go", category: "AI Tools", parentId: "chatgpt" },
   { id: "gsd-meta-prompt", name: "GSD meta-prompt", category: "AI Tools", url: "https://github.com/gsd-build/get-shit-done" },
