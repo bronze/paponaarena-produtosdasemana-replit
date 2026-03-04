@@ -51,7 +51,7 @@ function PeopleList() {
     if (sortMode === "alpha") {
       return [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     }
-    return [...list].sort((a, b) => b.mentionCount - a.mentionCount);
+    return [...list].sort((a, b) => b.mentionCount - a.mentionCount || a.name.localeCompare(b.name, "pt-BR"));
   }, [allPeople, search, sortMode]);
 
   return (
