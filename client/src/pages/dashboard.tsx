@@ -26,6 +26,7 @@ import {
   getPerson,
   getEpisode,
   getMentionsForEpisode,
+  resolveParent,
 } from "@/lib/data-utils";
 
 const CONFETTI_COLORS = ["#f59e0b", "#fbbf24", "#fcd34d", "#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#ec4899"];
@@ -79,7 +80,17 @@ export default function Dashboard() {
 
   const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
   const latestMentions = getMentionsForEpisode(latestEpisode.id);
-  const latestProductCount = new Set(latestMentions.map((m) => m.productId)).size;
+  const latestTop3 = Array.from(
+    latestMentions.reduce((acc, m) => {
+      const id = resolveParent(m.productId);
+      acc.set(id, (acc.get(id) || 0) + 1);
+      return acc;
+    }, new Map<string, number>())
+  )
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([id]) => getProduct(id))
+    .filter(Boolean);
 
   const statCards = [
     { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500", href: "/episodes" },
@@ -185,12 +196,21 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-sm opacity-80">
                     <Package className="h-3.5 w-3.5" />
-                    <span data-testid="text-latest-products">{latestProductCount} produtos mencionados</span>
+                    <span data-testid="text-latest-products">{latestMentions.length} menções</span>
                   </div>
                   <span className="text-sm font-medium opacity-80 flex items-center gap-1">
                     Ver Episódio <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
+                {latestTop3.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {latestTop3.map((product) => (
+                      <Badge key={product!.id} className="bg-primary-foreground/20 text-primary-foreground border-0 text-xs">
+                        {product!.name}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </Link>

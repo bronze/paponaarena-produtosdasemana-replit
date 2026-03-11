@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "wouter";
-import { ArrowLeft, Mic, Users } from "lucide-react";
+import { ArrowLeft, Mic, Package, Users } from "lucide-react";
 import { SiYoutube, SiSpotify } from "react-icons/si";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,7 +50,9 @@ function EpisodeList() {
 
       <div className="grid gap-3 lg:grid-cols-2">
         {filtered.map((ep) => {
-          const mentionCount = getMentionsForEpisode(ep.id).length;
+          const mentions = getMentionsForEpisode(ep.id);
+          const mentionCount = mentions.length;
+          const uniqueProductCount = new Set(mentions.map((m) => m.productId)).size;
           const participants = getParticipantsForEpisode(ep.id);
           return (
             <Link key={ep.id} href={`/episodes/${ep.id}`}>
@@ -73,8 +75,12 @@ function EpisodeList() {
                       <span>{mentionCount} menções</span>
                     </div>
                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <Package className="h-3.5 w-3.5" />
+                      <span>{uniqueProductCount} produtos</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
                       <Users className="h-3.5 w-3.5" />
-                      <span>{participants.length}</span>
+                      <span>{participants.length} pessoas</span>
                     </div>
                   </div>
                 </div>
@@ -177,7 +183,7 @@ function EpisodeDetail() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Produtos ({sortedEpisodeProducts.length})</CardTitle>
+            <CardTitle className="text-base">{epMentions.length} menções e {sortedEpisodeProducts.length} produtos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-1">
@@ -197,7 +203,7 @@ function EpisodeDetail() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Participantes ({participants.length})</CardTitle>
+            <CardTitle className="text-base">{participants.length} participantes</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
