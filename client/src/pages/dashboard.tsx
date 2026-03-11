@@ -80,6 +80,33 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* 1000th mention milestone banner */}
+      <Link href="/episodes/108" className="mt-2 block">
+        <Card className="border-amber-400 bg-amber-50 dark:bg-amber-950/20 cursor-pointer transition-opacity hover:opacity-90">
+          <CardContent className="pt-5 pb-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <span className="text-3xl">🏆</span>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-amber-800 dark:text-amber-300 text-base leading-snug">
+                  Produto #1000 — Marco histórico!
+                </p>
+                <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+                  <Link href="/people/larissa-araujo" className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
+                    Larissa Araújo
+                  </Link>
+                  {" "}mencionou{" "}
+                  <Link href="/products/claude-code" className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
+                    Claude Code
+                  </Link>
+                  {" "}no Ep. 108
+                </p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 hidden sm:block" />
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
