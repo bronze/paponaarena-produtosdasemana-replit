@@ -334,15 +334,19 @@ function PersonDetail() {
                               <Badge variant="outline" className="text-xs font-normal text-muted-foreground">
                                 combo
                               </Badge>
+                              {m.context && <span className="text-xs text-muted-foreground italic">({m.context})</span>}
                             </span>
                           );
                         }
                         return (
-                          <Link key={m.id} href={`/products/${m.productId}`}>
-                            <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
-                              {product?.name || m.productId}
-                            </Badge>
-                          </Link>
+                          <span key={m.id} className="inline-flex items-center gap-1">
+                            <Link href={`/products/${m.productId}`}>
+                              <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
+                                {product?.name || m.productId}
+                              </Badge>
+                            </Link>
+                            {m.context && <span className="text-xs text-muted-foreground italic">({m.context})</span>}
+                          </span>
                         );
                       })}
                     </div>

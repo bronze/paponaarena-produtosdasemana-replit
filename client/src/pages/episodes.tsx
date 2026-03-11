@@ -221,13 +221,17 @@ function EpisodeDetail() {
                               </Link>
                             </span>
                           ))}
+                          {mention.context && <span className="text-xs text-muted-foreground italic ml-0.5">({mention.context})</span>}
                         </span>
                       ) : (
-                        <Link key={mention.id} href={`/products/${resolveParent(mention.productId)}`}>
-                          <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
-                            {product?.name || mention.productId}
-                          </Badge>
-                        </Link>
+                        <span key={mention.id} className="flex items-center gap-1">
+                          <Link href={`/products/${resolveParent(mention.productId)}`}>
+                            <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
+                              {product?.name || mention.productId}
+                            </Badge>
+                          </Link>
+                          {mention.context && <span className="text-xs text-muted-foreground italic">({mention.context})</span>}
+                        </span>
                       )
                     )}
                   </div>
