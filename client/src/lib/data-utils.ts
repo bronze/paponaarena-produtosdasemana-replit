@@ -131,6 +131,41 @@ export function getMentionsPerEpisodeTrend() {
   }));
 }
 
+export function getTopProductsAscension(topN = 5) {
+  const top = getLeaderboardProducts().slice(0, topN);
+  const topIds = new Set(top.map((p) => p.id));
+  const sortedEps = [...episodes].sort((a, b) => a.date.localeCompare(b.date));
+
+  const cumulative: Record<string, number> = {};
+  for (const p of top) cumulative[p.id] = 0;
+
+  return sortedEps.map((ep) => {
+    const epMentions = mentions.filter((m) => m.episodeId === ep.id);
+    for (const m of epMentions) {
+      const product = productMap.get(m.productId);
+      if (!product) continue;
+      if (isCombo(product)) {
+        for (const creditId of product.alsoCredits!) {
+          const resolvedId = resolveParent(creditId);
+          if (topIds.has(resolvedId)) cumulative[resolvedId]++;
+        }
+      } else {
+        const resolvedId = resolveParent(m.productId);
+        if (topIds.has(resolvedId)) cumulative[resolvedId]++;
+      }
+    }
+    const point: Record<string, string | number> = { episode: `#${ep.id}` };
+    for (const p of top) point[p.name] = cumulative[p.id];
+    return point;
+  });
+}
+
+export function getTopProductNames(topN = 5) {
+  return getLeaderboardProducts()
+    .slice(0, topN)
+    .map((p) => p.name);
+}
+
 export function getUniqueCategories() {
   const cats = new Set<string>();
   for (const p of products) {

@@ -8,6 +8,9 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  LineChart,
+  Line,
+  Legend,
   XAxis,
   YAxis,
   Tooltip,
@@ -27,6 +30,8 @@ import {
   getEpisode,
   getMentionsForEpisode,
   resolveParent,
+  getTopProductsAscension,
+  getTopProductNames,
 } from "@/lib/data-utils";
 
 const CONFETTI_COLORS = ["#f59e0b", "#fbbf24", "#fcd34d", "#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#ec4899"];
@@ -77,6 +82,9 @@ export default function Dashboard() {
   const categoryStats = getCategoryStats().slice(0, 8);
   const trend = getMentionsPerEpisodeTrend();
   const recentMentions = getRecentMentions(8);
+
+  const ascensionData = getTopProductsAscension(5);
+  const topProductNames = getTopProductNames(5);
 
   const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
   const latestMentions = getMentionsForEpisode(latestEpisode.id);
@@ -256,6 +264,39 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Ascensão dos Top 5 Produtos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={280}>
+            <LineChart data={ascensionData} margin={{ left: 0, right: 16 }}>
+              <XAxis dataKey="episode" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+              <YAxis />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: 8,
+                  color: "hsl(var(--card-foreground))",
+                }}
+              />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              {topProductNames.map((name, i) => (
+                <Line
+                  key={name}
+                  type="monotone"
+                  dataKey={name}
+                  stroke={COLORS[i % COLORS.length]}
+                  dot={false}
+                  strokeWidth={2}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
