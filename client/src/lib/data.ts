@@ -84,6 +84,7 @@ export const episodes: Episode[] = [
   { id: 107, title: "😱 4.000 demissões: o que está por trás do layoff da Block?", date: "2026-03-04", description: "Discussão sobre o layoff da Block e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=-8VRA_OJqRk", spotifyLink: "https://open.spotify.com/episode/05B58SR0sSordFWYtwDv6t" },
   { id: 108, title: "Aprendizados de mais de 20 anos de produto e liderança - Joca Neto", date: "2026-03-11", description: "Entrevista com Joca Neto sobre aprendizados de mais de 20 anos de produto e liderança.", youtubeLink: "https://www.youtube.com/watch?v=6iQ7OnsAmME", spotifyLink: "https://open.spotify.com/episode/3bSkGaTVqKlpE1IwAXlHwQ" },
   { id: 109, title: "Da Y Combinator ao Vibe Coding: Por dentro do Replit", date: "2026-03-19", description: "Discussão sobre a jornada do Replit desde o Y Combinator até o vibe coding e o futuro do desenvolvimento de software.", youtubeLink: "https://www.youtube.com/watch?v=2o6RhXbp2cQ", spotifyLink: "https://open.spotify.com/episode/0tqqplcSAdJ5RtuzaCZozJ" },
+  { id: 110, title: "Como é o processo seletivo para Product Managers e Product Designers nas maiores empresas do Brasil", date: "2026-03-26", description: "Discussão sobre o processo seletivo para Product Managers e Product Designers nas maiores empresas do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=CMAUtA--Vhg", spotifyLink: "https://open.spotify.com/episode/3Q98aXs2BYRUlNlspvlPxZ" },
 ];
 
 export const products: Product[] = [
@@ -133,7 +134,7 @@ export const products: Product[] = [
   { id: "b4waste", name: "B4waste", category: "Lifestyle", url: "https://b4waste.com.br/" },
   { id: "bolt", name: "Bolt", category: "AI Tools", url: "https://bolt.new" },
   { id: "lovable", name: "Lovable", category: "AI Tools", url: "https://lovable.dev" },
-  { id: "wisprflow", name: "WisprFlow", category: "AI Tools", url: "https://wisprflow.ai" },
+  { id: "wisprflow", name: "Wispr Flow", category: "AI Tools", url: "https://wisprflow.ai" },
   { id: "gemini", name: "Gemini", category: "AI Tools", url: "https://gemini.google.com/" },
   { id: "replit", name: "Replit", category: "AI Tools", url: "https://replit.com" },
   { id: "notebooklm", name: "NotebookLM", category: "AI Tools", url: "https://notebooklm.google.com" },
@@ -664,6 +665,14 @@ export const products: Product[] = [
   { id: "paper-design", name: "Paper Design", category: "Productivity" },
   { id: "browser-strawberry", name: "Browser Strawberry", category: "Tech" },
   { id: "useleia", name: "Useleia.com", category: "Business", url: "https://useleia.com/" },
+  { id: "tenis-adidas-x-lego", name: "Tênis Adidas x Lego", category: "Lifestyle" },
+  { id: "netflix-pessoa-de-interesse", name: "Netflix (série Pessoa de Interesse)", category: "Entertainment", parentId: "netflix" },
+  { id: "smartgym", name: "SmartGym", category: "Fitness" },
+  { id: "skilldevpot", name: "SkillDevPot.dev", category: "Education" },
+  { id: "google-colab", name: "Google Colab", category: "Development", url: "https://colab.research.google.com" },
+  { id: "julius-ai", name: "Julius AI", category: "AI Tools", url: "https://julius.ai" },
+  { id: "lanterna-celular", name: "Lanterna do celular", category: "Utilities" },
+  { id: "sabonete", name: "Sabonete", category: "Lifestyle" },
 ];
 
 export const people: Person[] = [
@@ -949,6 +958,13 @@ export const people: Person[] = [
   { id: "felipe-fragoso", name: "Felipe Fragoso" },
   { id: "cristiane-de-oliveira", name: "Cristiane de Oliveira" },
   { id: "camila-flores", name: "Camila Flores" },
+  { id: "felipe-marques", name: "Felipe Marques" },
+  { id: "valeria-romano", name: "Valéria Romano" },
+  { id: "nader", name: "Nader" },
+  { id: "caio-comitre", name: "Caio Comitre" },
+  { id: "fernando", name: "Fernando" },
+  { id: "renato-santoro", name: "Renato Santoro" },
+  { id: "thiago-bodruk", name: "Thiago Bodruk" },
 ];
 
 export const mentions: Mention[] = [
@@ -2016,4 +2032,22 @@ export const mentions: Mention[] = [
   { id: "m109-22", episodeId: 109, personId: "huxley", productId: "cursor" },
   { id: "m109-23", episodeId: 109, personId: "cristiane-de-oliveira", productId: "useleia" },
   { id: "m109-24", episodeId: 109, personId: "camila-flores", productId: "claude" },
+  { id: "m110-1", episodeId: 110, personId: "aiquis", productId: "wisprflow" },
+  { id: "m110-2", episodeId: 110, personId: "arthur", productId: "tenis-adidas-x-lego" },
+  { id: "m110-3", episodeId: 110, personId: "felipe-marques", productId: "netflix-pessoa-de-interesse" },
+  { id: "m110-4", episodeId: 110, personId: "valeria-romano", productId: "claude-code" },
+  { id: "m110-5", episodeId: 110, personId: "glauco", productId: "replit" },
+  { id: "m110-6", episodeId: 110, personId: "amanda-couto", productId: "replit" },
+  { id: "m110-7", episodeId: 110, personId: "danilo-penteado", productId: "claude-code" },
+  { id: "m110-8", episodeId: 110, personId: "nader", productId: "claude" },
+  { id: "m110-9", episodeId: 110, personId: "nader", productId: "notebooklm" },
+  { id: "m110-10", episodeId: 110, personId: "rafael-ferreira", productId: "smartgym" },
+  { id: "m110-11", episodeId: 110, personId: "caio-comitre", productId: "skilldevpot" },
+  { id: "m110-12", episodeId: 110, personId: "kelly-costa", productId: "google-colab" },
+  { id: "m110-13", episodeId: 110, personId: "kelly-costa", productId: "julius-ai" },
+  { id: "m110-14", episodeId: 110, personId: "julia-patrocinio", productId: "globoplay" },
+  { id: "m110-15", episodeId: 110, personId: "peixoto", productId: "lovable" },
+  { id: "m110-16", episodeId: 110, personId: "fernando", productId: "claude-code" },
+  { id: "m110-17", episodeId: 110, personId: "renato-santoro", productId: "lanterna-celular" },
+  { id: "m110-18", episodeId: 110, personId: "thiago-bodruk", productId: "sabonete" },
 ];
