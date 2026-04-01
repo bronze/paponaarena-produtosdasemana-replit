@@ -1,5 +1,5 @@
 import { episodes, products, people, mentions } from "./data";
-import type { Product, Mention } from "./types";
+import type { Product, Mention, Person } from "./types";
 
 const productMap = new Map(products.map((p) => [p.id, p]));
 const episodeMap = new Map(episodes.map((e) => [e.id, e]));
@@ -209,7 +209,7 @@ export function getParticipantsForEpisode(episodeId: number) {
   const personIds = new Set(epMentions.map((m) => m.personId));
   return Array.from(personIds)
     .map((id) => personMap.get(id))
-    .filter(Boolean);
+    .filter((p): p is Person => p !== undefined);
 }
 
 export function getLastEpisode() {
