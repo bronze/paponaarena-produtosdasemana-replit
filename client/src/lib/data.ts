@@ -677,7 +677,7 @@ export const products: Product[] = [
   { id: "ray-ban-meta-display", name: "Ray-Ban Meta Display", category: "Hardware" },
   { id: "handy-computer", name: "handy.computer", category: "Hardware", url: "https://handy.computer" },
   { id: "getyourguide", name: "GetYourGuide", category: "Travel", url: "https://www.getyourguide.com" },
-  { id: "deathbyclawd", name: "DeathbyClawd", category: "AI Tools" },
+  { id: "deathbyclawd", name: "DeathbyClawd", category: "AI Tools", url: "https://deathbyclawd.com/" },
   { id: "gopro", name: "GoPro", category: "Hardware", url: "https://gopro.com" },
   { id: "garmin-forerunner-265", name: "Garmin Forerunner 265", category: "Fitness" },
   { id: "maxi-cosi-spinel-360", name: "Maxi Cosi Spinel 360", category: "Hardware" },
