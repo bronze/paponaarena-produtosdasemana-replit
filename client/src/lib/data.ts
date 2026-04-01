@@ -680,7 +680,7 @@ export const products: Product[] = [
   { id: "deathbyclawd", name: "DeathbyClawd", category: "AI Tools", url: "https://deathbyclawd.com/" },
   { id: "gopro", name: "GoPro", category: "Hardware", url: "https://gopro.com" },
   { id: "garmin-forerunner-265", name: "Garmin Forerunner 265", category: "Fitness" },
-  { id: "maxi-cosi-spinel-360", name: "Maxi Cosi Spinel 360", category: "Hardware" },
+  { id: "maxi-cosi-spinel-360", name: "Maxi Cosi Spinel 360", category: "Hardware", url: "https://amzn.to/4m3z6Gc" },
   { id: "napper", name: "Napper", category: "Wellness" },
   { id: "calm-app", name: "Calm App", category: "Wellness", url: "https://www.calm.com" },
 ];
