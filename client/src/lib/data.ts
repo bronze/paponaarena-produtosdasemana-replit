@@ -85,6 +85,7 @@ export const episodes: Episode[] = [
   { id: 108, title: "Aprendizados de mais de 20 anos de produto e liderança - Joca Neto", date: "2026-03-11", description: "Entrevista com Joca Neto sobre aprendizados de mais de 20 anos de produto e liderança.", youtubeLink: "https://www.youtube.com/watch?v=6iQ7OnsAmME", spotifyLink: "https://open.spotify.com/episode/3bSkGaTVqKlpE1IwAXlHwQ" },
   { id: 109, title: "Da Y Combinator ao Vibe Coding: Por dentro do Replit", date: "2026-03-19", description: "Discussão sobre a jornada do Replit desde o Y Combinator até o vibe coding e o futuro do desenvolvimento de software.", youtubeLink: "https://www.youtube.com/watch?v=2o6RhXbp2cQ", spotifyLink: "https://open.spotify.com/episode/0tqqplcSAdJ5RtuzaCZozJ" },
   { id: 110, title: "Como é o processo seletivo para Product Managers e Product Designers nas maiores empresas do Brasil", date: "2026-03-26", description: "Discussão sobre o processo seletivo para Product Managers e Product Designers nas maiores empresas do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=CMAUtA--Vhg", spotifyLink: "https://open.spotify.com/episode/3Q98aXs2BYRUlNlspvlPxZ" },
+  { id: 111, title: "🎯 Pare de lançar feature! O dilema que ninguém esperava", date: "2026-04-01", description: "Discussão sobre o dilema de parar de lançar features e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YCmoBL4yS2c", spotifyLink: "https://open.spotify.com/episode/5C1m4gu8HH5O7YyLXuqCYj" },
 ];
 
 export const products: Product[] = [
@@ -673,6 +674,15 @@ export const products: Product[] = [
   { id: "julius-ai", name: "Julius AI", category: "AI Tools", url: "https://julius.ai" },
   { id: "lanterna-celular", name: "Lanterna do celular", category: "Utilities" },
   { id: "sabonete", name: "Sabonete", category: "Lifestyle" },
+  { id: "ray-ban-meta-display", name: "Ray-Ban Meta Display", category: "Hardware" },
+  { id: "handy-computer", name: "handy.computer", category: "Hardware", url: "https://handy.computer" },
+  { id: "getyourguide", name: "GetYourGuide", category: "Travel", url: "https://www.getyourguide.com" },
+  { id: "deathbyclawd", name: "DeathbyClawd", category: "AI Tools" },
+  { id: "gopro", name: "GoPro", category: "Hardware", url: "https://gopro.com" },
+  { id: "garmin-forerunner-265", name: "Garmin Forerunner 265", category: "Fitness" },
+  { id: "maxi-cosi-spinel-360", name: "Maxi Cosi Spinel 360", category: "Hardware" },
+  { id: "napper", name: "Napper", category: "Wellness" },
+  { id: "calm-app", name: "Calm App", category: "Wellness", url: "https://www.calm.com" },
 ];
 
 export const people: Person[] = [
@@ -965,6 +975,9 @@ export const people: Person[] = [
   { id: "fernando", name: "Fernando" },
   { id: "renato-santoro", name: "Renato Santoro" },
   { id: "thiago-bodruk", name: "Thiago Bodruk" },
+  { id: "wellington-souza", name: "Wellington Souza" },
+  { id: "lika", name: "Lika" },
+  { id: "yasmin-sipahi", name: "Yasmïn Sipahi" },
 ];
 
 export const mentions: Mention[] = [
@@ -2050,4 +2063,18 @@ export const mentions: Mention[] = [
   { id: "m110-16", episodeId: 110, personId: "fernando", productId: "claude-code" },
   { id: "m110-17", episodeId: 110, personId: "renato-santoro", productId: "lanterna-celular" },
   { id: "m110-18", episodeId: 110, personId: "thiago-bodruk", productId: "sabonete" },
+  { id: "m111-1", episodeId: 111, personId: "arthur", productId: "ray-ban-meta-display" },
+  { id: "m111-2", episodeId: 111, personId: "aiquis", productId: "mercado-livre" },
+  { id: "m111-3", episodeId: 111, personId: "aiquis", productId: "amazon" },
+  { id: "m111-4", episodeId: 111, personId: "rafael-ferreira", productId: "handy-computer" },
+  { id: "m111-5", episodeId: 111, personId: "yasmin-sipahi", productId: "booking" },
+  { id: "m111-6", episodeId: 111, personId: "yasmin-sipahi", productId: "getyourguide" },
+  { id: "m111-7", episodeId: 111, personId: "wellington-souza", productId: "manus-ai" },
+  { id: "m111-8", episodeId: 111, personId: "efrem", productId: "deathbyclawd" },
+  { id: "m111-9", episodeId: 111, personId: "nader", productId: "browser-strawberry" },
+  { id: "m111-10", episodeId: 111, personId: "carol-pilon", productId: "gopro" },
+  { id: "m111-11", episodeId: 111, personId: "rodrigo", productId: "garmin-forerunner-265" },
+  { id: "m111-12", episodeId: 111, personId: "nina", productId: "maxi-cosi-spinel-360" },
+  { id: "m111-13", episodeId: 111, personId: "lika", productId: "napper" },
+  { id: "m111-14", episodeId: 111, personId: "matt-lopes", productId: "calm-app" },
 ];
