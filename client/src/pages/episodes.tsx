@@ -9,7 +9,6 @@ import {
   episodes,
   getMentionsForEpisode,
   getProduct,
-  getPerson,
   getParticipantsForEpisode,
   resolveParent,
 } from "@/lib/data-utils";
@@ -93,6 +92,48 @@ function EpisodeList() {
   );
 }
 
+function ParticipantRow({ person, products }: {
+  person: { id: string; name: string };
+  products: { mention: { id: string; context?: string; productId: string }; product: ReturnType<typeof getProduct> }[];
+}) {
+  return (
+    <div key={person.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+      <Link href={`/people/${person.id}`} className="text-sm font-medium hover:underline shrink-0" data-testid={`badge-person-${person.id}`}>
+        {person.name}
+      </Link>
+      <div className="flex flex-wrap gap-1">
+        {products.map(({ mention, product }) =>
+          product?.alsoCredits?.length ? (
+            <span key={mention.id} className="flex items-center gap-0.5">
+              <span className="text-xs text-muted-foreground italic mr-0.5">combo</span>
+              {product.alsoCredits.map((id, i) => (
+                <span key={id} className="flex items-center gap-0.5">
+                  {i > 0 && <span className="text-xs text-muted-foreground">+</span>}
+                  <Link href={`/products/${resolveParent(id)}`}>
+                    <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent border-dashed">
+                      {getProduct(id)?.name || id}
+                    </Badge>
+                  </Link>
+                </span>
+              ))}
+              {mention.context && <span className="text-xs text-muted-foreground italic ml-0.5">({mention.context})</span>}
+            </span>
+          ) : (
+            <span key={mention.id} className="flex items-center gap-1">
+              <Link href={`/products/${resolveParent(mention.productId)}`}>
+                <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
+                  {product?.name || mention.productId}
+                </Badge>
+              </Link>
+              {mention.context && <span className="text-xs text-muted-foreground italic">({mention.context})</span>}
+            </span>
+          )
+        )}
+      </div>
+    </div>
+  );
+}
+
 function EpisodeDetail() {
   const { id } = useParams<{ id: string }>();
   const episodeId = parseInt(id!);
@@ -128,7 +169,7 @@ function EpisodeDetail() {
       return (a.product?.name || a.productId).localeCompare(b.product?.name || b.productId);
     });
 
-  const HOSTS = ["aiquis", "arthur"];
+  const HOSTS = episode.hosts ?? ["aiquis", "arthur"];
   const sortedParticipants = [...participants].sort((a, b) => {
     const aHost = HOSTS.indexOf(a.id);
     const bHost = HOSTS.indexOf(b.id);
@@ -144,56 +185,92 @@ function EpisodeDetail() {
     })),
   }));
 
+  const hosts = participantWithProducts.filter(({ person }) => HOSTS.includes(person.id));
+  const guests = participantWithProducts.filter(({ person }) => !HOSTS.includes(person.id));
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2">
+      {/* Header */}
+      <div>
         <Link href="/episodes">
-          <Button variant="ghost" size="icon" data-testid="button-back">
-            <ArrowLeft className="h-4 w-4" />
+          <Button variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
+            <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Episódios
           </Button>
         </Link>
-        <div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">#{episode.id}</Badge>
-            <span className="text-sm text-muted-foreground">{episode.date}</span>
+        <div className="flex items-center gap-2 mb-1">
+          <Badge variant="secondary" className="text-sm px-2.5 py-0.5">#{episode.id}</Badge>
+          <span className="text-sm text-muted-foreground">{episode.date}</span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight leading-snug" data-testid="text-episode-title">
+          {episode.title}
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2 max-w-2xl">{episode.description}</p>
+      </div>
+
+      {/* Stats + Links */}
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex gap-4">
+          <div className="text-center">
+            <p className="text-2xl font-bold">{epMentions.length}</p>
+            <p className="text-xs text-muted-foreground">menções</p>
           </div>
-          <h1 className="text-xl font-bold tracking-tight mt-1" data-testid="text-episode-title">{episode.title}</h1>
+          <div className="w-px bg-border" />
+          <div className="text-center">
+            <p className="text-2xl font-bold">{sortedEpisodeProducts.length}</p>
+            <p className="text-xs text-muted-foreground">produtos</p>
+          </div>
+          <div className="w-px bg-border" />
+          <div className="text-center">
+            <p className="text-2xl font-bold">{participants.length}</p>
+            <p className="text-xs text-muted-foreground">pessoas</p>
+          </div>
+        </div>
+        <div className="flex gap-2 ml-auto">
+          {episode.youtubeLink && (
+            <a href={episode.youtubeLink} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm" className="border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10" data-testid="link-youtube">
+                <SiYoutube className="mr-1.5 h-3.5 w-3.5" /> YouTube
+              </Button>
+            </a>
+          )}
+          {episode.spotifyLink && (
+            <a href={episode.spotifyLink} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm" className="border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10" data-testid="link-spotify">
+                <SiSpotify className="mr-1.5 h-3.5 w-3.5" /> Spotify
+              </Button>
+            </a>
+          )}
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">{episode.description}</p>
-
-      <div className="flex gap-3 mt-2">
-        {episode.youtubeLink && (
-          <a href={episode.youtubeLink} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" size="default" className="border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10 px-5" data-testid="link-youtube">
-              <SiYoutube className="mr-2 h-4 w-4" /> YouTube
-            </Button>
-          </a>
-        )}
-        {episode.spotifyLink && (
-          <a href={episode.spotifyLink} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" size="default" className="border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10 px-5" data-testid="link-spotify">
-              <SiSpotify className="mr-2 h-4 w-4" /> Spotify
-            </Button>
-          </a>
-        )}
-      </div>
-
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Produtos */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{epMentions.length} menções e {sortedEpisodeProducts.length} produtos</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Package className="h-4 w-4 text-muted-foreground" />
+              Produtos mencionados
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-1">
-              {sortedEpisodeProducts.map(({ productId, count, product }) => (
-                <div key={productId} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
-                  <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
-                    {product?.name || productId}
-                  </Link>
+            <div className="space-y-0.5">
+              {sortedEpisodeProducts.map(({ productId, count, product }, index) => (
+                <div key={productId} className="flex items-center justify-between py-2 border-b border-border/40 last:border-0">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="text-xs text-muted-foreground w-5 text-right shrink-0 tabular-nums">{index + 1}</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
+                        {product?.name || productId}
+                      </Link>
+                      {product?.category && (
+                        <span className="text-xs text-muted-foreground shrink-0">{product.category}</span>
+                      )}
+                    </div>
+                  </div>
                   {count > 1 && (
-                    <span className="text-xs text-muted-foreground shrink-0 ml-2">{count}×</span>
+                    <span className="text-xs font-medium text-muted-foreground bg-muted rounded-full px-2 py-0.5 shrink-0 ml-2">
+                      {count}×
+                    </span>
                   )}
                 </div>
               ))}
@@ -201,48 +278,37 @@ function EpisodeDetail() {
           </CardContent>
         </Card>
 
+        {/* Participantes */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{participants.length} participantes</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              Participantes
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {participantWithProducts.map(({ person, products }) => (
-                <div key={person.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <Link href={`/people/${person.id}`} className="text-sm font-medium hover:underline shrink-0" data-testid={`badge-person-${person.id}`}>
-                    {person.name}
-                  </Link>
-                  <div className="flex flex-wrap gap-1">
-                    {products.map(({ mention, product }) =>
-                      product?.alsoCredits?.length ? (
-                        <span key={mention.id} className="flex items-center gap-0.5">
-                          <span className="text-xs text-muted-foreground italic mr-0.5">combo</span>
-                          {product.alsoCredits.map((id, i) => (
-                            <span key={id} className="flex items-center gap-0.5">
-                              {i > 0 && <span className="text-xs text-muted-foreground">+</span>}
-                              <Link href={`/products/${resolveParent(id)}`}>
-                                <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent border-dashed">
-                                  {getProduct(id)?.name || id}
-                                </Badge>
-                              </Link>
-                            </span>
-                          ))}
-                          {mention.context && <span className="text-xs text-muted-foreground italic ml-0.5">({mention.context})</span>}
-                        </span>
-                      ) : (
-                        <span key={mention.id} className="flex items-center gap-1">
-                          <Link href={`/products/${resolveParent(mention.productId)}`}>
-                            <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
-                              {product?.name || mention.productId}
-                            </Badge>
-                          </Link>
-                          {mention.context && <span className="text-xs text-muted-foreground italic">({mention.context})</span>}
-                        </span>
-                      )
-                    )}
+            <div className="space-y-4">
+              {hosts.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Hosts</p>
+                  <div className="space-y-2.5">
+                    {hosts.map(({ person, products }) => (
+                      <ParticipantRow key={person.id} person={person} products={products} />
+                    ))}
                   </div>
                 </div>
-              ))}
+              )}
+              {guests.length > 0 && (
+                <div>
+                  {hosts.length > 0 && <div className="border-t border-border/50 mb-3" />}
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Comunidade</p>
+                  <div className="space-y-2.5">
+                    {guests.map(({ person, products }) => (
+                      <ParticipantRow key={person.id} person={person} products={products} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

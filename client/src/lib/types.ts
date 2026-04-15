@@ -5,6 +5,7 @@ export interface Episode {
   description: string;
   youtubeLink?: string;
   spotifyLink?: string;
+  hosts?: string[];
 }
 
 export interface Product {
