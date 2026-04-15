@@ -87,6 +87,7 @@ export const episodes: Episode[] = [
   { id: 110, title: "Como é o processo seletivo para Product Managers e Product Designers nas maiores empresas do Brasil", date: "2026-03-26", description: "Discussão sobre o processo seletivo para Product Managers e Product Designers nas maiores empresas do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=CMAUtA--Vhg", spotifyLink: "https://open.spotify.com/episode/3Q98aXs2BYRUlNlspvlPxZ" },
   { id: 111, title: "🎯 Pare de lançar feature! O dilema que ninguém esperava", date: "2026-04-01", description: "Discussão sobre o dilema de parar de lançar features e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YCmoBL4yS2c", spotifyLink: "https://open.spotify.com/episode/5C1m4gu8HH5O7YyLXuqCYj" },
   { id: 112, title: "Vazou o código do Claude Code: O que vem por aí?", date: "2026-04-11", description: "Discussão sobre o vazamento do código do Claude Code e o que isso revela sobre o futuro da ferramenta.", youtubeLink: "https://www.youtube.com/watch?v=oF56Icgu7eY", spotifyLink: "https://open.spotify.com/episode/0ANsY2GTnxoRNDA6vUh42g" },
+  { id: 113, title: "O fim do MVP? como AI quebrou o ciclo de produto", date: "2026-04-15", description: "Discussão sobre o fim do MVP e como a inteligência artificial quebrou o ciclo tradicional de produto.", youtubeLink: "https://www.youtube.com/watch?v=OrFrhWqFRgg", spotifyLink: "https://open.spotify.com/episode/1uNlHqE8VSeTfSZShqmYTN" },
 ];
 
 export const products: Product[] = [
@@ -258,7 +259,6 @@ export const products: Product[] = [
   { id: "buscape", name: "Buscapé", category: "Retail", url: "https://www.buscape.com.br/" },
   { id: "buscape-zoom", name: "Buscapé + Zoom", category: "Retail", alsoCredits: ["buscape", "zoom-loja"] },
   { id: "invisibility-ai", name: "Invisibility AI", category: "AI Tools", url: "https://github.com/InvisibilityInc/Invisibility" },
-  { id: "ifood-lista-mercado", name: "iFood (lista do mercado)", category: "Delivery", parentId: "ifood" },
   { id: "rstudio", name: "R-Studio", category: "Development" },
   { id: "bipa", name: "Bipa", category: "Finance", url: "https://bipa.app/" },
   { id: "mobills", name: "Mobills", category: "Finance", url: "https://mobills.com.br" },
@@ -693,6 +693,10 @@ export const products: Product[] = [
   { id: "microsoft-365", name: "Microsoft 365", category: "Productivity" },
   { id: "byd", name: "BYD", category: "Transportation", url: "https://www.byd.com/" },
   { id: "app-byd", name: "App do BYD", category: "Transportation", url: "https://www.byd.com/", parentId: "byd" },
+  { id: "claude-projects", name: "Claude Projects", category: "AI Tools", parentId: "claude" },
+  { id: "blip", name: "Blip", category: "Communication", url: "https://blip.ai" },
+  { id: "kiro", name: "Kiro", category: "AI Tools", url: "https://kiro.dev" },
+  { id: "wikiloc", name: "Wikiloc", category: "Fitness", url: "https://www.wikiloc.com" },
 ];
 
 export const people: Person[] = [
@@ -995,6 +999,11 @@ export const people: Person[] = [
   { id: "eduardo-borges", name: "Eduardo Borges" },
   { id: "isaac-andrade", name: "Isaac Andrade" },
   { id: "alessandra-vasco", name: "Alessandra Vasco" },
+  { id: "helber-alves", name: "Helber Alves" },
+  { id: "aline", name: "Aline" },
+  { id: "guto-guimaraes", name: "Guto Guimarães" },
+  { id: "julia-mendes", name: "Julia Mendes" },
+  { id: "eduardo-montoya", name: "Eduardo Montoya" },
 ];
 
 export const mentions: Mention[] = [
@@ -1160,7 +1169,7 @@ export const mentions: Mention[] = [
   { id: "m41-3", episodeId: 41, personId: "aiquis", productId: "buscape-zoom" },
   { id: "m41-4", episodeId: 41, personId: "cloves", productId: "invisibility-ai" },
   { id: "m41-5", episodeId: 41, personId: "nana", productId: "canva" },
-  { id: "m41-6", episodeId: 41, personId: "miriam", productId: "ifood-lista-mercado" },
+  { id: "m41-6", episodeId: 41, personId: "miriam", productId: "ifood", context: "lista do mercado" },
   { id: "m41-7", episodeId: 41, personId: "karina", productId: "garmin-connect" },
   { id: "m41-8", episodeId: 41, personId: "eduardo", productId: "rstudio" },
   { id: "m41-9", episodeId: 41, personId: "bob", productId: "spotify" },
@@ -2122,4 +2131,24 @@ export const mentions: Mention[] = [
   { id: "m112-26", episodeId: 112, personId: "alessandra-vasco", productId: "perplexity" },
   { id: "m112-27", episodeId: 112, personId: "alessandra-vasco", productId: "supabase" },
   { id: "m112-28", episodeId: 112, personId: "danilera", productId: "app-byd" },
+  { id: "m113-1", episodeId: 113, personId: "arthur", productId: "claude-cowork" },
+  { id: "m113-2", episodeId: 113, personId: "aiquis", productId: "claude-projects" },
+  { id: "m113-3", episodeId: 113, personId: "helber-alves", productId: "replit", context: "fritou a bateria do celular de tanto buildar" },
+  { id: "m113-4", episodeId: 113, personId: "amanda-couto", productId: "claude-cowork" },
+  { id: "m113-5", episodeId: 113, personId: "rafael-ferreira", productId: "blip", context: "transferir arquivos iPhone ↔ Windows, tipo AirDrop" },
+  { id: "m113-6", episodeId: 113, personId: "marcos-lavin", productId: "claude-cowork" },
+  { id: "m113-7", episodeId: 113, personId: "marcos-lavin", productId: "chatgpt" },
+  { id: "m113-8", episodeId: 113, personId: "isaac-andrade", productId: "microsoft-365" },
+  { id: "m113-9", episodeId: 113, personId: "beatriz-morales", productId: "ifood", context: "lista do mercado" },
+  { id: "m113-10", episodeId: 113, personId: "renato-bassi", productId: "waze" },
+  { id: "m113-11", episodeId: 113, personId: "aline", productId: "claude" },
+  { id: "m113-12", episodeId: 113, personId: "aline", productId: "obsidian" },
+  { id: "m113-13", episodeId: 113, personId: "guto-guimaraes", productId: "kiro" },
+  { id: "m113-14", episodeId: 113, personId: "felipe-saraiva", productId: "claude-code" },
+  { id: "m113-15", episodeId: 113, personId: "peixoto", productId: "cursor" },
+  { id: "m113-16", episodeId: 113, personId: "danilera", productId: "replit" },
+  { id: "m113-17", episodeId: 113, personId: "nina", productId: "replit", context: "fazendo apps de barista" },
+  { id: "m113-18", episodeId: 113, personId: "julia-mendes", productId: "google-maps" },
+  { id: "m113-19", episodeId: 113, personId: "julia-mendes", productId: "wikiloc", context: "Google Maps de trilhas" },
+  { id: "m113-20", episodeId: 113, personId: "eduardo-montoya", productId: "codex-openai" },
 ];
