@@ -88,6 +88,7 @@ export const episodes: Episode[] = [
   { id: 111, title: "🎯 Pare de lançar feature! O dilema que ninguém esperava", date: "2026-04-01", description: "Discussão sobre o dilema de parar de lançar features e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YCmoBL4yS2c", spotifyLink: "https://open.spotify.com/episode/5C1m4gu8HH5O7YyLXuqCYj" },
   { id: 112, title: "Vazou o código do Claude Code: O que vem por aí?", date: "2026-04-11", description: "Discussão sobre o vazamento do código do Claude Code e o que isso revela sobre o futuro da ferramenta.", youtubeLink: "https://www.youtube.com/watch?v=oF56Icgu7eY", spotifyLink: "https://open.spotify.com/episode/0ANsY2GTnxoRNDA6vUh42g" },
   { id: 113, title: "O fim do MVP? como AI quebrou o ciclo de produto", date: "2026-04-15", description: "Discussão sobre o fim do MVP e como a inteligência artificial quebrou o ciclo tradicional de produto.", youtubeLink: "https://www.youtube.com/watch?v=OrFrhWqFRgg", spotifyLink: "https://open.spotify.com/episode/1uNlHqE8VSeTfSZShqmYTN" },
+  { id: 114, title: "Claude Design. Acabou pro Figma?", date: "2026-04-24", description: "Discussão sobre o Claude Design e o impacto da IA no futuro das ferramentas de design como o Figma.", youtubeLink: "https://www.youtube.com/watch?v=jIqof3cKSxM", spotifyLink: "https://open.spotify.com/episode/1ujAlFewEFuGfKixPXNyD0", hosts: ["aiquis", "arthur", "vitor-ferrara"] },
 ];
 
 export const products: Product[] = [
@@ -697,6 +698,12 @@ export const products: Product[] = [
   { id: "blip", name: "Blip", category: "Communication", url: "https://blip.ai" },
   { id: "kiro", name: "Kiro", category: "AI Tools", url: "https://kiro.dev" },
   { id: "wikiloc", name: "Wikiloc", category: "Fitness", url: "https://www.wikiloc.com" },
+  { id: "claude-artifacts", name: "Claude Artifacts", category: "AI Tools", parentId: "claude" },
+  { id: "replit-canvas", name: "Replit (Canvas)", category: "AI Tools", parentId: "replit" },
+  { id: "app-the-news", name: "App do The News", category: "Entertainment", url: "https://thenews.com.br/app" },
+  { id: "claude-design", name: "Claude Design", category: "AI Tools", parentId: "claude" },
+  { id: "iphone-17-pro-max", name: "iPhone 17 Pro Max", category: "Hardware" },
+  { id: "bala-fini", name: "Bala Fini", category: "Lifestyle" },
 ];
 
 export const people: Person[] = [
@@ -1004,6 +1011,10 @@ export const people: Person[] = [
   { id: "guto-guimaraes", name: "Guto Guimarães" },
   { id: "julia-mendes", name: "Julia Mendes" },
   { id: "eduardo-montoya", name: "Eduardo Montoya" },
+  { id: "vitor-ferrara", name: "Vitor Ferrara" },
+  { id: "jonas", name: "Jonas" },
+  { id: "paulo-santos", name: "Paulo Santos" },
+  { id: "pamela", name: "Pamela" },
 ];
 
 export const mentions: Mention[] = [
@@ -2151,4 +2162,24 @@ export const mentions: Mention[] = [
   { id: "m113-18", episodeId: 113, personId: "julia-mendes", productId: "google-maps" },
   { id: "m113-19", episodeId: 113, personId: "julia-mendes", productId: "wikiloc", context: "Google Maps de trilhas" },
   { id: "m113-20", episodeId: 113, personId: "eduardo-montoya", productId: "codex-openai" },
+  { id: "m114-1", episodeId: 114, personId: "aiquis", productId: "claude-artifacts", context: "roteiro de viagem com mapa interativo" },
+  { id: "m114-2", episodeId: 114, personId: "arthur", productId: "replit-canvas" },
+  { id: "m114-3", episodeId: 114, personId: "vitor-ferrara", productId: "claude-code" },
+  { id: "m114-4", episodeId: 114, personId: "ronald-falcao", productId: "google-stitch" },
+  { id: "m114-5", episodeId: 114, personId: "amanda-couto", productId: "claude" },
+  { id: "m114-6", episodeId: 114, personId: "amanda-couto", productId: "app-the-news", context: "controle de hábitos" },
+  { id: "m114-7", episodeId: 114, personId: "isaac-santos", productId: "copilot-365", context: "embedado no Excel" },
+  { id: "m114-8", episodeId: 114, personId: "huxley", productId: "claude-code" },
+  { id: "m114-9", episodeId: 114, personId: "andre-santos", productId: "claude-code" },
+  { id: "m114-10", episodeId: 114, personId: "alexandre-pereira", productId: "claude-code" },
+  { id: "m114-11", episodeId: 114, personId: "tadeu", productId: "claude-code" },
+  { id: "m114-12", episodeId: 114, personId: "caue", productId: "claude-code" },
+  { id: "m114-13", episodeId: 114, personId: "jonas", productId: "claude-design" },
+  { id: "m114-14", episodeId: 114, personId: "glauco", productId: "iphone-17-pro-max" },
+  { id: "m114-15", episodeId: 114, personId: "beatriz-morales", productId: "bala-fini" },
+  { id: "m114-16", episodeId: 114, personId: "daniel-gonzalez", productId: "starlink" },
+  { id: "m114-17", episodeId: 114, personId: "matt-lopes", productId: "garmin-connect" },
+  { id: "m114-18", episodeId: 114, personId: "paulo-santos", productId: "replit" },
+  { id: "m114-19", episodeId: 114, personId: "fernando", productId: "replit" },
+  { id: "m114-20", episodeId: 114, personId: "pamela", productId: "cursor" },
 ];
