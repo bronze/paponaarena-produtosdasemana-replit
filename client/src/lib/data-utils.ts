@@ -216,4 +216,21 @@ export function getLastEpisode() {
   return [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
 }
 
+export function getAICompanyMentionStats() {
+  const counts = getEffectiveMentionCounts();
+  const sum = (ids: string[]) =>
+    ids.reduce((acc, id) => acc + (counts.get(id) ?? 0), 0);
+  const breakdown = (ids: string[]) =>
+    ids
+      .map(id => ({ name: productMap.get(id)?.name ?? id, mentions: counts.get(id) ?? 0 }))
+      .filter(d => d.mentions > 0)
+      .sort((a, b) => b.mentions - a.mentions);
+
+  return [
+    { company: "Anthropic", mentions: sum(["claude", "claude-code"]), color: "#d97706", breakdown: breakdown(["claude", "claude-code"]) },
+    { company: "OpenAI",    mentions: sum(["chatgpt", "codex-openai", "openai"]), color: "#10a37f", breakdown: breakdown(["chatgpt", "codex-openai", "openai"]) },
+    { company: "Google",    mentions: sum(["gemini", "google-flow"]), color: "#4285F4", breakdown: breakdown(["gemini", "google-flow"]) },
+  ].sort((a, b) => b.mentions - a.mentions);
+}
+
 export { episodes, products, people, mentions };

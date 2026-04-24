@@ -32,6 +32,7 @@ import {
   resolveParent,
   getTopProductsAscension,
   getTopProductNames,
+  getAICompanyMentionStats,
 } from "@/lib/data-utils";
 
 const CONFETTI_COLORS = ["#f59e0b", "#fbbf24", "#fcd34d", "#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#ec4899"];
@@ -85,6 +86,7 @@ export default function Dashboard() {
 
   const ascensionData = getTopProductsAscension(5);
   const topProductNames = getTopProductNames(5);
+  const aiCompanyStats = getAICompanyMentionStats();
 
   const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
   const latestMentions = getMentionsForEpisode(latestEpisode.id);
@@ -161,36 +163,82 @@ export default function Dashboard() {
       </Link>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">Top 10 Produtos</CardTitle>
-            <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
-              Ver todos <ArrowRight className="h-3 w-3" />
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={topProducts} layout="vertical" margin={{ left: 0, right: 16 }}>
-                <XAxis type="number" />
-                <YAxis
-                  type="category"
-                  dataKey="name"
-                  width={120}
-                  tick={{ fontSize: 11 }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: 8,
-                    color: "hsl(var(--card-foreground))",
-                  }}
-                />
-                <Bar dataKey="mentionCount" fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} name="Menções" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <div className="space-y-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base">Top 10 Produtos</CardTitle>
+              <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
+                Ver todos <ArrowRight className="h-3 w-3" />
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={topProducts} layout="vertical" margin={{ left: 0, right: 16 }}>
+                  <XAxis type="number" />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    width={120}
+                    tick={{ fontSize: 11 }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: 8,
+                      color: "hsl(var(--card-foreground))",
+                    }}
+                  />
+                  <Bar dataKey="mentionCount" fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} name="Menções" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={160}>
+                <BarChart data={aiCompanyStats} layout="vertical" margin={{ left: 0, right: 16 }}>
+                  <XAxis type="number" tick={{ fill: "hsl(var(--foreground))", fontSize: 11 }} />
+                  <YAxis type="category" dataKey="company" width={80} tick={{ fontSize: 12, fill: "hsl(var(--foreground))" }} />
+                  <Tooltip
+                    content={({ active, payload, label }) => {
+                      if (!active || !payload?.length) return null;
+                      const d = payload[0].payload;
+                      return (
+                        <div style={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: 8,
+                          padding: "6px 12px",
+                        }}>
+                          <p style={{ color: "hsl(var(--card-foreground))", margin: 0, marginBottom: 4 }}>{label}</p>
+                          {d.breakdown.map((item: { name: string; mentions: number }) => (
+                            <p key={item.name} style={{ color: d.color, margin: 0 }}>{item.name}: {item.mentions}</p>
+                          ))}
+                          <p style={{ color: d.color, margin: 0, marginTop: 4, fontWeight: 600 }}>Total: {d.mentions}</p>
+                        </div>
+                      );
+                    }}
+                  />
+                  <Bar dataKey="mentions" radius={[0, 4, 4, 0]} name="Menções">
+                    {aiCompanyStats.map((entry) => (
+                      <Cell key={entry.company} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
+                <p><span style={{ color: "#d97706" }}>Anthropic:</span> Claude, Claude Code e variantes</p>
+                <p><span style={{ color: "#10a37f" }}>OpenAI:</span> ChatGPT, Codex e variantes</p>
+                <p><span style={{ color: "#4285F4" }}>Google:</span> Gemini, Google Flow e variantes</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         <div className="space-y-6">
           <Link href={`/episodes/${latestEpisode.id}`}>
