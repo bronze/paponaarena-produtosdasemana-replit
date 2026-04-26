@@ -84,8 +84,8 @@ export default function Dashboard() {
   const trend = getMentionsPerEpisodeTrend();
   const recentMentions = getRecentMentions(8);
 
-  const ascensionData = getTopProductsAscension(5);
-  const topProductNames = getTopProductNames(5);
+  const ascensionData = getTopProductsAscension(6);
+  const topProductNames = getTopProductNames(6);
   const aiCompanyStats = getAICompanyMentionStats();
 
   const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
@@ -235,6 +235,8 @@ export default function Dashboard() {
                 <p><span style={{ color: "#d97706" }}>Anthropic:</span> Claude, Claude Code e variantes</p>
                 <p><span style={{ color: "#10a37f" }}>OpenAI:</span> ChatGPT, Codex e variantes</p>
                 <p><span style={{ color: "#4285F4" }}>Google:</span> Gemini, Google Flow e variantes</p>
+                <p><span style={{ color: "#F26207" }}>Replit:</span> Replit, Replit Canvas e variantes</p>
+                <p><span style={{ color: "#8B5CF6" }}>Cursor:</span> Cursor e variantes</p>
               </div>
             </CardContent>
           </Card>
@@ -315,7 +317,7 @@ export default function Dashboard() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Ascensão dos Top 5 Produtos</CardTitle>
+          <CardTitle className="text-base">Ascensão dos Top 6 Produtos</CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={280}>
