@@ -89,6 +89,7 @@ export const episodes: Episode[] = [
   { id: 112, title: "Vazou o código do Claude Code: O que vem por aí?", date: "2026-04-11", description: "Discussão sobre o vazamento do código do Claude Code e o que isso revela sobre o futuro da ferramenta.", youtubeLink: "https://www.youtube.com/watch?v=oF56Icgu7eY", spotifyLink: "https://open.spotify.com/episode/0ANsY2GTnxoRNDA6vUh42g" },
   { id: 113, title: "O fim do MVP? como AI quebrou o ciclo de produto", date: "2026-04-15", description: "Discussão sobre o fim do MVP e como a inteligência artificial quebrou o ciclo tradicional de produto.", youtubeLink: "https://www.youtube.com/watch?v=OrFrhWqFRgg", spotifyLink: "https://open.spotify.com/episode/1uNlHqE8VSeTfSZShqmYTN" },
   { id: 114, title: "Claude Design. Acabou pro Figma?", date: "2026-04-24", description: "Discussão sobre o Claude Design e o impacto da IA no futuro das ferramentas de design como o Figma.", youtubeLink: "https://www.youtube.com/watch?v=jIqof3cKSxM", spotifyLink: "https://open.spotify.com/episode/1ujAlFewEFuGfKixPXNyD0", hosts: ["aiquis", "arthur", "vitor-ferrara"] },
+  { id: 115, title: "Metade dos PMs estão em apuros: o que IA muda na carreira", date: "2026-04-29", description: "Discussão sobre o impacto da IA na carreira de Product Managers.", youtubeLink: "https://www.youtube.com/watch?v=u9I8_Z99om0", spotifyLink: "https://open.spotify.com/episode/1WAA9TSHHDcRuLyxdjGUws" },
 ];
 
 export const products: Product[] = [
@@ -704,6 +705,8 @@ export const products: Product[] = [
   { id: "claude-design", name: "Claude Design", category: "AI Tools", parentId: "claude" },
   { id: "iphone-17-pro-max", name: "iPhone 17 Pro Max", category: "Hardware" },
   { id: "bala-fini", name: "Bala Fini", category: "Lifestyle" },
+  { id: "cartorio-civil", name: "Cartório Civil", category: "Services" },
+  { id: "hermes", name: "Hermes", category: "AI Tools", url: "https://hermes-agent.nousresearch.com/" },
 ];
 
 export const people: Person[] = [
@@ -1015,6 +1018,10 @@ export const people: Person[] = [
   { id: "jonas", name: "Jonas" },
   { id: "paulo-santos", name: "Paulo Santos" },
   { id: "pamela", name: "Pamela" },
+  { id: "paulo-rodrigues", name: "Paulo Rodrigues" },
+  { id: "joaozin", name: "Joãozin" },
+  { id: "celso", name: "Celso" },
+  { id: "ju-carvalho", name: "Ju Carvalho" },
 ];
 
 export const mentions: Mention[] = [
@@ -2182,4 +2189,24 @@ export const mentions: Mention[] = [
   { id: "m114-18", episodeId: 114, personId: "paulo-santos", productId: "replit" },
   { id: "m114-19", episodeId: 114, personId: "fernando", productId: "replit" },
   { id: "m114-20", episodeId: 114, personId: "pamela", productId: "cursor" },
+  { id: "m115-1", episodeId: 115, personId: "arthur", productId: "cursor" },
+  { id: "m115-2", episodeId: 115, personId: "aiquis", productId: "substack", context: "transcrição com busca" },
+  { id: "m115-3", episodeId: 115, personId: "aiquis", productId: "notebooklm", context: "mind map de podcast" },
+  { id: "m115-4", episodeId: 115, personId: "paulo-rodrigues", productId: "replit" },
+  { id: "m115-5", episodeId: 115, personId: "joaozin", productId: "replit" },
+  { id: "m115-6", episodeId: 115, personId: "erika", productId: "replit" },
+  { id: "m115-7", episodeId: 115, personId: "camila-meneghetti", productId: "replit" },
+  { id: "m115-8", episodeId: 115, personId: "rodrigo", productId: "cursor" },
+  { id: "m115-9", episodeId: 115, personId: "lucas-mattos", productId: "cursor" },
+  { id: "m115-10", episodeId: 115, personId: "beatriz-morales", productId: "cursor" },
+  { id: "m115-11", episodeId: 115, personId: "carol-pilon", productId: "claude-code" },
+  { id: "m115-12", episodeId: 115, personId: "celso", productId: "claude-code" },
+  { id: "m115-13", episodeId: 115, personId: "arthur-azevedo", productId: "claude-code" },
+  { id: "m115-14", episodeId: 115, personId: "neider-narde", productId: "claude-code" },
+  { id: "m115-15", episodeId: 115, personId: "vanessa", productId: "waze" },
+  { id: "m115-16", episodeId: 115, personId: "fabio", productId: "cartorio-civil", context: "game over, vai casar" },
+  { id: "m115-17", episodeId: 115, personId: "caue", productId: "nav-dasa" },
+  { id: "m115-18", episodeId: 115, personId: "fernanda", productId: "hermes", context: "agent" },
+  { id: "m115-19", episodeId: 115, personId: "matt-lopes", productId: "airalo", context: "eSIM" },
+  { id: "m115-20", episodeId: 115, personId: "ju-carvalho", productId: "disney-plus", context: "Stitch pro filho" },
 ];
