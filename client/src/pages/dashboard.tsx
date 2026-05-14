@@ -135,7 +135,7 @@ export default function Dashboard() {
       </div>
 
       {/* 1000th mention milestone banner */}
-      <Link href="/episodes/108" className="mt-2 block">
+      {/* <Link href="/episodes/108" className="mt-2 block">
         <Card className="relative border-amber-400 bg-amber-50 dark:bg-amber-950/20 cursor-pointer transition-opacity hover:opacity-90">
           <MilestoneConfetti />
           <CardContent className="pt-5 pb-5 relative z-10">
@@ -160,7 +160,7 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
-      </Link>
+      </Link> */}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
