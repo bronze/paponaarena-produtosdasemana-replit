@@ -92,6 +92,7 @@ export const episodes: Episode[] = [
   { id: 115, title: "Metade dos PMs estão em apuros: o que IA muda na carreira", date: "2026-04-29", description: "Discussão sobre o impacto da IA na carreira de Product Managers.", youtubeLink: "https://www.youtube.com/watch?v=u9I8_Z99om0", spotifyLink: "https://open.spotify.com/episode/1WAA9TSHHDcRuLyxdjGUws" },
   { id: 116, title: "Como a IA tá mudando a estrutura das organizações?", date: "2026-05-14", description: "Discussão sobre como a IA está mudando a estrutura das organizações.", youtubeLink: "https://www.youtube.com/watch?v=8luePci--HY", spotifyLink: "https://open.spotify.com/episode/7i4rDNqiFyL7aOXIkUtnnd", hosts: ["aiquis", "arthur", "fayner-costa", "fernanda-faria", "gabriel-hamu"] },
   { id: 117, title: "Ser Contribuidor Individual é a nova moda?", date: "2026-05-20", description: "Discussão sobre o papel do Contribuidor Individual (IC) e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=9Wu16M9ZyxY", spotifyLink: "https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ" },
+  { id: 121, title: "Como C-Levels estão usando IA? Ao Vivo no Web Summit Rio 26", date: "2026-06-15", description: "Discussão ao vivo no Web Summit Rio 26 sobre como C-Levels estão usando IA.", youtubeLink: "https://www.youtube.com/watch?v=WtVef7KaEwY", spotifyLink: "https://open.spotify.com/episode/7qrR9fLDAK6S8iLoqrQknp" },
 ];
 
 export const products: Product[] = [
@@ -599,6 +600,7 @@ export const products: Product[] = [
   { id: "wine", name: "Wine", category: "Retail", url: "https://www.wine.com.br/" },
   { id: "nike", name: "Nike", category: "Retail", url: "https://nike.com" },
   { id: "nike-alphafly", name: "Nike Alphafly", category: "Fitness", parentId: "nike" },
+  { id: "air-jordan-3-retro-brasil", name: "Air Jordan 3 Retro Brasil", category: "Retail", parentId: "nike" },
   { id: "pexels", name: "Pexels", category: "Business", url: "https://pexels.com" },
   { id: "vivino", name: "Vivino", category: "Business", url: "https://vivino.com" },
   { id: "u-haul", name: "U-haul", category: "Business" },
@@ -730,6 +732,8 @@ export const products: Product[] = [
   { id: "app-figurinhas-copa", name: "App de Figurinhas da Copa", category: "Entertainment" },
   { id: "chuveiro", name: "Chuveiro", category: "Hardware" },
   { id: "android-auto", name: "Android Auto", category: "Transportation", url: "https://www.android.com/intl/en_us/auto/" },
+  { id: "ruido-branco", name: "Ruído branco", category: "Lifestyle" },
+  { id: "fiorino", name: "Fiorino", category: "Transportation" },
 ];
 
 export const people: Person[] = [
@@ -1069,6 +1073,8 @@ export const people: Person[] = [
   { id: "agatha-martins", name: "Agatha Martins" },
   { id: "felipe-botelho", name: "Felipe Botelho" },
   { id: "felipe", name: "Felipe" },
+  { id: "julia-jordao", name: "Júlia Jordão" },
+  { id: "artur-negrao", name: "Artur Negrão" },
 ];
 
 export const mentions: Mention[] = [
@@ -2313,4 +2319,8 @@ export const mentions: Mention[] = [
   { id: "m117-30", episodeId: 117, personId: "felipe", productId: "app-figurinhas-copa" },
   { id: "m117-31", episodeId: 117, personId: "renata-borges", productId: "chuveiro" },
   { id: "m117-32", episodeId: 117, personId: "eduardo-montoya", productId: "android-auto" },
+  { id: "m121-1", episodeId: 121, personId: "arthur", productId: "air-jordan-3-retro-brasil" },
+  { id: "m121-2", episodeId: 121, personId: "arthur", productId: "replit", context: "o segurança do nosso stand fez o site da marca de roupa dele sozinho, do zero ao infinito" },
+  { id: "m121-3", episodeId: 121, personId: "julia-jordao", productId: "ruido-branco", context: "pra fazer a filha dormir depois de uma semana puxada de Web Summit" },
+  { id: "m121-4", episodeId: 121, personId: "artur-negrao", productId: "fiorino", context: "alugou pra carregar o orelhão reformado do stand da Salvy" },
 ];
