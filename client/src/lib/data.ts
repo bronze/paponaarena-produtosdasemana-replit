@@ -737,7 +737,7 @@ export const products: Product[] = [
   { id: "fiorino", name: "Fiorino", category: "Transportation" },
   { id: "aquecedor-shopee", name: "Aquecedor (Shopee)", category: "Hardware" },
   { id: "preply", name: "Preply", category: "Education", url: "https://preply.com" },
-  { id: "zyla", name: "Zyla", category: "AI Tools" },
+  { id: "zyla", name: "Zyla", category: "AI Tools", url: "https://www.zyla.fit/" },
   { id: "kafex", name: "Kaféx", category: "Food & Drink" },
   { id: "app-beto-carreiro-world", name: "App do Beto Carreiro World", category: "Entertainment" },
   { id: "figuritas", name: "Figuritas", category: "Entertainment" },
