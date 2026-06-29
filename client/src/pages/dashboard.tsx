@@ -24,6 +24,7 @@ import {
   getLeaderboardProducts,
   getCategoryStats,
   getMentionsPerEpisodeTrend,
+  getParticipantsPerEpisodeTrend,
   getRecentMentions,
   getProduct,
   getPerson,
@@ -82,6 +83,7 @@ export default function Dashboard() {
   const topProducts = getLeaderboardProducts().slice(0, 10);
   const categoryStats = getCategoryStats().slice(0, 8);
   const trend = getMentionsPerEpisodeTrend();
+  const participantsTrend = getParticipantsPerEpisodeTrend();
   const recentMentions = getRecentMentions(8);
 
   const ascensionData = getTopProductsAscension(6);
@@ -370,6 +372,33 @@ export default function Dashboard() {
                 }}
               />
               <Bar dataKey="mentions" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} name="Menções" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Participantes por Episódio</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={participantsTrend} margin={{ left: 0, right: 16 }}>
+              <XAxis dataKey="episode" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+              <YAxis allowDecimals={false} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: 8,
+                  color: "hsl(var(--card-foreground))",
+                }}
+                labelFormatter={(label) => {
+                  const item = participantsTrend.find((t) => t.episode === label);
+                  return item ? `Ep ${label} - ${item.date}` : label;
+                }}
+              />
+              <Bar dataKey="participants" fill="hsl(var(--chart-3))" radius={[4, 4, 0, 0]} name="Participantes" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

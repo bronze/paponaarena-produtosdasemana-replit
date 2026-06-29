@@ -131,6 +131,20 @@ export function getMentionsPerEpisodeTrend() {
   }));
 }
 
+export function getParticipantsPerEpisodeTrend() {
+  const sorted = [...episodes].sort((a, b) => a.date.localeCompare(b.date));
+  return sorted.map((ep) => {
+    const epMentions = mentions.filter((m) => m.episodeId === ep.id);
+    const uniqueParticipants = new Set(epMentions.map((m) => m.personId)).size;
+    return {
+      episode: `#${ep.id}`,
+      episodeId: ep.id,
+      participants: uniqueParticipants,
+      date: ep.date,
+    };
+  });
+}
+
 export function getTopProductsAscension(topN = 5) {
   const top = getLeaderboardProducts().slice(0, topN);
   const topIds = new Set(top.map((p) => p.id));
