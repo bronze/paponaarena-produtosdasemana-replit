@@ -241,7 +241,7 @@ export function getAICompanyMentionStats() {
       .sort((a, b) => b.mentions - a.mentions);
 
   return [
-    { company: "Anthropic", mentions: sum(["claude", "claude-code"]), color: "#d97706", breakdown: breakdown(["claude", "claude-code"]) },
+    { company: "Anthropic", mentions: sum(["claude", "claude-code", "claude-design"]), color: "#d97706", breakdown: breakdown(["claude", "claude-code", "claude-design"]) },
     { company: "OpenAI",    mentions: sum(["chatgpt", "codex-openai", "openai"]), color: "#10a37f", breakdown: breakdown(["chatgpt", "codex-openai", "openai"]) },
     { company: "Google",    mentions: sum(["gemini", "google-flow"]), color: "#4285F4", breakdown: breakdown(["gemini", "google-flow"]) },
     { company: "Replit",    mentions: sum(["replit", "replit-canvas"]), color: "#F26207", breakdown: breakdown(["replit", "replit-canvas"]) },

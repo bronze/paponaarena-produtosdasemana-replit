@@ -234,7 +234,7 @@ export default function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
               <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
-                <p><span style={{ color: "#d97706" }}>Anthropic:</span> Claude, Claude Code e variantes</p>
+                <p><span style={{ color: "#d97706" }}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
                 <p><span style={{ color: "#10a37f" }}>OpenAI:</span> ChatGPT, Codex e variantes</p>
                 <p><span style={{ color: "#4285F4" }}>Google:</span> Gemini, Google Flow e variantes</p>
                 <p><span style={{ color: "#F26207" }}>Replit:</span> Replit, Replit Canvas e variantes</p>

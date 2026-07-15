@@ -708,7 +708,7 @@ export const products: Product[] = [
   { id: "claude-artifacts", name: "Claude Artifacts", category: "AI Tools", parentId: "claude" },
   { id: "replit-canvas", name: "Replit (Canvas)", category: "AI Tools", parentId: "replit" },
   { id: "app-the-news", name: "App do The News", category: "Entertainment", url: "https://thenews.com.br/app" },
-  { id: "claude-design", name: "Claude Design", category: "AI Tools", parentId: "claude" },
+  { id: "claude-design", name: "Claude Design", category: "AI Tools" },
   { id: "iphone-17-pro-max", name: "iPhone 17 Pro Max", category: "Hardware" },
   { id: "bala-fini", name: "Bala Fini", category: "Lifestyle" },
   { id: "cartorio-civil", name: "Cartório Civil", category: "Services" },
