@@ -1,5 +1,117 @@
+## Como atualizar
+
+Quando um novo episódio sair, adicione as linhas novas **no topo da tabela** (logo abaixo do cabeçalho), uma linha por menção de produto, seguindo o padrão:
+
+```
+| <id do episódio> | <Nome do Ouvinte> | <Nome do Produto (contexto se houver)> |
+```
+
+Depois rode o skill `add-produtos` (ou cole a lista no prompt) para atualizar o `client/src/lib/data.ts` com o episódio, os produtos novos, as pessoas novas e as menções.
+
+---
+
 | Episódio | Ouvinte               | Produto                                                     |
 | -------- | --------------------- | ----------------------------------------------------------- |
+| 122      | Aíquis                | CazéTV                                                      |
+| 122      | Arthur                | Aquecedor (Shopee)                                          |
+| 122      | Felipe Dias           | YouTube                                                     |
+| 122      | Soraya                | YouTube                                                     |
+| 122      | Gabriela Garbi        | YouTube                                                     |
+| 122      | Carlos Bronze         | Claude Code                                                 |
+| 122      | Neider Narde          | Claude Code                                                 |
+| 122      | André Senaubar        | Claude Code                                                 |
+| 122      | Felipe Fragoso        | Claude Code                                                 |
+| 122      | Tammy Senra           | Claude                                                      |
+| 122      | Tammy Senra           | YouTube                                                     |
+| 122      | Arion Pinheiro        | Claude Cowork                                               |
+| 122      | Arion Pinheiro        | YouTube                                                     |
+| 122      | Camila Primasi        | Claude Cowork                                               |
+| 122      | Thays Bueno           | Claude Cowork                                               |
+| 122      | Glauco                | Replit                                                      |
+| 122      | Patrícia Zago         | ChatGPT                                                     |
+| 122      | Mateus Craveiro       | Codex                                                       |
+| 122      | Bruno Perrone         | Teams                                                       |
+| 122      | Agata Martins         | TikTok                                                      |
+| 122      | Victor Akira          | NotebookLM                                                  |
+| 122      | Tais Barbone          | Uber                                                        |
+| 122      | Tais Barbone          | iFood                                                       |
+| 122      | Denysson              | Duolingo                                                    |
+| 122      | Renato Bassi          | Pratikaia                                                   |
+| 122      | Natascha Hun          | Preply                                                      |
+| 122      | Vini Diascanio        | handy.computer                                              |
+| 122      | Janaina Meira         | Zyla                                                        |
+| 122      | Leandro Coelho        | Runna                                                       |
+| 122      | Marina Leitão         | Kaféx                                                       |
+| 122      | Huxley                | Hermes Agent                                                |
+| 122      | Juliana Carvalho      | App do Beto Carreiro World                                  |
+| 122      | Mariana Siqueira      | Figuritas                                                   |
+| 122      | Fábio Beiço           | Pokémon Champions                                           |
+| 122      | Thiago Oliveira       | Cuia de Mate                                                |
+| 122      | Talita Pereira        | Robô Aspirador Xiaomi                                       |
+| 122      | Portinho              | Bambu Lab Impressora 3D                                     |
+| 122      | Danilera              | Drive Thru da Leroy Merlin                                  |
+| 122      | Julia Patrocinio      | Cobertor                                                    |
+| 121      | Arthur                | Air Jordan 3 Retro Brasil                                   |
+| 121      | Arthur                | Replit (o segurança do nosso stand fez o site da marca de roupa dele) |
+| 121      | Júlia Jordão          | Ruído branco (pra fazer a filha dormir)                     |
+| 121      | Artur Negrão          | Fiorino (alugou pra carregar o orelhão reformado do stand da Salvy) |
+| 117      | Arthur                | Ray-Ban Meta Display                                        |
+| 117      | Aíquis                | Mercado Livre                                               |
+| 117      | Aíquis                | Amazon (desproduto da semana)                               |
+| 117      | Marcos Lavin          | Claude                                                      |
+| 117      | Marcos Lavin          | Notion                                                      |
+| 117      | Kenia Cardoso         | Claude                                                      |
+| 117      | Kenia Cardoso         | ChatGPT                                                     |
+| 117      | Kenia Cardoso         | ClickUp                                                     |
+| 117      | Talita Paoletti       | Claude                                                      |
+| 117      | Talita Paoletti       | ChatGPT                                                     |
+| 117      | Amanda Couto          | Claude Design                                               |
+| 117      | Amanda Couto          | ChatGPT                                                     |
+| 117      | Dudu Magalhães        | Claude (conectado via MCP com Mixpanel, ULTRIQ e Power BI)  |
+| 117      | Dudu Magalhães        | Mixpanel                                                    |
+| 117      | Dudu Magalhães        | ULTRIQ                                                      |
+| 117      | Dudu Magalhães        | Power BI                                                    |
+| 117      | Henrique Bila         | Spotify                                                     |
+| 117      | Amanda Farias         | Google Lens                                                 |
+| 117      | Daiane Correia        | Claude Code                                                 |
+| 117      | Daiane Correia        | N8N                                                         |
+| 117      | Marina Moreira        | Cursor                                                      |
+| 117      | Marina Moreira        | Notion Workers                                              |
+| 117      | Rutinea Cruz          | Claude                                                      |
+| 117      | Rutinea Cruz          | ChatGPT                                                     |
+| 117      | Agatha Martins        | Replit                                                      |
+| 117      | Carlos Bronze         | Obsidian                                                    |
+| 117      | Nader                 | Claude Code + ChatGPT                                       |
+| 117      | Isaac Andrade         | Microsoft Planner                                           |
+| 117      | Felipe Botelho        | Amstel Latam                                                |
+| 117      | Felipe                | App de Figurinhas da Copa                                   |
+| 117      | Renata Borges         | Chuveiro                                                    |
+| 117      | Eduardo Montoya       | Android Auto                                                |
+| 116      | Arthur                | Replit                                                      |
+| 116      | Aíquis                | YouTube Studio (insights com AI)                            |
+| 116      | Fernanda Faria        | Claude Code (Pipeline de discovery)                         |
+| 116      | Gabriel Hamú          | Claude Code (Skills dentro do Claude Enterprise)            |
+| 116      | Fayner Costa          | Inteligência Itaú                                           |
+| 116      | Jessica               | Global Trust                                                |
+| 116      | Lucas Silva           | ChatGPT                                                     |
+| 116      | Rafael Ferreira       | ChatGPT                                                     |
+| 116      | Cris Danieli          | Claude                                                      |
+| 116      | Hugo Veríssimo        | Manus AI                                                    |
+| 116      | Ana Carolina          | Microsoft Copilot                                           |
+| 116      | Luan Carvalho         | Matchmaker                                                  |
+| 116      | Laiane                | Replit                                                      |
+| 116      | Juliana Costa         | Claude Code                                                 |
+| 116      | Mariana               | Microsoft Copilot                                           |
+| 116      | Vande                 | Microsoft Copilot                                           |
+| 116      | Natalia               | SageMaker                                                   |
+| 116      | Juliana               | Claude                                                      |
+| 116      | Tiago Rodrigues       | Yard Driver                                                 |
+| 116      | Renata Borges         | LinkedIn + Claude                                           |
+| 116      | Renata                | Copilot + Claude                                            |
+| 116      | Siciane               | Claude                                                      |
+| 116      | Thais Cabral          | SYNC                                                        |
+| 116      | Nicole                | Caneca de café                                              |
+| 116      | Angélica              | Agentes do Microsoft 365                                    |
 | 115      | Arthur                | Cursor                                                      |
 | 115      | Aíquis                | Substack (transcrição com busca)                            |
 | 115      | Aíquis                | Notebook LM (mind map de podcast)                           |
