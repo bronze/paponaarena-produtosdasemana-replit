@@ -1,5 +1,6 @@
 import { Link, useParams, useLocation } from "wouter";
 import { ArrowLeft, ExternalLink, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import posthog from "posthog-js";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -80,10 +81,14 @@ function ProductList() {
 
   function handleSort(col: SortColumn) {
     if (sortCol === col) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+      const newDir = sortDir === "asc" ? "desc" : "asc";
+      setSortDir(newDir);
+      posthog.capture("product_sort_changed", { column: col, direction: newDir });
     } else {
+      const newDir = col === "name" ? "asc" : "desc";
       setSortCol(col);
-      setSortDir(col === "name" ? "asc" : "desc");
+      setSortDir(newDir);
+      posthog.capture("product_sort_changed", { column: col, direction: newDir });
     }
   }
 
@@ -109,7 +114,7 @@ function ProductList() {
       <Input
         placeholder="Buscar produto ou categoria..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => { setSearch(e.target.value); if (e.target.value.length > 2) posthog.capture("product_searched", { query: e.target.value }); }}
         className="max-w-sm"
         data-testid="input-search"
       />
@@ -151,7 +156,7 @@ function ProductList() {
           </TableHeader>
           <TableBody>
             {displayed.map((product) => (
-              <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/products/${product.id}`)} data-testid={`row-product-${product.id}`}>
+              <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => { navigate(`/products/${product.id}`); posthog.capture("product_viewed", { product_id: product.id, product_name: product.name, source: "list" }); }} data-testid={`row-product-${product.id}`}>
                 <TableCell className="text-center font-bold text-muted-foreground">{product.rank}</TableCell>
                 <TableCell className="font-medium text-sm" data-testid={`link-product-${product.id}`}>
                   {product.name}
@@ -169,7 +174,7 @@ function ProductList() {
 
       {!search && secondary.length > 0 && (
         <div className="flex justify-center pt-2">
-          <Button variant="outline" onClick={() => setShowAll((s) => !s)}>
+          <Button variant="outline" onClick={() => { const next = !showAll; setShowAll(next); if (next) posthog.capture("product_list_expanded", { additional_count: secondary.length }); }}>
             {showAll
               ? "Ver menos"
               : `Ver mais (${secondary.length} produto${secondary.length !== 1 ? "s" : ""})`}
@@ -241,7 +246,7 @@ function ProductDetail() {
             <Badge variant="secondary">{product.category}</Badge>
             <span className="text-sm text-muted-foreground">{allMentions.length} menções</span>
             {product.url && (
-              <a href={product.url} target="_blank" rel="noopener noreferrer">
+              <a href={product.url} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("product_url_clicked", { product_id: product.id, product_name: product.name })}>
                 <Button variant="outline" size="sm" data-testid="link-product-url">
                   <ExternalLink className="mr-1 h-3 w-3" /> Visitar site
                 </Button>

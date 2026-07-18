@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
+import posthog from "posthog-js";
 import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -120,7 +121,7 @@ export default function Dashboard() {
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => (
-          <Link key={stat.label} href={stat.href}>
+          <Link key={stat.label} href={stat.href} onClick={() => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href })}>
             <Card className="cursor-pointer transition-colors hover:bg-accent/50">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
@@ -245,7 +246,7 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-6">
-          <Link href={`/episodes/${latestEpisode.id}`}>
+          <Link href={`/episodes/${latestEpisode.id}`} onClick={() => posthog.capture("dashboard_latest_episode_clicked", { episode_id: latestEpisode.id, episode_title: latestEpisode.title })}>
             <div className="rounded-lg bg-primary p-5 text-primary-foreground cursor-pointer transition-opacity hover:opacity-90" data-testid="card-latest-episode">
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-2">

@@ -1,3 +1,6 @@
 allowBuilds:
   bufferutil: false
+  core-js: set this to true or false
   esbuild: false
+minimumReleaseAgeExclude:
+  - posthog-js@1.404.1

@@ -1,5 +1,6 @@
 import {Link, useParams} from "wouter";
 import {ArrowLeft, User, Package, Mic, TrendingUp} from "lucide-react";
+import posthog from "posthog-js";
 import {SiLinkedin} from "react-icons/si";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
@@ -66,10 +67,10 @@ function PeopleList() {
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
         <Input placeholder="Buscar pessoa..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-sm" data-testid="input-search" />
         <div className="flex gap-1">
-          <Button variant={sortMode === "mentions" ? "default" : "outline"} size="sm" onClick={() => setSortMode("mentions")} data-testid="sort-mentions">
+          <Button variant={sortMode === "mentions" ? "default" : "outline"} size="sm" onClick={() => { setSortMode("mentions"); posthog.capture("people_sort_changed", { sort_mode: "mentions" }); }} data-testid="sort-mentions">
             Mais menções
           </Button>
-          <Button variant={sortMode === "alpha" ? "default" : "outline"} size="sm" onClick={() => setSortMode("alpha")} data-testid="sort-alpha">
+          <Button variant={sortMode === "alpha" ? "default" : "outline"} size="sm" onClick={() => { setSortMode("alpha"); posthog.capture("people_sort_changed", { sort_mode: "alpha" }); }} data-testid="sort-alpha">
             Alfabética
           </Button>
         </div>
@@ -77,7 +78,7 @@ function PeopleList() {
 
       <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((person, i) => (
-          <Link key={person.id} href={`/people/${person.id}`}>
+          <Link key={person.id} href={`/people/${person.id}`} onClick={() => posthog.capture("person_viewed", { person_id: person.id, source: "list" })}>
             <div
               className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
               data-testid={`card-person-${person.id}`}>

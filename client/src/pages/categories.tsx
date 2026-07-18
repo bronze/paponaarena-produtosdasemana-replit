@@ -1,5 +1,6 @@
 import { Link, useParams, useLocation } from "wouter";
 import { ArrowLeft, ChevronRight, TrendingUp, Mic, Package, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import posthog from "posthog-js";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -63,7 +64,7 @@ function CategoryList() {
         <Input
           placeholder="Buscar categoria ou produto..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => { setSearch(e.target.value); if (e.target.value.length > 2) posthog.capture("category_searched", { query: e.target.value }); }}
           className="max-w-sm"
           data-testid="input-search"
         />
@@ -89,7 +90,7 @@ function CategoryList() {
 
       <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((cat) => (
-          <Link key={cat.category} href={`/categories/${encodeURIComponent(cat.category)}`}>
+          <Link key={cat.category} href={`/categories/${encodeURIComponent(cat.category)}`} onClick={() => posthog.capture("category_viewed", { category: cat.category, mention_count: cat.count })}>
             <div
               className="flex items-center gap-3 p-4 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer h-full"
               data-testid={`card-category-${cat.category}`}
