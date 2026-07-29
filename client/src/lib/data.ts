@@ -97,6 +97,7 @@ export const episodes: Episode[] = [
   { id: 123, title: 'Tem algo de novo no "novo" (velho) PM?', date: "2026-07-01", description: 'Discussão sobre o que há de novo no "novo" (velho) PM.', youtubeLink: "https://www.youtube.com/watch?v=PrJ8OVDxAgk", spotifyLink: "https://open.spotify.com/episode/3rG850Zonp1lVz0ewnwlH1" },
   { id: 125, title: "Do marketing para AI Ops, semana de 4 dias e workflows agênticos com Marina Moreira, AI Ops @ Velora", date: "2026-07-15", description: "Entrevista com Marina Moreira, AI Ops na Velora, sobre a virada de marketing para AI Ops, semana de 4 dias e workflows agênticos.", youtubeLink: "https://www.youtube.com/watch?v=avfmMZkuGtc", spotifyLink: "https://open.spotify.com/episode/4p8jBtfTWdhaml6GXLRRZF", hosts: ["arthur", "aiquis", "marina-moreira"] },
   { id: 126, title: "Dev ainda coda? O que é o líder de engenharia do futuro? com Henrique Boz", date: "2026-07-22", description: "Entrevista com Henrique Boz sobre se dev ainda coda e o que é o líder de engenharia do futuro.", youtubeLink: "https://www.youtube.com/watch?v=dw93e5e97tQ", spotifyLink: "https://open.spotify.com/episode/2wuAkV5a5tzq78hkbfqd34", hosts: ["arthur", "aiquis", "henrique-boz"] },
+  { id: 127, title: "Do zero ao TOP30 dos podcasts de tech mais escutados do Brasil - Papo na Arena especial 3 anos", date: "2026-07-29", description: "Episódio especial de 3 anos do Papo na Arena: como o podcast foi do zero ao TOP30 dos podcasts de tech mais escutados do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=ZkOlJRCMabE", spotifyLink: "https://open.spotify.com/episode/5txr4suwX2N49IYSsgq0EL" },
 ];
 
 export const products: Product[] = [
@@ -771,6 +772,12 @@ export const products: Product[] = [
   { id: "rideology", name: "Rideology", category: "Lifestyle" },
   { id: "grok-4-5", name: "Grok 4.5", category: "AI Tools", url: "https://grok.com" },
   { id: "app-jae", name: "App Jaé", category: "Transportation" },
+  { id: "lego-venom", name: "Lego Venom", category: "Lifestyle" },
+  { id: "google-meet", name: "Google Meet", category: "Productivity" },
+  { id: "copilot-premium", name: "Copilot Premium", category: "AI Tools", parentId: "copilot" },
+  { id: "gleam", name: "Gleam", category: "Development" },
+  { id: "mobbin", name: "Mobbin", category: "Productivity" },
+  { id: "youtube-kids", name: "YouTube Kids", category: "Entertainment", parentId: "youtube" },
 ];
 
 export const people: Person[] = [
@@ -1154,6 +1161,12 @@ export const people: Person[] = [
   { id: "agata", name: "Agata" },
   { id: "mateus-moury", name: "Mateus Moury" },
   { id: "samuel", name: "Samuel" },
+  { id: "paulo-matos", name: "Paulo Matos" },
+  { id: "renato-alves", name: "Renato Alves" },
+  { id: "neto", name: "Neto" },
+  { id: "juliano", name: "Juliano" },
+  { id: "julia", name: "Júlia" },
+  { id: "marcela", name: "Marcela" },
 ];
 
 export const mentions: Mention[] = [
@@ -2515,4 +2528,26 @@ export const mentions: Mention[] = [
   { id: "m126-17", episodeId: 126, personId: "amanda-farias", productId: "replit" },
   { id: "m126-18", episodeId: 126, personId: "samuel", productId: "replit" },
   { id: "m126-19", episodeId: 126, personId: "eduardo-montoya", productId: "app-jae" },
+  { id: "m127-1", episodeId: 127, personId: "aiquis", productId: "lovable", context: "Cartão de crédito vencido bloqueou a renovação anual do Lovable" },
+  { id: "m127-2", episodeId: 127, personId: "arthur", productId: "lego-venom", context: "busto" },
+  { id: "m127-3", episodeId: 127, personId: "valeria-romano", productId: "google-meet" },
+  { id: "m127-4", episodeId: 127, personId: "glauco", productId: "claude-design" },
+  { id: "m127-5", episodeId: 127, personId: "danilera", productId: "copilot-premium" },
+  { id: "m127-6", episodeId: 127, personId: "danilo-penteado", productId: "codex-openai" },
+  { id: "m127-7", episodeId: 127, personId: "paulo-matos", productId: "codex-openai" },
+  { id: "m127-8", episodeId: 127, personId: "camila-meneghetti", productId: "gleam" },
+  { id: "m127-9", episodeId: 127, personId: "henrique-bila", productId: "chatgpt-work" },
+  { id: "m127-10", episodeId: 127, personId: "carol-pilon", productId: "claude-code" },
+  { id: "m127-11", episodeId: 127, personId: "portinho", productId: "bambu-lab-impressora-3d" },
+  { id: "m127-12", episodeId: 127, personId: "lucas-moreira", productId: "bambu-lab-impressora-3d" },
+  { id: "m127-13", episodeId: 127, personId: "fabio-beico", productId: "antigravity" },
+  { id: "m127-14", episodeId: 127, personId: "caue-muriano", productId: "mobbin" },
+  { id: "m127-15", episodeId: 127, personId: "juliano", productId: "mobbin" },
+  { id: "m127-16", episodeId: 127, personId: "lucas-mattos", productId: "cursor" },
+  { id: "m127-17", episodeId: 127, personId: "renato-alves", productId: "cursor" },
+  { id: "m127-18", episodeId: 127, personId: "neto", productId: "replit" },
+  { id: "m127-19", episodeId: 127, personId: "fernando", productId: "replit" },
+  { id: "m127-20", episodeId: 127, personId: "alex", productId: "replit" },
+  { id: "m127-21", episodeId: 127, personId: "julia", productId: "replit" },
+  { id: "m127-22", episodeId: 127, personId: "marcela", productId: "youtube-kids" },
 ];
