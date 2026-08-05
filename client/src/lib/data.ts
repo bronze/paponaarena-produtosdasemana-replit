@@ -98,6 +98,7 @@ export const episodes: Episode[] = [
   { id: 125, title: "Do marketing para AI Ops, semana de 4 dias e workflows agênticos com Marina Moreira, AI Ops @ Velora", date: "2026-07-15", description: "Entrevista com Marina Moreira, AI Ops na Velora, sobre a virada de marketing para AI Ops, semana de 4 dias e workflows agênticos.", youtubeLink: "https://www.youtube.com/watch?v=avfmMZkuGtc", spotifyLink: "https://open.spotify.com/episode/4p8jBtfTWdhaml6GXLRRZF", hosts: ["arthur", "aiquis", "marina-moreira"] },
   { id: 126, title: "Dev ainda coda? O que é o líder de engenharia do futuro? com Henrique Boz", date: "2026-07-22", description: "Entrevista com Henrique Boz sobre se dev ainda coda e o que é o líder de engenharia do futuro.", youtubeLink: "https://www.youtube.com/watch?v=dw93e5e97tQ", spotifyLink: "https://open.spotify.com/episode/2wuAkV5a5tzq78hkbfqd34", hosts: ["arthur", "aiquis", "henrique-boz"] },
   { id: 127, title: "Do zero ao TOP30 dos podcasts de tech mais escutados do Brasil - Papo na Arena especial 3 anos", date: "2026-07-29", description: "Episódio especial de 3 anos do Papo na Arena: como o podcast foi do zero ao TOP30 dos podcasts de tech mais escutados do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=ZkOlJRCMabE", spotifyLink: "https://open.spotify.com/episode/5txr4suwX2N49IYSsgq0EL" },
+  { id: 128, title: "Construir mais rápido NÃO significa decidir melhor.", date: "2026-08-05", description: "Discussão sobre por que construir mais rápido não significa decidir melhor, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YFdFy3pJm-g", spotifyLink: "https://open.spotify.com/episode/3EL1Eh4S2NzlfIelSkkVVi" },
 ];
 
 export const products: Product[] = [
@@ -778,6 +779,13 @@ export const products: Product[] = [
   { id: "gleam", name: "Gleam", category: "Development" },
   { id: "mobbin", name: "Mobbin", category: "Productivity" },
   { id: "youtube-kids", name: "YouTube Kids", category: "Entertainment", parentId: "youtube" },
+  { id: "app-da-azul", name: "App da Azul", category: "Travel" },
+  { id: "extensao-claude-chrome", name: "Extensão do Claude no Chrome", category: "AI Tools", parentId: "claude" },
+  { id: "buzz-xyz", name: "buzz.xyz", category: "Productivity", url: "https://buzz.xyz" },
+  { id: "dji-mimo", name: "DJI Mimo", category: "Productivity" },
+  { id: "gemini-spark", name: "Gemini Spark", category: "AI Tools", parentId: "gemini" },
+  { id: "baldo", name: "Baldo", category: "Lifestyle" },
+  { id: "impressora-3d", name: "Impressora 3D", category: "Hardware" },
 ];
 
 export const people: Person[] = [
@@ -1167,6 +1175,8 @@ export const people: Person[] = [
   { id: "juliano", name: "Juliano" },
   { id: "julia", name: "Júlia" },
   { id: "marcela", name: "Marcela" },
+  { id: "kel-moe", name: "Kel Moe" },
+  { id: "juliana-silva", name: "Juliana Silva" },
 ];
 
 export const mentions: Mention[] = [
@@ -2550,4 +2560,25 @@ export const mentions: Mention[] = [
   { id: "m127-20", episodeId: 127, personId: "alex", productId: "replit" },
   { id: "m127-21", episodeId: 127, personId: "julia", productId: "replit" },
   { id: "m127-22", episodeId: 127, personId: "marcela", productId: "youtube-kids" },
+  { id: "m128-1", episodeId: 128, personId: "arthur", productId: "mercado-livre" },
+  { id: "m128-2", episodeId: 128, personId: "aiquis", productId: "app-da-azul" },
+  { id: "m128-3", episodeId: 128, personId: "kel-moe", productId: "codex-openai" },
+  { id: "m128-4", episodeId: 128, personId: "beatriz-morales", productId: "extensao-claude-chrome" },
+  { id: "m128-5", episodeId: 128, personId: "peixoto", productId: "claude-code" },
+  { id: "m128-6", episodeId: 128, personId: "hamu", productId: "claude-code" },
+  { id: "m128-7", episodeId: 128, personId: "rafael-ferreira", productId: "copilot" },
+  { id: "m128-8", episodeId: 128, personId: "glauco", productId: "linkedin" },
+  { id: "m128-9", episodeId: 128, personId: "portinho", productId: "buzz-xyz" },
+  { id: "m128-10", episodeId: 128, personId: "matt-lopes", productId: "dji-mimo" },
+  { id: "m128-11", episodeId: 128, personId: "lucas-moreira", productId: "gemini-spark" },
+  { id: "m128-12", episodeId: 128, personId: "lucas-mattos", productId: "chatgpt-work" },
+  { id: "m128-13", episodeId: 128, personId: "fabio-beico", productId: "baldo", context: "guia de cafeterias" },
+  { id: "m128-14", episodeId: 128, personId: "caue-muriano", productId: "hevy" },
+  { id: "m128-15", episodeId: 128, personId: "andrezinho", productId: "claude-design" },
+  { id: "m128-16", episodeId: 128, personId: "carol-pilon", productId: "impressora-3d" },
+  { id: "m128-17", episodeId: 128, personId: "fernando", productId: "codex-openai" },
+  { id: "m128-18", episodeId: 128, personId: "paulo-matos", productId: "chatgpt-work" },
+  { id: "m128-19", episodeId: 128, personId: "juliana-silva", productId: "replit" },
+  { id: "m128-20", episodeId: 128, personId: "renato-alves", productId: "mobbin" },
+  { id: "m128-21", episodeId: 128, personId: "neto", productId: "notebooklm" },
 ];
