@@ -99,6 +99,7 @@ export const episodes: Episode[] = [
   { id: 126, title: "Dev ainda coda? O que é o líder de engenharia do futuro? com Henrique Boz", date: "2026-07-22", description: "Entrevista com Henrique Boz sobre se dev ainda coda e o que é o líder de engenharia do futuro.", youtubeLink: "https://www.youtube.com/watch?v=dw93e5e97tQ", spotifyLink: "https://open.spotify.com/episode/2wuAkV5a5tzq78hkbfqd34", hosts: ["arthur", "aiquis", "henrique-boz"] },
   { id: 127, title: "Do zero ao TOP30 dos podcasts de tech mais escutados do Brasil - Papo na Arena especial 3 anos", date: "2026-07-29", description: "Episódio especial de 3 anos do Papo na Arena: como o podcast foi do zero ao TOP30 dos podcasts de tech mais escutados do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=ZkOlJRCMabE", spotifyLink: "https://open.spotify.com/episode/5txr4suwX2N49IYSsgq0EL" },
   { id: 128, title: "Construir mais rápido NÃO significa decidir melhor.", date: "2026-08-05", description: "Discussão sobre por que construir mais rápido não significa decidir melhor, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YFdFy3pJm-g", spotifyLink: "https://open.spotify.com/episode/3EL1Eh4S2NzlfIelSkkVVi" },
+  { id: 129, title: "Como estamos usando IA no dia a dia de produto? (Atualizado 5 meses depois)", date: "2026-08-12", description: "Atualização sobre como profissionais de produto estão usando IA no dia a dia, 5 meses depois.", youtubeLink: "https://www.youtube.com/watch?v=zizq_DgGMRU", spotifyLink: "https://open.spotify.com/episode/70gZB5BOMPUVD4NwB2bbVC", hosts: ["aiquis", "arthur", "efrem"] },
 ];
 
 export const products: Product[] = [
@@ -771,7 +772,8 @@ export const products: Product[] = [
   { id: "litellm", name: "LiteLLM", category: "Development", url: "https://litellm.ai" },
   { id: "chatgpt-work", name: "ChatGPT Work", category: "AI Tools", parentId: "chatgpt" },
   { id: "rideology", name: "Rideology", category: "Lifestyle" },
-  { id: "grok-4-5", name: "Grok 4.5", category: "AI Tools", url: "https://grok.com" },
+  { id: "grok", name: "Grok", category: "AI Tools", url: "https://grok.com" },
+  { id: "grok-4-5", name: "Grok 4.5", category: "AI Tools", url: "https://grok.com", parentId: "grok" },
   { id: "app-jae", name: "App Jaé", category: "Transportation" },
   { id: "lego-venom", name: "Lego Venom", category: "Lifestyle" },
   { id: "google-meet", name: "Google Meet", category: "Productivity" },
@@ -786,6 +788,18 @@ export const products: Product[] = [
   { id: "gemini-spark", name: "Gemini Spark", category: "AI Tools", parentId: "gemini" },
   { id: "baldo", name: "Baldo", category: "Lifestyle" },
   { id: "impressora-3d", name: "Impressora 3D", category: "Hardware" },
+  { id: "pacoquita", name: "Paçoquita", category: "Fitness" },
+  { id: "grokbot", name: "Grokbot", category: "AI Tools", url: "https://grok.com", parentId: "grok" },
+  { id: "starbank", name: "StarBank", category: "Finance" },
+  { id: "meshy-ai", name: "Meshy.ai", category: "AI Tools", url: "https://www.meshy.ai" },
+  { id: "dramabox", name: "DramaBox", category: "Entertainment", url: "https://www.dramaboxapp.com" },
+  { id: "kast", name: "Kast", category: "Finance", url: "https://kast.xyz" },
+  { id: "mixer", name: "Mixer", category: "Lifestyle" },
+  { id: "letterbox", name: "Letterbox", category: "Entertainment" },
+  { id: "decade", name: "Decade", category: "Lifestyle" },
+  { id: "bingers", name: "Bingers", category: "Entertainment" },
+  { id: "paraciclo", name: "Paraciclo", category: "Transportation" },
+  { id: "cafeteira", name: "Cafeteira", category: "Hardware" },
 ];
 
 export const people: Person[] = [
@@ -1177,6 +1191,11 @@ export const people: Person[] = [
   { id: "marcela", name: "Marcela" },
   { id: "kel-moe", name: "Kel Moe" },
   { id: "juliana-silva", name: "Juliana Silva" },
+  { id: "rafael-mathias", name: "Rafael Mathias" },
+  { id: "isabela", name: "Isabela" },
+  { id: "duda-venturelli", name: "Duda Venturelli" },
+  { id: "mariana-maia", name: "Mariana Maia" },
+  { id: "leticia-barroso", name: "Letícia Barroso" },
 ];
 
 export const mentions: Mention[] = [
@@ -2581,4 +2600,24 @@ export const mentions: Mention[] = [
   { id: "m128-19", episodeId: 128, personId: "juliana-silva", productId: "replit" },
   { id: "m128-20", episodeId: 128, personId: "renato-alves", productId: "mobbin" },
   { id: "m128-21", episodeId: 128, personId: "neto", productId: "notebooklm" },
+  { id: "m129-1", episodeId: 129, personId: "efrem", productId: "pacoquita", context: "substituto natural de CarboGel nas corridas: amendoim, açúcar e sal" },
+  { id: "m129-2", episodeId: 129, personId: "aiquis", productId: "hermes", context: "secretário pessoal em teste; sob judice" },
+  { id: "m129-3", episodeId: 129, personId: "arthur", productId: "grokbot" },
+  { id: "m129-4", episodeId: 129, personId: "lara-parodi", productId: "garmin-connect" },
+  { id: "m129-5", episodeId: 129, personId: "glauco", productId: "starbank", context: "APIs bem documentadas" },
+  { id: "m129-6", episodeId: 129, personId: "rafael-mathias", productId: "booking" },
+  { id: "m129-7", episodeId: 129, personId: "portinho", productId: "meshy-ai", context: "gerador 3D gratuito" },
+  { id: "m129-8", episodeId: 129, personId: "matt-lopes", productId: "dramabox" },
+  { id: "m129-9", episodeId: 129, personId: "victor-nery", productId: "kast", context: "cartão de crypto" },
+  { id: "m129-10", episodeId: 129, personId: "isabela", productId: "gymrats" },
+  { id: "m129-11", episodeId: 129, personId: "duda-venturelli", productId: "mixer" },
+  { id: "m129-12", episodeId: 129, personId: "rodrigo-tavares", productId: "letterbox" },
+  { id: "m129-13", episodeId: 129, personId: "gabriel-hamu", productId: "claude-design" },
+  { id: "m129-14", episodeId: 129, personId: "andrezinho", productId: "claude-design" },
+  { id: "m129-15", episodeId: 129, personId: "lucas-mattos", productId: "magie" },
+  { id: "m129-16", episodeId: 129, personId: "mariana-maia", productId: "decade" },
+  { id: "m129-17", episodeId: 129, personId: "agatha-martins", productId: "bingers", context: "ex-founder do Tive Time" },
+  { id: "m129-18", episodeId: 129, personId: "tadeu-saldanha", productId: "paraciclo", context: "Niterói, 500+ pessoas nos bicicletários" },
+  { id: "m129-19", episodeId: 129, personId: "leticia-barroso", productId: "cafeteira" },
+  { id: "m129-20", episodeId: 129, personId: "dudu-magalhaes", productId: "globoplay", context: "desproduto da semana" },
 ];
