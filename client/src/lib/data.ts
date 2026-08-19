@@ -100,6 +100,7 @@ export const episodes: Episode[] = [
   { id: 127, title: "Do zero ao TOP30 dos podcasts de tech mais escutados do Brasil - Papo na Arena especial 3 anos", date: "2026-07-29", description: "Episódio especial de 3 anos do Papo na Arena: como o podcast foi do zero ao TOP30 dos podcasts de tech mais escutados do Brasil.", youtubeLink: "https://www.youtube.com/watch?v=ZkOlJRCMabE", spotifyLink: "https://open.spotify.com/episode/5txr4suwX2N49IYSsgq0EL" },
   { id: 128, title: "Construir mais rápido NÃO significa decidir melhor.", date: "2026-08-05", description: "Discussão sobre por que construir mais rápido não significa decidir melhor, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YFdFy3pJm-g", spotifyLink: "https://open.spotify.com/episode/3EL1Eh4S2NzlfIelSkkVVi" },
   { id: 129, title: "Como estamos usando IA no dia a dia de produto? (Atualizado 5 meses depois)", date: "2026-08-12", description: "Atualização sobre como profissionais de produto estão usando IA no dia a dia, 5 meses depois.", youtubeLink: "https://www.youtube.com/watch?v=zizq_DgGMRU", spotifyLink: "https://open.spotify.com/episode/70gZB5BOMPUVD4NwB2bbVC", hosts: ["aiquis", "arthur", "efrem"] },
+  { id: 130, title: "Product Managers devem codar? O experimento da Buser", date: "2026-08-19", description: "Discussão sobre se Product Managers devem codar, o experimento da Buser e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Pv65k5kQfOI", spotifyLink: "https://open.spotify.com/episode/6Z7IXZgXpCh5SJAvUPHPnf", hosts: ["aiquis", "arthur", "poliana"] },
 ];
 
 export const products: Product[] = [
@@ -800,6 +801,14 @@ export const products: Product[] = [
   { id: "bingers", name: "Bingers", category: "Entertainment" },
   { id: "paraciclo", name: "Paraciclo", category: "Transportation" },
   { id: "cafeteira", name: "Cafeteira", category: "Hardware" },
+  { id: "fita-dupla-face-3m", name: "Fita dupla face 3M Super Forte", category: "Hardware" },
+  { id: "standing-desk-esteira", name: "Standing Desk + Esteira", category: "Hardware" },
+  { id: "tabs", name: "Tabs", category: "Productivity" },
+  { id: "cartao-otimo", name: "Cartão Ótimo", category: "Finance" },
+  { id: "webmotors", name: "WebMotors", category: "Business" },
+  { id: "midjourney", name: "Midjourney", category: "AI Tools", url: "https://midjourney.com" },
+  { id: "class-app", name: "Class App", category: "Productivity" },
+  { id: "uber-one", name: "Uber One", category: "Transportation", parentId: "uber" },
 ];
 
 export const people: Person[] = [
@@ -1196,6 +1205,13 @@ export const people: Person[] = [
   { id: "duda-venturelli", name: "Duda Venturelli" },
   { id: "mariana-maia", name: "Mariana Maia" },
   { id: "leticia-barroso", name: "Letícia Barroso" },
+  { id: "poliana", name: "Poliana" },
+  { id: "vitor", name: "Vitor" },
+  { id: "jordana-mascarenhas", name: "Jordana Mascarenhas" },
+  { id: "pedro-weber", name: "Pedro Weber" },
+  { id: "ariel-rinaldi", name: "Ariel Rinaldi" },
+  { id: "rafaela-costa", name: "Rafaela Costa" },
+  { id: "guilherme-valadares", name: "Guilherme Valadares" },
 ];
 
 export const mentions: Mention[] = [
@@ -2620,4 +2636,26 @@ export const mentions: Mention[] = [
   { id: "m129-18", episodeId: 129, personId: "tadeu-saldanha", productId: "paraciclo", context: "Niterói, 500+ pessoas nos bicicletários" },
   { id: "m129-19", episodeId: 129, personId: "leticia-barroso", productId: "cafeteira" },
   { id: "m129-20", episodeId: 129, personId: "dudu-magalhaes", productId: "globoplay", context: "desproduto da semana" },
+  { id: "m130-1", episodeId: 130, personId: "arthur", productId: "grokbot", context: "early access; os posts da Arena nesta semana saíram por ele" },
+  { id: "m130-2", episodeId: 130, personId: "aiquis", productId: "fita-dupla-face-3m", context: "cabos da mesa" },
+  { id: "m130-3", episodeId: 130, personId: "poliana", productId: "standing-desk-esteira" },
+  { id: "m130-4", episodeId: 130, personId: "vanessa", productId: "claude" },
+  { id: "m130-5", episodeId: 130, personId: "vitor", productId: "claude" },
+  { id: "m130-6", episodeId: 130, personId: "amanda-couto", productId: "claude" },
+  { id: "m130-7", episodeId: 130, personId: "amanda-couto", productId: "youtube" },
+  { id: "m130-8", episodeId: 130, personId: "janaina-meira", productId: "teams" },
+  { id: "m130-9", episodeId: 130, personId: "jordana-mascarenhas", productId: "tabs" },
+  { id: "m130-10", episodeId: 130, personId: "eduardo-montoya", productId: "wellhub" },
+  { id: "m130-11", episodeId: 130, personId: "pedro-weber", productId: "cartao-otimo" },
+  { id: "m130-12", episodeId: 130, personId: "ariel-rinaldi", productId: "webmotors" },
+  { id: "m130-13", episodeId: 130, personId: "camila-meneghetti", productId: "canva" },
+  { id: "m130-14", episodeId: 130, personId: "camila-meneghetti", productId: "instagram" },
+  { id: "m130-15", episodeId: 130, personId: "rafaela-costa", productId: "codex-openai" },
+  { id: "m130-16", episodeId: 130, personId: "guilherme-valadares", productId: "claude-design" },
+  { id: "m130-17", episodeId: 130, personId: "guilherme-valadares", productId: "claude-code" },
+  { id: "m130-18", episodeId: 130, personId: "carlos-bronze", productId: "midjourney" },
+  { id: "m130-19", episodeId: 130, personId: "lucas-mattos", productId: "cursor", context: "no celular" },
+  { id: "m130-20", episodeId: 130, personId: "andre-menezes", productId: "github", context: "só dá valor quando cai" },
+  { id: "m130-21", episodeId: 130, personId: "danilera", productId: "class-app" },
+  { id: "m130-22", episodeId: 130, personId: "glauco", productId: "uber-one" },
 ];
