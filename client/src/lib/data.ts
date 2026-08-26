@@ -101,6 +101,7 @@ export const episodes: Episode[] = [
   { id: 128, title: "Construir mais rápido NÃO significa decidir melhor.", date: "2026-08-05", description: "Discussão sobre por que construir mais rápido não significa decidir melhor, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YFdFy3pJm-g", spotifyLink: "https://open.spotify.com/episode/3EL1Eh4S2NzlfIelSkkVVi" },
   { id: 129, title: "Como estamos usando IA no dia a dia de produto? (Atualizado 5 meses depois)", date: "2026-08-12", description: "Atualização sobre como profissionais de produto estão usando IA no dia a dia, 5 meses depois.", youtubeLink: "https://www.youtube.com/watch?v=zizq_DgGMRU", spotifyLink: "https://open.spotify.com/episode/70gZB5BOMPUVD4NwB2bbVC", hosts: ["aiquis", "arthur", "efrem"] },
   { id: 130, title: "Product Managers devem codar? O experimento da Buser", date: "2026-08-19", description: "Discussão sobre se Product Managers devem codar, o experimento da Buser e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Pv65k5kQfOI", spotifyLink: "https://open.spotify.com/episode/6Z7IXZgXpCh5SJAvUPHPnf", hosts: ["aiquis", "arthur", "poliana"] },
+  { id: 131, title: "Grok Bot - um novo momento Claude Code?", date: "2026-08-26", description: "Discussão sobre o Grok Bot e se ele representa um novo momento para ferramentas como o Claude Code, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Qks68_HIt1o", spotifyLink: "https://open.spotify.com/episode/7h9YmFTb8k6n7klgdRS7uz" },
 ];
 
 export const products: Product[] = [
@@ -809,6 +810,9 @@ export const products: Product[] = [
   { id: "midjourney", name: "Midjourney", category: "AI Tools", url: "https://midjourney.com" },
   { id: "class-app", name: "Class App", category: "Productivity" },
   { id: "uber-one", name: "Uber One", category: "Transportation", parentId: "uber" },
+  { id: "doorflex", name: "DoorFlex", category: "Fitness" },
+  { id: "samsung-food", name: "Samsung Food", category: "Lifestyle" },
+  { id: "wevets", name: "WeVets", category: "Health" },
 ];
 
 export const people: Person[] = [
@@ -1212,6 +1216,10 @@ export const people: Person[] = [
   { id: "ariel-rinaldi", name: "Ariel Rinaldi" },
   { id: "rafaela-costa", name: "Rafaela Costa" },
   { id: "guilherme-valadares", name: "Guilherme Valadares" },
+  { id: "felipe-augusto", name: "Felipe Augusto" },
+  { id: "brian-cassiano", name: "Brian Cassiano" },
+  { id: "deborah-lira", name: "Deborah Lira" },
+  { id: "nana-menezes", name: "Nana Menezes" },
 ];
 
 export const mentions: Mention[] = [
@@ -2658,4 +2666,17 @@ export const mentions: Mention[] = [
   { id: "m130-20", episodeId: 130, personId: "andre-menezes", productId: "github", context: "só dá valor quando cai" },
   { id: "m130-21", episodeId: 130, personId: "danilera", productId: "class-app" },
   { id: "m130-22", episodeId: 130, personId: "glauco", productId: "uber-one" },
+  { id: "m131-1", episodeId: 131, personId: "felipe-augusto", productId: "antigravity" },
+  { id: "m131-2", episodeId: 131, personId: "amanda-couto", productId: "capcut" },
+  { id: "m131-3", episodeId: 131, personId: "carlos-bronze", productId: "youtube-premium" },
+  { id: "m131-4", episodeId: 131, personId: "brian-cassiano", productId: "claude-code" },
+  { id: "m131-5", episodeId: 131, personId: "nina", productId: "doorflex" },
+  { id: "m131-6", episodeId: 131, personId: "deborah-lira", productId: "claude-design" },
+  { id: "m131-7", episodeId: 131, personId: "nana-menezes", productId: "splitwise" },
+  { id: "m131-8", episodeId: 131, personId: "lara-parodi", productId: "chatgpt", context: "tarefas agendadas" },
+  { id: "m131-9", episodeId: 131, personId: "fabio-beico", productId: "samsung-food" },
+  { id: "m131-10", episodeId: 131, personId: "danilo-penteado", productId: "codex-openai" },
+  { id: "m131-11", episodeId: 131, personId: "arthur-azevedo", productId: "lovable" },
+  { id: "m131-12", episodeId: 131, personId: "aiquis", productId: "claude", context: "setup do Hermes na VPS" },
+  { id: "m131-13", episodeId: 131, personId: "arthur", productId: "wevets", context: "Cleo Maria comeu pano e foi internada (salve Ale, Karina, Luísa)" },
 ];
