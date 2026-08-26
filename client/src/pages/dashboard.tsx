@@ -203,10 +203,10 @@ export default function Dashboard() {
               <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={160}>
+              <ResponsiveContainer width="100%" height={192}>
                 <BarChart data={aiCompanyStats} layout="vertical" margin={{ left: 0, right: 16 }}>
                   <XAxis type="number" tick={{ fill: "hsl(var(--foreground))", fontSize: 11 }} />
-                  <YAxis type="category" dataKey="company" width={80} tick={{ fontSize: 12, fill: "hsl(var(--foreground))" }} />
+                  <YAxis type="category" dataKey="company" width={80} interval={0} tick={{ fontSize: 12, fill: "hsl(var(--foreground))" }} />
                   <Tooltip
                     content={({ active, payload, label }) => {
                       if (!active || !payload?.length) return null;
