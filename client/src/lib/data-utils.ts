@@ -246,6 +246,7 @@ export function getAICompanyMentionStats() {
     { company: "Google",    mentions: sum(["gemini", "google-flow"]), color: "#4285F4", breakdown: breakdown(["gemini", "google-flow"]) },
     { company: "Replit",    mentions: sum(["replit", "replit-canvas"]), color: "#F26207", breakdown: breakdown(["replit", "replit-canvas"]) },
     { company: "Cursor",    mentions: sum(["cursor", "combo-cursor-claude-code"]), color: "#8B5CF6", breakdown: breakdown(["cursor", "combo-cursor-claude-code"]) },
+    { company: "xAI",       mentions: sum(["grok", "grok-4-5", "grokbot"]), color: "#64748B", breakdown: breakdown(["grok", "grok-4-5", "grokbot"]) },
   ].sort((a, b) => b.mentions - a.mentions);
 }
 

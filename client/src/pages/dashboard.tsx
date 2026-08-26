@@ -240,6 +240,7 @@ export default function Dashboard() {
                 <p><span style={{ color: "#4285F4" }}>Google:</span> Gemini, Google Flow e variantes</p>
                 <p><span style={{ color: "#F26207" }}>Replit:</span> Replit, Replit Canvas e variantes</p>
                 <p><span style={{ color: "#8B5CF6" }}>Cursor:</span> Cursor e variantes</p>
+                <p><span style={{ color: "#64748B" }}>xAI:</span> Grok, Grokbot e variantes</p>
               </div>
             </CardContent>
           </Card>
