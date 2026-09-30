@@ -102,6 +102,7 @@ export const episodes: Episode[] = [
   { id: 129, title: "Como estamos usando IA no dia a dia de produto? (Atualizado 5 meses depois)", date: "2026-08-12", description: "Atualização sobre como profissionais de produto estão usando IA no dia a dia, 5 meses depois.", youtubeLink: "https://www.youtube.com/watch?v=zizq_DgGMRU", spotifyLink: "https://open.spotify.com/episode/70gZB5BOMPUVD4NwB2bbVC", hosts: ["aiquis", "arthur", "efrem"] },
   { id: 130, title: "Product Managers devem codar? O experimento da Buser", date: "2026-08-19", description: "Discussão sobre se Product Managers devem codar, o experimento da Buser e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Pv65k5kQfOI", spotifyLink: "https://open.spotify.com/episode/6Z7IXZgXpCh5SJAvUPHPnf", hosts: ["aiquis", "arthur", "poliana"] },
   { id: 131, title: "Grok Bot - um novo momento Claude Code?", date: "2026-08-26", description: "Discussão sobre o Grok Bot e se ele representa um novo momento para ferramentas como o Claude Code, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Qks68_HIt1o", spotifyLink: "https://open.spotify.com/episode/7h9YmFTb8k6n7klgdRS7uz" },
+  { id: 135, title: "Como foi o Lenny & Friends Summit?", date: "2026-09-23", description: "Como foi o Lenny & Friends Summit? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=5UADu7bzoHc", spotifyLink: "https://open.spotify.com/episode/0thI6loRiUXAuHbMNHCmEL" },
 ];
 
 export const products: Product[] = [
@@ -813,6 +814,14 @@ export const products: Product[] = [
   { id: "doorflex", name: "DoorFlex", category: "Fitness" },
   { id: "samsung-food", name: "Samsung Food", category: "Lifestyle" },
   { id: "wevets", name: "WeVets", category: "Health" },
+  { id: "all-her-fault", name: "All Her Fault", category: "Entertainment" },
+  { id: "exploding-kittens", name: "Exploding Kittens", category: "Entertainment", url: "https://www.explodingkittens.com/" },
+  { id: "noaa-radar-app", name: "NOAA Radar App", category: "Apps", url: "https://apps.apple.com/app/noaa-live-weather-radar/id1666079570" },
+  { id: "opencode", name: "opencode", category: "Development", url: "https://opencode.ai/" },
+  { id: "lucateu-mudancas", name: "Lucateu Mudanças", category: "Services", url: "https://www.lucateumudancas.com.br/" },
+  { id: "tupi-recarga", name: "Tupi Recarga", category: "Transportation", url: "https://tupimob.com/app-de-recarga/" },
+  { id: "amazon-music", name: "Amazon Music", category: "Entertainment", url: "https://music.amazon.com/" },
+  { id: "eleicoes-ai", name: "eleicoes.AI", category: "Apps", url: "https://eleicoes.ai/" },
 ];
 
 export const people: Person[] = [
@@ -1220,6 +1229,10 @@ export const people: Person[] = [
   { id: "brian-cassiano", name: "Brian Cassiano" },
   { id: "deborah-lira", name: "Deborah Lira" },
   { id: "nana-menezes", name: "Nana Menezes" },
+  { id: "ph-santos", name: "PH Santos" },
+  { id: "mari-salmazo", name: "Mari Salmazo" },
+  { id: "aline-capelatto", name: "Aline Capelatto" },
+  { id: "luiza-tomanik", name: "Luiza Tomanik" },
 ];
 
 export const mentions: Mention[] = [
@@ -2679,4 +2692,18 @@ export const mentions: Mention[] = [
   { id: "m131-11", episodeId: 131, personId: "arthur-azevedo", productId: "lovable" },
   { id: "m131-12", episodeId: 131, personId: "aiquis", productId: "claude", context: "setup do Hermes na VPS" },
   { id: "m131-13", episodeId: 131, personId: "arthur", productId: "wevets", context: "Cleo Maria comeu pano e foi internada (salve Ale, Karina, Luísa)" },
+  { id: "m135-1", episodeId: 135, personId: "arthur", productId: "all-her-fault" },
+  { id: "m135-2", episodeId: 135, personId: "aiquis", productId: "exploding-kittens" },
+  { id: "m135-3", episodeId: 135, personId: "ph-santos", productId: "claude" },
+  { id: "m135-4", episodeId: 135, personId: "andrezinho", productId: "claude" },
+  { id: "m135-5", episodeId: 135, personId: "matt-lopes", productId: "noaa-radar-app" },
+  { id: "m135-6", episodeId: 135, personId: "danilera", productId: "tiktok" },
+  { id: "m135-7", episodeId: 135, personId: "mari-salmazo", productId: "hermes" },
+  { id: "m135-8", episodeId: 135, personId: "mari-salmazo", productId: "opencode" },
+  { id: "m135-9", episodeId: 135, personId: "aline-capelatto", productId: "wisprflow" },
+  { id: "m135-10", episodeId: 135, personId: "nina", productId: "lucateu-mudancas" },
+  { id: "m135-11", episodeId: 135, personId: "victor-nery", productId: "tupi-recarga" },
+  { id: "m135-12", episodeId: 135, personId: "luiza-tomanik", productId: "amazon-music" },
+  { id: "m135-13", episodeId: 135, personId: "carol-pilon", productId: "eleicoes-ai" },
+  { id: "m135-14", episodeId: 135, personId: "danilo-franco", productId: "codex-openai" },
 ];
