@@ -103,6 +103,7 @@ export const episodes: Episode[] = [
   { id: 130, title: "Product Managers devem codar? O experimento da Buser", date: "2026-08-19", description: "Discussão sobre se Product Managers devem codar, o experimento da Buser e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Pv65k5kQfOI", spotifyLink: "https://open.spotify.com/episode/6Z7IXZgXpCh5SJAvUPHPnf", hosts: ["aiquis", "arthur", "poliana"] },
   { id: 131, title: "Grok Bot - um novo momento Claude Code?", date: "2026-08-26", description: "Discussão sobre o Grok Bot e se ele representa um novo momento para ferramentas como o Claude Code, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Qks68_HIt1o", spotifyLink: "https://open.spotify.com/episode/7h9YmFTb8k6n7klgdRS7uz" },
   { id: 135, title: "Como foi o Lenny & Friends Summit?", date: "2026-09-23", description: "Como foi o Lenny & Friends Summit? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=5UADu7bzoHc", spotifyLink: "https://open.spotify.com/episode/0thI6loRiUXAuHbMNHCmEL" },
+  { id: 136, title: "O Vale faz algo diferente em produto e IA?", date: "2026-09-30", description: "Discussão sobre se o Vale do Silício faz algo diferente em produto e IA, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=PR_Z6fPAI6w", spotifyLink: "https://open.spotify.com/episode/5YqA5txsuWegGGHA5XT460", hosts: ["aiquis", "arthur", "gabriel-hamu", "bruno-nunes"] },
 ];
 
 export const products: Product[] = [
@@ -822,6 +823,8 @@ export const products: Product[] = [
   { id: "tupi-recarga", name: "Tupi Recarga", category: "Transportation", url: "https://tupimob.com/app-de-recarga/" },
   { id: "amazon-music", name: "Amazon Music", category: "Entertainment", url: "https://music.amazon.com/" },
   { id: "eleicoes-ai", name: "eleicoes.AI", category: "Apps", url: "https://eleicoes.ai/" },
+  { id: "claude-opus-55", name: "Claude Opus 5.5", category: "AI Tools", url: "https://claude.ai", parentId: "claude" },
+  { id: "claude-fable", name: "Claude Fable", category: "AI Tools", url: "https://claude.ai", parentId: "claude" },
 ];
 
 export const people: Person[] = [
@@ -1233,6 +1236,7 @@ export const people: Person[] = [
   { id: "mari-salmazo", name: "Mari Salmazo" },
   { id: "aline-capelatto", name: "Aline Capelatto" },
   { id: "luiza-tomanik", name: "Luiza Tomanik" },
+  { id: "bruno-nunes", name: "Bruno Nunes" },
 ];
 
 export const mentions: Mention[] = [
@@ -2706,4 +2710,9 @@ export const mentions: Mention[] = [
   { id: "m135-12", episodeId: 135, personId: "luiza-tomanik", productId: "amazon-music" },
   { id: "m135-13", episodeId: 135, personId: "carol-pilon", productId: "eleicoes-ai" },
   { id: "m135-14", episodeId: 135, personId: "danilo-franco", productId: "codex-openai" },
+  { id: "m136-1", episodeId: 136, personId: "gabriel-hamu", productId: "codex-openai" },
+  { id: "m136-2", episodeId: 136, personId: "bruno-nunes", productId: "codex-openai" },
+  { id: "m136-3", episodeId: 136, personId: "aiquis", productId: "claude-opus-55" },
+  { id: "m136-4", episodeId: 136, personId: "arthur", productId: "claude-fable" },
+  { id: "m136-5", episodeId: 136, personId: "arthur", productId: "claude-opus-55" },
 ];
