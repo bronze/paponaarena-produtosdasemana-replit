@@ -4,7 +4,8 @@ import { ArrowRight, Globe } from "lucide-react";
 import { posthog } from "@/lib/analytics";
 import { SiLinkedin, SiSpotify, SiYoutube } from "react-icons/si";
 import { cn } from "@/lib/utils";
-import { getAboutCopy, MAINTAINER, REPLIT_URL } from "@/lib/about";
+import { getAboutCopy, getThousandthMention, MAINTAINER, REPLIT_URL } from "@/lib/about";
+import { formatLongDate } from "@/lib/dates";
 import { SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "@/lib/seo";
 import arthurImg from "@assets/arthur_1772132984125.webp";
 import aquisImg from "@assets/aiquis_1772132984122.webp";
@@ -45,6 +46,7 @@ function SectionTitle({ children }: { children: ReactNode }) {
 
 export default function AboutPage() {
   const copy = getAboutCopy();
+  const milestone = getThousandthMention();
 
   return (
     <div className="-mb-4 text-lg leading-relaxed md:-mb-8">
@@ -118,6 +120,38 @@ export default function AboutPage() {
           </ul>
         </div>
       </Band>
+
+      {/* Marco do produto nº 1.000: número gigante à esquerda, a história à direita */}
+      {milestone && (
+        <Band>
+          <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-center lg:gap-16">
+            <p className="text-[6rem] font-extrabold leading-none tracking-[-0.05em] md:text-[9rem]" aria-hidden="true">
+              #1000<span className="text-primary">.</span>
+            </p>
+            <div className="max-w-2xl space-y-5">
+              <SectionTitle>O produto nº 1.000<span className="text-primary" aria-hidden="true">.</span></SectionTitle>
+              <p>
+                O milésimo produto da semana registrado no Radar foi{" "}
+                <Link href={`/products/${milestone.product.id}`} className="font-bold underline underline-offset-4 hover:no-underline">
+                  {milestone.product.name}
+                </Link>
+                , citado por{" "}
+                <Link href={`/people/${milestone.person.id}`} className="font-bold underline underline-offset-4 hover:no-underline">
+                  {milestone.person.name}
+                </Link>{" "}
+                no episódio #{milestone.episode.id}, “{milestone.episode.title}”, de {formatLongDate(milestone.episode.date)}.
+              </p>
+              <Link
+                href={`/episodes/${milestone.episode.id}`}
+                className={cn(pillBase, pillLight)}
+                onClick={() => posthog.capture("about_milestone_clicked", { episode_id: milestone.episode.id })}
+              >
+                Ver o episódio #{milestone.episode.id} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </Band>
+      )}
 
       {/* Quem faz: faixa escura no fim da página */}
       <Band className="bg-sidebar text-sidebar-foreground">

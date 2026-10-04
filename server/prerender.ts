@@ -14,7 +14,7 @@ import {
   people,
   resolveParent,
 } from "../client/src/lib/data-utils";
-import { getAboutCopy, MAINTAINER, REPLIT_URL } from "../client/src/lib/about";
+import { getAboutCopy, getThousandthMention, MAINTAINER, REPLIT_URL } from "../client/src/lib/about";
 import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL, SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "../client/src/lib/seo";
 
 function esc(value: string): string {
@@ -47,6 +47,16 @@ const nav = `<nav>${[
   link("/people", "Pessoas"),
   link("/sobre", "Sobre"),
 ].join(" · ")}</nav>`;
+
+function milestoneHtml(): string {
+  const m = getThousandthMention();
+  if (!m) return "";
+  return (
+    `<h2>O produto nº 1.000</h2>` +
+    `<p>O milésimo produto da semana registrado no Radar foi ${link(`/products/${encodeURIComponent(m.product.id)}`, m.product.name)}, ` +
+    `citado por ${link(`/people/${encodeURIComponent(m.person.id)}`, m.person.name)} no episódio ${episodeLink(m.episode.id)}.</p>`
+  );
+}
 
 /** Conteúdo semântico com links reais, para crawlers que não executam JS. */
 function bodyContent(pathname: string): string {
@@ -89,6 +99,7 @@ function bodyContent(pathname: string): string {
           `<p>Hosts: ${link("/people/arthur", "Arthur")} e ${link("/people/aiquis", "Aíquis")}.</p>` +
           list([link(SPOTIFY_SHOW_URL, "Ouvir no Spotify"), link(YOUTUBE_CHANNEL_URL, "Assistir no YouTube")]) +
           `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
+          milestoneHtml() +
           `<h2>Quem faz</h2><p>${esc(copy.maintainer)}</p>` +
           list([link(MAINTAINER.siteUrl, "carlosbronze.com.br"), link(MAINTAINER.linkedinUrl, "LinkedIn")]) +
           `<p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`

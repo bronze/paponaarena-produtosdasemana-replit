@@ -222,6 +222,31 @@
   ul.clean .mk { flex: none; font-weight: 800; }
 
   footer { padding: 40px 0 56px; font-size: 13px; }
+
+  /* ---------- Callout de marco (produto nº 1.000), arquivado ---------- */
+  .milestone {
+    position: relative; overflow: hidden; display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px; border: 1px solid #FBBF24; border-radius: var(--radius); background: #FFFBEB;
+    text-decoration: none; transition: opacity .15s;
+  }
+  .milestone:hover { opacity: .9; }
+  .milestone .trophy { font-size: 30px; line-height: 1; position: relative; }
+  .milestone .body { position: relative; flex: 1; min-width: 0; }
+  .milestone .title { margin: 0; font-weight: 700; color: #92400E; line-height: 1.35; }
+  .milestone .sub { margin: 2px 0 0; font-size: 14px; color: #B45309; }
+  .milestone .sub b { font-weight: 600; }
+  .milestone .arrow { position: relative; color: #D97706; }
+  .confetti { position: absolute; inset: 0; pointer-events: none; }
+  .confetti i {
+    position: absolute; top: 0; border-radius: 2px; opacity: 0;
+    animation: confetti-fall var(--d) ease-in var(--delay) infinite;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-10px) rotate(0); opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: translateY(140px) rotate(var(--r)); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
 </style>
 </head>
 <body>
@@ -511,6 +536,47 @@
     </div>
   </div>
 </section>
+
+<!-- CALLOUT DE MARCO -->
+<section class="block" id="marco">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Componente arquivado</span>
+      <h2 class="h1">Callout de marco<span class="dot">.</span></h2>
+      <p class="muted">O aviso do produto nº 1.000, que ficou na home quando o marco aconteceu (episódio #108). Guardado pelo efeito de confete, para reaproveitar num próximo marco (produto nº 2.000, episódio 200…). Usa âmbar, fora da paleta, de propósito: é uma comemoração pontual, não um padrão do app. O confete some com <code>prefers-reduced-motion</code>. Hoje o marco aparece na página Sobre, em <code>client/src/pages/about.tsx</code>.</p>
+    </div>
+
+    <a class="milestone" href="#marco">
+      <div class="confetti" aria-hidden="true"></div>
+      <span class="trophy" aria-hidden="true">🏆</span>
+      <div class="body">
+        <p class="title">Produto #1000 — Marco histórico!</p>
+        <p class="sub"><b>Larissa Araújo</b> mencionou <b>Claude Code</b> no Ep. 108</p>
+      </div>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+<script>
+  // Mesmo efeito do componente React original (framer-motion): 28 confetes caindo em loop
+  (function () {
+    var colors = ["#f59e0b", "#fbbf24", "#fcd34d", "#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#ec4899"];
+    var box = document.querySelector("#marco .confetti");
+    for (var i = 0; i < 28; i++) {
+      var p = document.createElement("i");
+      var size = Math.random() * 6 + 5;
+      var duration = Math.random() * 1.5 + 1.5;
+      p.style.left = Math.random() * 100 + "%";
+      p.style.width = size + "px";
+      p.style.height = size * 0.5 + "px";
+      p.style.background = colors[i % colors.length];
+      p.style.setProperty("--d", duration + Math.random() * 3 + 2 + "s");
+      p.style.setProperty("--delay", Math.random() * 0.6 + "s");
+      p.style.setProperty("--r", Math.random() * 720 - 360 + "deg");
+      box.appendChild(p);
+    }
+  })();
+</script>
 
 <!-- REGRAS -->
 <section class="block hl">

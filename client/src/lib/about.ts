@@ -1,4 +1,5 @@
-import { getTotalStats } from "./data-utils";
+import { mentions } from "./data";
+import { getEpisode, getPerson, getProduct, getTotalStats } from "./data-utils";
 
 export const REPLIT_URL = "https://replit.com";
 
@@ -25,4 +26,18 @@ export function getAboutCopy() {
     maintainer: `Mantido por ${MAINTAINER.name}. As menções são adicionadas à mão depois que cada episódio vai ao ar.`,
     replit: "Este site foi feito com Replit.",
   };
+}
+
+/**
+ * O marco do produto nº 1.000, marcado à mão nos dados com "#1000" no comentário da menção
+ * (a contagem atual pode ter mudado depois, com menções antigas adicionadas).
+ */
+export function getThousandthMention() {
+  const mention = mentions.find((m) => m.context?.includes("#1000"));
+  if (!mention) return undefined;
+  const person = getPerson(mention.personId);
+  const product = getProduct(mention.productId);
+  const episode = getEpisode(mention.episodeId);
+  if (!person || !product || !episode) return undefined;
+  return { mention, person, product, episode };
 }

@@ -1,6 +1,5 @@
 import { Link } from "wouter";
-import { lazy, Suspense, useMemo } from "react";
-import { motion } from "framer-motion";
+import { lazy, Suspense } from "react";
 import { posthog } from "@/lib/analytics";
 import { BarChart3, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,38 +25,6 @@ const AiCompanyChart = lazy(() => import("./dashboard-charts").then((m) => ({ de
 const AscensionChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AscensionChart })));
 const TrendChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TrendChart })));
 const ParticipantsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.ParticipantsChart })));
-
-const CONFETTI_COLORS = ["#f59e0b", "#fbbf24", "#fcd34d", "#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#ec4899"];
-
-function MilestoneConfetti() {
-  const particles = useMemo(() =>
-    Array.from({ length: 28 }, (_, i) => ({
-      id: i,
-      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      size: Math.random() * 6 + 5,
-      left: Math.random() * 100,
-      delay: Math.random() * 0.6,
-      duration: Math.random() * 1.5 + 1.5,
-      rotate: Math.random() * 720 - 360,
-      repeatDelay: Math.random() * 3 + 2,
-    })), []
-  );
-  return (
-    <div className="absolute inset-0 overflow-hidden rounded-lg pointer-events-none">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute top-0 rounded-sm"
-          style={{ left: `${p.left}%`, width: p.size, height: p.size * 0.5, backgroundColor: p.color }}
-          initial={{ y: -10, opacity: 1, rotate: 0 }}
-          animate={{ y: 140, opacity: [1, 1, 0], rotate: p.rotate }}
-          transition={{ duration: p.duration, delay: p.delay, ease: "easeIn", repeat: Infinity, repeatDelay: p.repeatDelay }}
-        />
-      ))}
-    </div>
-  );
-}
-
 
 export default function Dashboard() {
   const stats = getTotalStats();
@@ -107,34 +74,6 @@ export default function Dashboard() {
           onClick: () => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href }),
         }))}
       />
-
-      {/* 1000th mention milestone banner */}
-      {/* <Link href="/episodes/108" className="mt-2 block">
-        <Card className="relative border-amber-400 bg-amber-50 cursor-pointer transition-opacity hover:opacity-90">
-          <MilestoneConfetti />
-          <CardContent className="pt-5 pb-5 relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-              <span className="text-3xl">🏆</span>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-amber-800 text-base leading-snug">
-                  Produto #1000 — Marco histórico!
-                </p>
-                <p className="text-sm text-amber-700 mt-0.5">
-                  <Link href="/people/larissa-araujo" className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
-                    Larissa Araújo
-                  </Link>
-                  {" "}mencionou{" "}
-                  <Link href="/products/claude-code" className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
-                    Claude Code
-                  </Link>
-                  {" "}no Ep. 108
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-amber-600 shrink-0 hidden sm:block" />
-            </div>
-          </CardContent>
-        </Card>
-      </Link> */}
 
       <LatestEpisode
         variant="escuro"

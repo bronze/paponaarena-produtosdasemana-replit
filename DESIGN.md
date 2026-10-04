@@ -118,6 +118,11 @@ Componente `LatestEpisode` em `client/src/components/latest-episode.tsx`, com a 
 
 Prévia visual: seção "Destaque de episódio" do `design-system.html`.
 
+### Marcos
+
+- **Marco na página Sobre (em uso):** seção "O produto nº 1.000." com "#1000." gigante (96→144px, peso 800, ponto coral) à esquerda e a história à direita, com links para produto, pessoa e episódio. O marco é achado pela anotação "#1000" no comentário da menção (`getThousandthMention` em `client/src/lib/about.ts`), não pela contagem.
+- **Callout de marco (arquivado):** card âmbar com troféu e confete caindo, que ficou na home quando o marco aconteceu. Guardado só no `design-system.html` (seção "Callout de marco") para reaproveitar num próximo marco. Âmbar fica fora da paleta de propósito, por ser uma comemoração pontual; o confete respeita `prefers-reduced-motion`.
+
 ## Gráficos
 
 | Token | Hex | HSL |
