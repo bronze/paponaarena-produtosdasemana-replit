@@ -144,7 +144,7 @@ A prévia de link (WhatsApp, LinkedIn, X, Slack) é gerada por `npm run og`: o t
 
 - **Escura de propósito.** É a única peça em fundo `ink`, a exceção ao "light only": nos feeds, quase sempre claros, o card escuro se destaca. Segue as regras de cor sobre preto (coral como texto só sobre `ink`/`ink-2`).
 - **"Radar." é o herói.** "Papo na Arena" vem menor, em `on-dark-muted`, acima; o ponto final coral fica depois de "Radar". Assim o card não se passa pelo podcast.
-- **Aviso de fã sempre legível.** Texto simples em `on-dark-muted`, 28px, logo abaixo dos totais (sem pílula): "Projeto de fã, não oficial · feito por um ouvinte".
+- **Aviso de fã sempre legível.** Texto simples em `on-dark-muted`, 28px, logo abaixo dos totais (sem pílula): "Projeto de fã, não oficial".
 - **Onda sonora = dados, como efeito de fundo.** Uma barra por episódio ocupando a imagem inteira, com altura proporcional às menções (a mais alta tem 90% da altura); acima de 150 episódios, vizinhos são agrupados pela média. Tem uma camada desfocada atrás para dar brilho, e um degradê escuro na esquerda garante a leitura do texto.
 - **Só tons de coral.** A onda usa um gradiente do vinho escuro ao coral claro (`#6B1A24` → `#B8323A` → `#FF5757` → `#FF9B9B`), sem outras cores, mantendo a regra de uma cor de marca só.
 - **Sem ranking.** A imagem fala do podcast, não de quais produtos lideram.
