@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System Papo na Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Tokens extraídos dos prints de productarena.io e productarena.io/podcast.
+     Light only — sem dark mode. */
+  :root {
+    --coral: #FF5757;        /* cor única de marca */
+    --coral-tint: #FFE9E9;   /* fundo suave para chips/ícones */
+    --ink: #0E0E10;          /* preto do hero deles; texto principal */
+    --ink-2: #19191B;        /* cards em superfície escura */
+    --ink-3: #27272A;        /* bordas em superfície escura */
+    --page: #FBFBFC;         /* fundo do app: off-white (seção "Ideias boas" do podcast) */
+    --highlight: #F3F4F6;    /* seções de destaque (como "Agenda da Arena" no site deles) */
+    --surface: #FFFFFF;      /* cards sobre o fundo claro */
+    --border: #E5E7EB;
+    --muted: #4B5563;        /* texto secundário (passa AA sobre --page, --highlight e --surface) */
+    --on-dark: #F3F4F6;
+    --on-dark-muted: #A1A1AA;
+
+    --chart-1: #FF5757;
+    --chart-2: #0E0E10;
+    --chart-3: #F2A65A;
+    --chart-4: #5B7DB1;
+    --chart-5: #A1A1AA;
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+  /* ---------- Tipografia ---------- */
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--coral); }
+  .on-dark .eyebrow { color: var(--coral); }
+  .on-dark .eyebrow::before { display: none; }
+
+  .display { font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; margin: 0; }
+  .h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; margin: 0; }
+  .h2 { font-size: 24px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin: 0; }
+  .h3 { font-size: 18px; font-weight: 700; letter-spacing: -.01em; line-height: 1.3; margin: 0; }
+  .body { font-size: 16px; }
+  .small { font-size: 14px; }
+  .xs { font-size: 12px; }
+  .muted { color: var(--muted); }
+  .dot { color: var(--coral); }
+
+  /* ---------- Seções do guia ---------- */
+  header.hero { background: var(--ink); color: var(--on-dark); padding: 72px 0 64px; }
+  header.hero p { color: var(--on-dark-muted); max-width: 620px; font-size: 18px; margin: 20px 0 0; }
+  .accent { color: var(--coral); }
+
+  section.block { padding: 64px 0; }
+  section.block + section.block { border-top: 1px solid var(--border); }
+  section.hl { background: var(--highlight); }
+  .block-head { margin-bottom: 32px; display: grid; gap: 12px; }
+  .block-head p { margin: 0; max-width: 680px; }
+
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .g5 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px;
+  }
+  section.hl .card { background: var(--surface); border-color: transparent; }
+
+  /* swatches */
+  .swatch { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: var(--surface); }
+  .swatch .chip { height: 96px; display: flex; align-items: flex-end; padding: 12px; font-weight: 700; font-size: 14px; }
+  .swatch .meta { padding: 12px; display: grid; gap: 2px; }
+  .swatch code { font-size: 12px; color: var(--muted); }
+
+  /* tabela */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--highlight); }
+  tr:last-child td { border-bottom: 0; }
+  .pair { display: inline-flex; align-items: center; justify-content: center; min-width: 64px; padding: 4px 10px; border-radius: 6px; font-weight: 700; border: 1px solid var(--border); }
+  .ok { color: #166534; font-weight: 700; }
+  .no { color: #B91C1C; font-weight: 700; }
+  .lg { color: #92400E; font-weight: 700; }
+
+  /* ---------- Componentes ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px;
+    border-radius: 999px; font: 600 15px/1 var(--font); cursor: pointer; border: 1px solid transparent;
+    text-decoration: none; transition: filter .15s, background .15s;
+  }
+  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .on-dark .btn:focus-visible { outline-color: var(--on-dark); }
+  .btn-primary { background: var(--coral); color: var(--ink); }
+  .btn-primary:hover { filter: brightness(.94); }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--border); }
+  .btn-secondary:hover { background: var(--highlight); }
+  .btn-dark { background: var(--ink); color: var(--on-dark); }
+  .btn-dark:hover { background: var(--ink-2); }
+  .btn-ghost-dark { background: transparent; color: var(--on-dark); border-color: var(--ink-3); }
+  .btn svg { width: 16px; height: 16px; }
+
+  .tag {
+    display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    background: var(--coral-tint); color: var(--ink);
+  }
+  .tag.outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .on-dark .tag { background: transparent; border: 1px solid rgba(255,87,87,.4); color: var(--coral); }
+
+  .icon-box { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--coral-tint); color: var(--ink); }
+  .icon-box svg { width: 20px; height: 20px; }
+
+  .stat { display: grid; gap: 4px; }
+  .stat .num { font-size: 40px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .stat .num .dot { font-size: 40px; }
+
+  .dark-panel { background: var(--ink); color: var(--on-dark); border-radius: var(--radius); padding: 32px; }
+  .dark-panel .muted { color: var(--on-dark-muted); }
+
+  .cta-band { background: var(--coral); color: var(--ink); border-radius: var(--radius); padding: 40px 32px; text-align: center; display: grid; gap: 16px; justify-items: center; }
+  .cta-band p { margin: 0; max-width: 560px; }
+
+  .notice {
+    display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 16px; border-radius: var(--radius-sm);
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--coral); font-size: 14px;
+  }
+
+  /* ---------- Preview do app ---------- */
+  .app { display: grid; grid-template-columns: 240px 1fr; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); min-height: 560px; background: var(--page); }
+  @media (max-width: 760px) { .app { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .sidebar { background: var(--ink); color: var(--on-dark); padding: 20px 12px; display: flex; flex-direction: column; gap: 24px; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; font-weight: 800; letter-spacing: -.02em; }
+  .brand-mark { width: 32px; height: 32px; border-radius: 8px; background: var(--coral); color: var(--ink); display: grid; place-items: center; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .nav-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--on-dark-muted); padding: 0 8px 8px; }
+  .nav { display: grid; gap: 2px; }
+  .nav a { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 10px; border-radius: 8px; text-decoration: none; color: var(--on-dark-muted); font-size: 14px; font-weight: 500; position: relative; }
+  .nav a svg { width: 18px; height: 18px; }
+  .nav a:hover { background: var(--ink-2); color: var(--on-dark); }
+  .nav a.active { background: var(--ink-2); color: var(--on-dark); font-weight: 600; }
+  .nav a.active svg { color: var(--coral); }
+  .nav a.active::before { content: ""; position: absolute; left: -12px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--coral); }
+  .side-foot { margin-top: auto; font-size: 12px; color: var(--on-dark-muted); padding: 12px 8px 0; border-top: 1px solid var(--ink-3); }
+
+  .main { padding: 32px; display: grid; gap: 24px; align-content: start; min-width: 0; }
+  @media (max-width: 760px) { .main { padding: 20px 16px; } }
+  .highlight-band { background: var(--highlight); border-radius: var(--radius); padding: 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+  .page-head { display: grid; gap: 8px; }
+  .page-head p { margin: 0; }
+
+  .rank { display: grid; gap: 0; }
+  .rank-row { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .rank-row:last-child { border-bottom: 0; }
+  .rank-pos { font-weight: 800; color: var(--muted); font-size: 13px; }
+  .rank-name { font-weight: 600; }
+  .bar { height: 6px; border-radius: 3px; background: var(--highlight); margin-top: 6px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--chart-1); border-radius: 3px; }
+
+  .chart { display: flex; align-items: flex-end; gap: 10px; height: 140px; padding-top: 8px; }
+  .chart div { flex: 1; border-radius: 6px 6px 0 0; }
+
+  .do-dont { display: grid; gap: 12px; }
+  .do-dont li { margin: 0; }
+  ul.clean { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 15px; }
+  ul.clean li { display: flex; gap: 10px; }
+  ul.clean .mk { flex: none; font-weight: 800; }
+
+  footer { padding: 40px 0 56px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header class="hero on-dark">
+  <div class="wrap">
+    <span class="eyebrow">Design system · proposta</span>
+    <h1 class="display" style="margin-top:16px">Papo na Arena<span class="accent">.</span><br>Produtos da Semana</h1>
+    <p>Paleta e componentes inspirados na Product Arena, como homenagem de fã. Uma cor de marca só (<strong style="color:var(--on-dark)">#FF5757</strong>), tudo passando no WCAG AA e sem dark mode.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
+      <a class="btn btn-primary" href="#app">Ver preview do app</a>
+      <a class="btn btn-ghost-dark" href="#cores">Paleta e contraste</a>
+    </div>
+  </div>
+</header>
+
+<!-- CORES -->
+<section class="block" id="cores">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Cores</span>
+      <h2 class="h1">Uma cor de marca, muito preto e fundo claro<span class="dot">.</span></h2>
+      <p class="muted">Hex extraídos direto dos prints. O fundo do app é um off-white quase imperceptível (<code>#FBFBFC</code>); o cinza <code>#F3F4F6</code> fica só para seções de destaque, como no site deles. Cards em branco.</p>
+    </div>
+    <div class="grid g5">
+      <div class="swatch"><div class="chip" style="background:var(--coral);color:var(--ink)">Coral</div><div class="meta"><strong class="small">--coral</strong><code>#FF5757 · 0 100% 67%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--ink);color:var(--on-dark)">Ink</div><div class="meta"><strong class="small">--ink</strong><code>#0E0E10 · 240 7% 6%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--ink-2);color:var(--on-dark)">Ink 2</div><div class="meta"><strong class="small">--ink-2</strong><code>#19191B · 240 4% 10%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--page);color:var(--ink);border-bottom:1px solid var(--border)">Page</div><div class="meta"><strong class="small">--page</strong><code>#FBFBFC · 240 14% 99%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--highlight);color:var(--ink)">Highlight</div><div class="meta"><strong class="small">--highlight</strong><code>#F3F4F6 · 220 14% 96%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--surface);color:var(--ink);border-bottom:1px solid var(--border)">Surface</div><div class="meta"><strong class="small">--surface</strong><code>#FFFFFF · 0 0% 100%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--muted);color:#fff">Muted</div><div class="meta"><strong class="small">--muted</strong><code>#4B5563 · 215 14% 34%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--border);color:var(--ink)">Border</div><div class="meta"><strong class="small">--border</strong><code>#E5E7EB · 220 13% 91%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--coral-tint);color:var(--ink)">Coral tint</div><div class="meta"><strong class="small">--coral-tint</strong><code>#FFE9E9 · 0 100% 96%</code></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--on-dark-muted);color:var(--ink)">On dark muted</div><div class="meta"><strong class="small">--on-dark-muted</strong><code>#A1A1AA · 240 5% 65%</code></div></div>
+    </div>
+
+    <div style="margin-top:40px" class="block-head">
+      <h3 class="h2">Contraste (WCAG AA)</h3>
+      <p class="muted">Texto normal precisa de 4,5:1. Texto grande (≥ 24px, ou ≥ 19px em negrito) e ícones precisam de 3:1.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Par</th><th>Uso</th><th>Razão</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pair" style="background:var(--coral);color:var(--ink)">Aa</span></td><td>Texto preto sobre coral (botões, faixa CTA)</td><td>6,2:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--ink);color:var(--coral)">Aa</span></td><td>Coral sobre preto (sidebar, destaques escuros)</td><td>6,2:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--ink-2);color:var(--coral)">Aa</span></td><td>Coral sobre card escuro</td><td>5,6:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--page);color:var(--ink)">Aa</span></td><td>Texto principal sobre o fundo</td><td>18,6:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--page);color:var(--muted)">Aa</span></td><td>Texto secundário sobre o fundo</td><td>7,3:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--highlight);color:var(--muted)">Aa</span></td><td>Texto secundário sobre o destaque cinza</td><td>6,9:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--ink);color:var(--on-dark-muted)">Aa</span></td><td>Texto secundário na sidebar</td><td>7,5:1</td><td class="ok">Passa em tudo</td></tr>
+          <tr><td><span class="pair" style="background:var(--surface);color:var(--coral)">Aa</span></td><td>Coral sobre branco</td><td>3,1:1</td><td class="lg">Só título grande e ícone</td></tr>
+          <tr><td><span class="pair" style="background:var(--page);color:var(--coral)">Aa</span></td><td>Coral sobre o fundo off-white</td><td>3,0:1</td><td class="lg">Só título grande e ícone</td></tr>
+          <tr><td><span class="pair" style="background:var(--highlight);color:var(--coral)">Aa</span></td><td>Coral sobre o destaque cinza</td><td>2,8:1</td><td class="no">Não usar como texto/ícone</td></tr>
+          <tr><td><span class="pair" style="background:var(--coral);color:#fff">Aa</span></td><td>Branco sobre coral (como no site deles)</td><td>3,1:1</td><td class="no">Não usar em texto pequeno</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOGRAFIA -->
+<section class="block hl">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Tipografia</span>
+      <h2 class="h1">Plus Jakarta Sans, títulos pesados e apertados<span class="dot">.</span></h2>
+      <p class="muted">Mesma família que o app já usa. Títulos ganham peso 800 e tracking negativo, no estilo deles. Tabelas e listas continuam em 14px para manter a densidade.</p>
+    </div>
+    <div class="grid" style="gap:28px">
+      <div><div class="xs muted" style="margin-bottom:6px">Display · 64px / 800 / -0.035em · só em capa/hero</div><p class="display">Ficar mais afiado<span class="dot">.</span></p></div>
+      <div><div class="xs muted" style="margin-bottom:6px">H1 · 40px / 800 / -0.03em · título de página</div><p class="h1">Produtos mais mencionados</p></div>
+      <div><div class="xs muted" style="margin-bottom:6px">H2 · 24px / 700 / -0.02em · cabeçalho de seção</div><p class="h2">Últimos episódios</p></div>
+      <div><div class="xs muted" style="margin-bottom:6px">H3 · 18px / 700 · título de card</div><p class="h3">Como estamos usando IA no dia a dia</p></div>
+      <div><div class="xs muted" style="margin-bottom:6px">Body · 16px / 400 · textos corridos</div><p class="body" style="margin:0;max-width:640px">O Papo na Arena é o podcast para quem constrói produtos, lidera pessoas e quer ficar mais afiado na era da IA.</p></div>
+      <div><div class="xs muted" style="margin-bottom:6px">Small · 14px · tabelas, listas, metadados</div><p class="small muted" style="margin:0">Ep. 130 · 3 menções · Ferramentas de IA</p></div>
+      <div><div class="xs muted" style="margin-bottom:6px">Eyebrow · 12px / 700 / caixa alta · ponto coral no claro, texto coral no escuro</div><span class="eyebrow">Quem puxa a conversa</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTES -->
+<section class="block">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Componentes</span>
+      <h2 class="h1">Botões, tags e blocos<span class="dot">.</span></h2>
+    </div>
+
+    <div class="grid g2">
+      <div class="card" style="display:grid;gap:16px">
+        <h3 class="h3">Botões (fundo claro)</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ouça o episódio</button>
+          <button class="btn btn-secondary">Ver produtos</button>
+          <button class="btn btn-dark">Ver no YouTube</button>
+        </div>
+        <p class="small muted" style="margin:0">Primário: coral com texto preto. Foco: contorno preto de 2px.</p>
+      </div>
+
+      <div class="dark-panel on-dark" style="display:grid;gap:16px">
+        <h3 class="h3">Botões (fundo escuro)</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ouça o podcast</button>
+          <button class="btn btn-ghost-dark">Conheça a Arena</button>
+        </div>
+        <p class="small muted" style="margin:0">Mesmo primário. Coral como texto só aparece em superfícies escuras.</p>
+      </div>
+
+      <div class="card" style="display:grid;gap:16px">
+        <h3 class="h3">Tags</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag">Produto</span><span class="tag">IA</span><span class="tag outline">Ferramentas</span>
+        </div>
+        <div class="dark-panel on-dark" style="padding:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag">Produto</span><span class="tag">Código</span><span class="tag">IA</span>
+        </div>
+      </div>
+
+      <div class="card" style="display:grid;gap:12px">
+        <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></div>
+        <h3 class="h3">Card com ícone</h3>
+        <p class="small muted" style="margin:0">Ícone em preto sobre o tint coral, como nos cards "IA sem Hype" deles — sem depender do contraste do coral.</p>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card stat"><span class="num">130<span class="dot">+</span></span><span class="small muted">episódios</span></div>
+      <div class="card stat"><span class="num">412</span><span class="small muted">produtos mencionados</span></div>
+      <div class="card stat"><span class="num">58</span><span class="small muted">pessoas</span></div>
+    </div>
+
+    <div class="cta-band" style="margin-top:16px">
+      <span class="eyebrow" style="color:var(--ink)">O próximo episódio é seu</span>
+      <h3 class="h1">Ouviu um produto no podcast?<br>Ele provavelmente está aqui.</h3>
+      <p>Faixa coral com texto preto: mesma energia da faixa CTA deles, passando no AA.</p>
+      <button class="btn btn-dark">Buscar produto</button>
+    </div>
+
+    <div class="notice" style="margin-top:16px">
+      <strong>Projeto de fã, não oficial.</strong>
+      <span class="muted">Este site não é afiliado à Product Arena. Feito por ouvintes do Papo na Arena.</span>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW DO APP -->
+<section class="block" id="app">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Preview</span>
+      <h2 class="h1">Como fica no app<span class="dot">.</span></h2>
+      <p class="muted">Sidebar escura com destaque coral, fundo off-white, cards brancos e o cinza só num bloco de destaque. Ranking e tabelas na densidade atual.</p>
+    </div>
+
+    <div class="app">
+      <aside class="sidebar on-dark">
+        <div class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></span>Papo na Arena</div>
+        <div>
+          <div class="nav-label">Navegação</div>
+          <nav class="nav">
+            <a href="#app" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>Dashboard</a>
+            <a href="#app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>Episódios</a>
+            <a href="#app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m7.5 4.3 9 5.2M21 8 12 13 3 8l9-5Z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>Produtos</a>
+            <a href="#app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>Categorias</a>
+            <a href="#app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M16 4a4 4 0 0 1 0 8M22 21v-1a6 6 0 0 0-4-5.6"/></svg>Pessoas</a>
+            <a href="#app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Sobre</a>
+          </nav>
+        </div>
+        <div class="side-foot">Projeto de fã, não oficial.</div>
+      </aside>
+
+      <div class="main">
+        <div class="page-head">
+          <span class="eyebrow">Dashboard</span>
+          <h3 class="h1">Produtos da semana</h3>
+          <p class="muted">Tudo o que foi indicado no quadro de fim de episódio.</p>
+        </div>
+
+        <div class="grid g3">
+          <div class="card stat"><span class="num">130</span><span class="small muted">episódios</span></div>
+          <div class="card stat"><span class="num">412</span><span class="small muted">produtos</span></div>
+          <div class="card stat"><span class="num">58</span><span class="small muted">pessoas</span></div>
+        </div>
+
+        <div class="highlight-band">
+          <div style="display:grid;gap:6px">
+            <span class="eyebrow">Destaque do último episódio</span>
+            <h4 class="h2">#130 · Product Managers devem codar?</h4>
+            <p class="small muted" style="margin:0">4 produtos indicados: Claude Code, Cursor, Lovable e v0.</p>
+          </div>
+          <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ouvir episódio</button>
+        </div>
+
+        <div class="grid g2">
+          <div class="card">
+            <h4 class="h3" style="margin-bottom:8px">Mais mencionados</h4>
+            <div class="rank">
+              <div class="rank-row"><span class="rank-pos">01</span><div><div class="rank-name">Claude</div><div class="bar"><span style="width:100%"></span></div></div><span class="small muted">24</span></div>
+              <div class="rank-row"><span class="rank-pos">02</span><div><div class="rank-name">Cursor</div><div class="bar"><span style="width:75%"></span></div></div><span class="small muted">18</span></div>
+              <div class="rank-row"><span class="rank-pos">03</span><div><div class="rank-name">Notion</div><div class="bar"><span style="width:58%"></span></div></div><span class="small muted">14</span></div>
+              <div class="rank-row"><span class="rank-pos">04</span><div><div class="rank-name">Figma</div><div class="bar"><span style="width:42%"></span></div></div><span class="small muted">10</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h4 class="h3" style="margin-bottom:8px">Por categoria</h4>
+            <div class="chart" aria-hidden="true">
+              <div style="height:90%;background:var(--chart-1)"></div>
+              <div style="height:70%;background:var(--chart-2)"></div>
+              <div style="height:52%;background:var(--chart-3)"></div>
+              <div style="height:40%;background:var(--chart-4)"></div>
+              <div style="height:28%;background:var(--chart-5)"></div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px" class="xs muted">
+              <span><span style="color:var(--chart-1)">■</span> IA</span><span><span style="color:var(--chart-2)">■</span> Produtividade</span><span><span style="color:var(--chart-3)">■</span> Design</span><span><span style="color:var(--chart-4)">■</span> Dev</span><span><span style="color:var(--chart-5)">■</span> Outros</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Episódio</th><th>Título</th><th>Produtos</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>#130</td><td>Product Managers devem codar?</td><td>4</td><td><span class="tag">Produto</span></td></tr>
+              <tr><td>#129</td><td>Como estamos usando IA no dia a dia</td><td>6</td><td><span class="tag">IA</span></td></tr>
+              <tr><td>#128</td><td>Construir mais rápido não significa decidir melhor</td><td>3</td><td><span class="tag outline">Decisão</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGRAS -->
+<section class="block hl">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Regras de uso</span>
+      <h2 class="h1">Acento, não clone<span class="dot">.</span></h2>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:12px">Fazer</h3>
+        <ul class="clean">
+          <li><span class="mk" style="color:#166534">✓</span><span>Coral como fundo (botão, faixa, marca) com texto preto</span></li>
+          <li><span class="mk" style="color:#166534">✓</span><span>Coral como texto/ícone só sobre preto</span></li>
+          <li><span class="mk" style="color:#166534">✓</span><span>Ponto final coral em títulos grandes ("Produtos da semana<span class="dot">.</span>")</span></li>
+          <li><span class="mk" style="color:#166534">✓</span><span>Links e rótulos pequenos em preto ou cinza</span></li>
+          <li><span class="mk" style="color:#166534">✓</span><span>Aviso "projeto de fã, não oficial" sempre visível</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:12px">Evitar</h3>
+        <ul class="clean">
+          <li><span class="mk" style="color:#B91C1C">✕</span><span>Texto branco sobre coral</span></li>
+          <li><span class="mk" style="color:#B91C1C">✕</span><span>Texto pequeno coral em fundo claro; ícone coral sobre o cinza <code>#F3F4F6</code></span></li>
+          <li><span class="mk" style="color:#B91C1C">✕</span><span>Usar o logo ou wordmark "Product Arena"</span></li>
+          <li><span class="mk" style="color:#B91C1C">✕</span><span>Hero gigante e faixas de landing page nas telas do app</span></li>
+          <li><span class="mk" style="color:#B91C1C">✕</span><span>Aumentar fonte de tabelas e listas</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap muted">Proposta de design system · Papo na Arena — Produtos da Semana · projeto de fã, não oficial.</div>
+</footer>
+
+</body>
+</html>
