@@ -1,14 +1,15 @@
 import {Link, useParams} from "wouter";
-import {ArrowLeft, User, Package, Mic, Search, TrendingUp} from "lucide-react";
+import {ArrowLeft, Package, Mic, Search} from "lucide-react";
 import { posthog } from "@/lib/analytics";
 import {SiLinkedin} from "react-icons/si";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
+import { StatBand } from "@/components/stat-band";
+import type { Mention } from "@/lib/types";
 import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
 import {useState, useMemo, useRef} from "react";
-import {people, episodes, getMentionsForPerson, getProduct, getEpisode, getPersonMentionCount, getPersonRoleCounts} from "@/lib/data-utils";
+import {people, getMentionsForPerson, getProduct, getEpisode, getPersonRoleCounts} from "@/lib/data-utils";
 import { normalize } from "@/lib/text";
 import arthurImg from "@assets/arthur_1772132984125.webp";
 import aquisImg from "@assets/aiquis_1772132984122.webp";
@@ -160,7 +161,7 @@ function PeopleList() {
             aria-label="Buscar pessoas"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setVisibleCount(INITIAL_COUNT); if (e.target.value.length > 2) posthog.capture("person_searched", { query: e.target.value }); }}
-            className="h-11 pl-9"
+            className="h-12 pl-9"
             data-testid="input-search"
           />
         </div>
@@ -170,7 +171,6 @@ function PeopleList() {
               key={mode}
               variant={sortMode === mode ? "default" : "outline"}
               size="sm"
-              className="h-11 px-4"
               aria-pressed={sortMode === mode}
               onClick={() => { setSortMode(mode); setVisibleCount(INITIAL_COUNT); posthog.capture("people_sort_changed", { sort_mode: mode }); }}
               data-testid={`sort-${mode}`}
@@ -246,36 +246,72 @@ function PeopleList() {
   );
 }
 
+const DETAIL_LIST_LIMIT = 20;
+
+/** Produto citado numa menção: nome com link, combos como "A + B (combo)" e o comentário, se houver. */
+function MentionedProduct({ mention }: { mention: Mention }) {
+  const product = getProduct(mention.productId);
+  const credits = product?.alsoCredits;
+  return (
+    <span>
+      {credits?.length ? (
+        <>
+          {credits.map((creditId, idx) => (
+            <span key={creditId}>
+              {idx > 0 && <span className="text-muted-foreground"> + </span>}
+              <Link href={`/products/${creditId}`} className="font-semibold underline-offset-2 hover:underline">
+                {getProduct(creditId)?.name || creditId}
+              </Link>
+            </span>
+          ))}
+          <span className="text-muted-foreground"> (combo)</span>
+        </>
+      ) : (
+        <Link href={`/products/${mention.productId}`} className="font-semibold underline-offset-2 hover:underline">
+          {product?.name || mention.productId}
+        </Link>
+      )}
+      {mention.context && <span className="italic text-muted-foreground"> — {mention.context}</span>}
+    </span>
+  );
+}
+
+function ShowAllButton({ total, onClick }: { total: number; onClick: () => void }) {
+  return (
+    <Button variant="outline" className="mt-4 h-12 w-full rounded-full font-semibold" onClick={onClick}>
+      Mostrar todos ({total})
+    </Button>
+  );
+}
+
 function PersonDetail() {
   const {id} = useParams<{id: string}>();
   const person = people.find((p) => p.id === id);
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [showAllProducts, setShowAllProducts] = useState(false);
+  const [showAllEpisodes, setShowAllEpisodes] = useState(false);
 
   if (!person) {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Pessoa não encontrada.</p>
-        <Link href="/people">
-          <Button variant="ghost" className="mt-4">
+        <Button asChild variant="ghost" className="mt-4">
+          <Link href="/people">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }
 
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const aquisAudios = [aquisAudio, aquisCaraAudio];
-
-  const audioSrc = useMemo(() => {
-    if (person.id === "arthur") return arthurAudio;
-    if (person.id === "aiquis") return aquisAudio;
-    return null;
-  }, [person.id]);
+  const audioSrc = person.id === "arthur" ? arthurAudio : person.id === "aiquis" ? aquisAudio : null;
 
   const playSound = () => {
     const audio = audioRef.current;
     if (!audio || !audioSrc) return;
     if (person.id === "aiquis") {
+      const aquisAudios = [aquisAudio, aquisCaraAudio];
       audio.src = aquisAudios[Math.floor(Math.random() * aquisAudios.length)];
     }
     const wasEnded = audio.ended;
@@ -296,7 +332,7 @@ function PersonDetail() {
     return (getProduct(a[0])?.name || a[0]).localeCompare(getProduct(b[0])?.name || b[0], "pt-BR");
   });
 
-  const episodesParticipated = new Set(personMentions.map((m) => m.episodeId));
+  const episodeIds = Array.from(new Set(personMentions.map((m) => m.episodeId))).sort((a, b) => b - a);
 
   const roles = getPersonRoleCounts(person.id);
   const epLabel = (n: number) => `${n} ${n === 1 ? "episódio" : "episódios"}`;
@@ -305,183 +341,127 @@ function PersonDetail() {
     roles.cohost > 0 && `Cohost em ${epLabel(roles.cohost)}`,
   ].filter(Boolean).join(" · ");
 
-  const statCards = [
-    {label: "Total de Menções", value: personMentions.length, icon: TrendingUp},
-    {label: "Produtos Únicos", value: topProducts.length, icon: Package},
-    {label: "Episódios", value: episodesParticipated.size, icon: Mic},
-  ];
+  const shownProducts = showAllProducts ? topProducts : topProducts.slice(0, DETAIL_LIST_LIMIT);
+  const shownEpisodes = showAllEpisodes ? episodeIds : episodeIds.slice(0, DETAIL_LIST_LIMIT);
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <Link href="/people" aria-label="Voltar para Pessoas">
-          <Button variant="ghost" size="icon" aria-label="Voltar para Pessoas" data-testid="button-back">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <Avatar
-          className={`h-12 w-12 shrink-0 ${audioSrc ? "select-none active:scale-95 transition-transform cursor-pointer" : ""}`}
-          onPointerUp={audioSrc ? playSound : undefined}
-          style={{ touchAction: "manipulation" }}>
-          {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
-          <AvatarFallback className="text-sm font-semibold">
-            {person.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        {audioSrc && <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />}
-        <div>
-          <h1 className="detail-title" data-testid="text-person-name">
-            {person.name}
-          </h1>
-          <p className="text-sm text-muted-foreground">Análise do participante</p>
-          {roleLine && <p className="text-sm text-muted-foreground" data-testid="text-person-roles">{roleLine}</p>}
-          {person.linkedinUrl && (
-            <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <Badge
-                variant="outline"
-                className="mt-2 cursor-pointer text-sm px-3 py-1 border-brand-linkedin/40 text-brand-linkedin hover:bg-brand-linkedin/10"
-                data-testid="link-linkedin">
-                <SiLinkedin aria-hidden="true" className="mr-1.5 h-4 w-4" /> LinkedIn
-              </Badge>
-            </a>
-          )}
-        </div>
-      </div>
-
-      <div className="grid gap-4 grid-cols-3">
-        {statCards.map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className="text-2xl font-bold">{stat.value}</p>
-                </div>
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-tint">
-                  <stat.icon className="h-5 w-5 text-foreground" aria-hidden="true" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-primary" aria-hidden="true" /> Top Produtos Mencionados
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            {topProducts.slice(0, 8).map(([productId, count]) => {
-              const product = getProduct(productId);
-              return (
-                <Link key={productId} href={`/products/${productId}`}>
-                  <Badge variant="secondary" className="cursor-pointer hover:bg-accent text-sm px-3 py-1">
-                    {product?.name || productId}
-                    {count > 1 && <span className="ml-1.5 font-bold text-muted-foreground">{count}x</span>}
-                  </Badge>
-                </Link>
-              );
-            })}
+      {/* Header */}
+      <div>
+        <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
+          <Link href="/people">
+            <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Pessoas
+          </Link>
+        </Button>
+        <div className="flex items-center gap-4">
+          <Avatar
+            className={`h-16 w-16 shrink-0 md:h-20 md:w-20 ${audioSrc ? "select-none active:scale-95 transition-transform cursor-pointer" : ""}`}
+            onPointerUp={audioSrc ? playSound : undefined}
+            style={{ touchAction: "manipulation" }}>
+            {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
+            <AvatarFallback className="text-lg font-semibold">{initials(person.name)}</AvatarFallback>
+          </Avatar>
+          {audioSrc && <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />}
+          <div className="min-w-0">
+            <h1 className="detail-title" data-testid="text-person-name">
+              {person.name}
+            </h1>
+            {roleLine && <p className="mt-1 text-sm text-muted-foreground" data-testid="text-person-roles">{roleLine}</p>}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        {person.linkedinUrl && (
+          <a
+            href={person.linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 text-sm font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            onClick={() => posthog.capture("person_linkedin_clicked", { person_id: person.id })}
+            data-testid="link-linkedin"
+          >
+            <SiLinkedin aria-hidden="true" className="h-4 w-4 text-brand-linkedin" /> Ver no LinkedIn
+          </a>
+        )}
+      </div>
+
+      <StatBand
+        className="grid-cols-3"
+        items={[
+          { label: "Menções", value: personMentions.length },
+          { label: "Produtos", value: topProducts.length },
+          { label: "Episódios", value: episodeIds.length },
+        ]}
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Produtos */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Produtos mencionados ({topProducts.length})</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Package className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              Produtos recomendados
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {topProducts.map(([productId, count]) => {
+            <ol>
+              {shownProducts.map(([productId, count], index) => {
                 const product = getProduct(productId);
                 return (
-                  <div key={productId} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
-                    <Link href={`/products/${productId}`} className="text-sm hover:underline">
-                      {product?.name || productId}
-                    </Link>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {product && (
-                        <Badge variant="outline" className="text-xs">
-                          {product.category}
-                        </Badge>
-                      )}
-                      {count > 1 && <span className="text-xs font-semibold text-muted-foreground">{count}x</span>}
+                  <li key={productId} className="flex items-center justify-between gap-3 border-b border-border/40 py-2 last:border-0">
+                    <div className="flex min-w-0 items-baseline gap-2.5">
+                      <span className="w-5 shrink-0 text-right text-xs tabular-nums text-muted-foreground">{index + 1}</span>
+                      <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
+                        {product?.name || productId}
+                      </Link>
+                      {product?.category && <span className="shrink-0 text-xs text-muted-foreground">{product.category}</span>}
                     </div>
-                  </div>
+                    {count > 1 && (
+                      <span className="ml-2 shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{count}×</span>
+                    )}
+                  </li>
                 );
               })}
-            </div>
+            </ol>
+            {!showAllProducts && topProducts.length > DETAIL_LIST_LIMIT && (
+              <ShowAllButton total={topProducts.length} onClick={() => setShowAllProducts(true)} />
+            )}
           </CardContent>
         </Card>
 
+        {/* Episódios */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Episódios ({episodesParticipated.size})</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Mic className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              Episódios
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {Array.from(episodesParticipated)
-                .sort((a, b) => b - a)
-                .map((epId) => {
-                  const epMentions = personMentions.filter((m) => m.episodeId === epId);
-                  return (
-                    <div key={epId} className="flex items-center gap-2 flex-wrap py-2 border-b border-border/50 last:border-0 -mx-2 px-2 rounded">
-                      <Link href={`/episodes/${epId}`}>
-                        <Badge variant="outline" className="text-xs shrink-0 cursor-pointer hover:bg-accent">
-                          #{epId}
-                        </Badge>
-                      </Link>
-                      {epMentions.map((m) => {
-                        const product = getProduct(m.productId);
-                        const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
-                        if (isCombo) {
-                          const credits = product!.alsoCredits!;
-                          return (
-                            <span key={m.id} className="inline-flex items-center gap-1.5">
-                              {credits.map((creditId, idx) => {
-                                const credited = getProduct(creditId);
-                                return (
-                                  <span key={creditId} className="inline-flex items-center gap-1.5">
-                                    {idx > 0 && <span className="text-xs text-muted-foreground">+</span>}
-                                    <Link href={`/products/${creditId}`}>
-                                      <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
-                                        {credited?.name || creditId}
-                                      </Badge>
-                                    </Link>
-                                  </span>
-                                );
-                              })}
-                              <Badge variant="outline" className="text-xs font-normal text-muted-foreground">
-                                combo
-                              </Badge>
-                              {m.context && <span className="text-xs text-muted-foreground italic">({m.context})</span>}
-                            </span>
-                          );
-                        }
-                        return (
-                          <span key={m.id} className="inline-flex items-center gap-1">
-                            <Link href={`/products/${m.productId}`}>
-                              <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
-                                {product?.name || m.productId}
-                              </Badge>
-                            </Link>
-                            {m.context && <span className="text-xs text-muted-foreground italic">({m.context})</span>}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-            </div>
+            <ul>
+              {shownEpisodes.map((epId) => {
+                const episode = getEpisode(epId);
+                const epMentions = personMentions.filter((m) => m.episodeId === epId);
+                return (
+                  <li key={epId} className="space-y-1 border-b border-border/40 py-3 first:pt-0 last:border-0">
+                    <Link href={`/episodes/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
+                      <span className="font-bold tabular-nums">#{epId}</span>
+                      {episode && <span className="text-muted-foreground"> · </span>}
+                      {episode?.title}
+                    </Link>
+                    <p className="text-sm">
+                      {epMentions.map((m, i) => (
+                        <span key={m.id}>
+                          {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
+                          <MentionedProduct mention={m} />
+                        </span>
+                      ))}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+            {!showAllEpisodes && episodeIds.length > DETAIL_LIST_LIMIT && (
+              <ShowAllButton total={episodeIds.length} onClick={() => setShowAllEpisodes(true)} />
+            )}
           </CardContent>
         </Card>
       </div>
@@ -491,6 +471,6 @@ function PersonDetail() {
 
 export default function PeoplePage() {
   const params = useParams<{id: string}>();
-  if (params.id) return <PersonDetail />;
+  if (params.id) return <PersonDetail key={params.id} />;
   return <PeopleList />;
 }
