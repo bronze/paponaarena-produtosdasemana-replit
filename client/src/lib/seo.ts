@@ -167,3 +167,110 @@ export function getPageMeta(pathname: string): PageMeta {
   return notFound(path);
 }
 
+
+export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@PaponaArena";
+export const SPOTIFY_SHOW_URL = "https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ";
+
+type JsonLd = Record<string, unknown>;
+
+const absolute = (path: string) => `${SITE_URL}${path === "/" ? "/" : path}`;
+
+function podcastSeries(): JsonLd {
+  const hosts = ["arthur", "aiquis"]
+    .map((id) => getPerson(id))
+    .filter((p): p is NonNullable<typeof p> => !!p)
+    .map((p) => ({
+      "@type": "Person",
+      name: p.name,
+      ...(p.linkedinUrl ? { sameAs: [p.linkedinUrl] } : {}),
+    }));
+
+  return {
+    "@type": "PodcastSeries",
+    "@id": `${SITE_URL}/#podcast`,
+    name: SITE_NAME,
+    url: SPOTIFY_SHOW_URL,
+    inLanguage: "pt-BR",
+    description:
+      "Podcast de Arthur e Aíquis sobre produto, tecnologia e inteligência artificial, com os produtos da semana em cada episódio.",
+    author: hosts,
+    sameAs: [YOUTUBE_CHANNEL_URL, SPOTIFY_SHOW_URL],
+  };
+}
+
+function breadcrumbs(items: { name: string; path: string }[]): JsonLd {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: absolute(item.path),
+    })),
+  };
+}
+
+/** Dados estruturados (schema.org) da rota. Vazio para rotas inexistentes. */
+export function getJsonLd(pathname: string): JsonLd[] {
+  const meta = getPageMeta(pathname);
+  if (meta.noindex) return [];
+
+  const path = meta.canonicalPath;
+  const [, section, rawId] = path.split("/");
+
+  if (path === "/") {
+    return [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        name: `${SITE_NAME} – Produtos da Semana`,
+        alternateName: SITE_NAME,
+        url: absolute("/"),
+        inLanguage: "pt-BR",
+        description: DEFAULT_DESCRIPTION,
+        about: { "@id": `${SITE_URL}/#podcast` },
+      },
+      podcastSeries(),
+    ];
+  }
+
+  const sectionNames: Record<string, string> = {
+    episodes: "Episódios",
+    products: "Produtos",
+    categories: "Categorias",
+    people: "Pessoas",
+  };
+  const home = { name: SITE_NAME, path: "/" };
+  const list = { name: sectionNames[section], path: `/${section}` };
+
+  if (!rawId) return [breadcrumbs([home, list])];
+
+  const id = safeDecode(rawId);
+  const crumbs = (name: string) => breadcrumbs([home, list, { name, path }]);
+
+  if (section === "episodes") {
+    const episode = getEpisode(Number(id))!;
+    const sameAs = [episode.youtubeLink, episode.spotifyLink].filter(Boolean);
+    return [
+      {
+        "@type": "PodcastEpisode",
+        name: episode.title,
+        description: episode.description,
+        url: absolute(path),
+        datePublished: episode.date,
+        episodeNumber: episode.id,
+        inLanguage: "pt-BR",
+        partOfSeries: { "@id": `${SITE_URL}/#podcast`, "@type": "PodcastSeries", name: SITE_NAME, url: SPOTIFY_SHOW_URL },
+        ...(sameAs.length ? { sameAs } : {}),
+      },
+      crumbs(`Ep${episode.id}`),
+    ];
+  }
+
+  const names: Record<string, string | undefined> = {
+    products: getProduct(id)?.name,
+    people: getPerson(id)?.name,
+    categories: id,
+  };
+  return [crumbs(names[section] ?? id)];
+}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { getPageMeta, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 function setMeta(attr: "name" | "property", key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
@@ -22,6 +22,25 @@ function setCanonical(href: string) {
   el.href = href;
 }
 
+function setJsonLd(items: object[]) {
+  const id = "route-jsonld";
+  let el = document.getElementById(id);
+  if (items.length === 0) {
+    el?.remove();
+    return;
+  }
+  if (!el) {
+    el = document.createElement("script");
+    el.id = id;
+    el.setAttribute("type", "application/ld+json");
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": items,
+  });
+}
+
 /** Atualiza title, description, canonical e og/twitter conforme a rota atual. */
 export function RouteSeo() {
   const [location] = useLocation();
@@ -41,6 +60,8 @@ export function RouteSeo() {
     setMeta("property", "og:description", meta.description);
     setMeta("name", "twitter:title", meta.title);
     setMeta("name", "twitter:description", meta.description);
+
+    setJsonLd(getJsonLd(location));
   }, [location]);
 
   return null;

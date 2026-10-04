@@ -22,10 +22,10 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 
 ## 3. Dados estruturados (JSON-LD)
 
-- [ ] `WebSite` + `PodcastSeries` na home
-- [ ] `PodcastEpisode` em cada episódio
-- [ ] `sameAs` com links oficiais: YouTube (https://www.youtube.com/@PaponaArena) e Spotify (https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ)
-- [ ] Validar no Rich Results Test
+- [x] `WebSite` + `PodcastSeries` na home
+- [x] `PodcastEpisode` em cada episódio
+- [x] `sameAs` com links oficiais: YouTube (https://www.youtube.com/@PaponaArena) e Spotify (https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ)
+- [ ] Validar no Rich Results Test (https://search.google.com/test/rich-results) — só depois de publicar
 
 ## 4. Renderização (prerender/SSG)
 
