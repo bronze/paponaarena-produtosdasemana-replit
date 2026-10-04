@@ -26,7 +26,8 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 - [x] `PodcastEpisode` em cada episódio
 - [x] `sameAs` com links oficiais: YouTube (https://www.youtube.com/@PaponaArena) e Spotify (https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ)
 - [x] Validar no Rich Results Test (4/out/2026, `/episodes/126`): rastreado com sucesso, 1 item válido (Breadcrumbs), sem erros/avisos. `PodcastEpisode`/`PodcastSeries`/`WebSite`/`AboutPage` não são tipos elegíveis a rich result, então não aparecem lá (esperado)
-- [ ] Validar a sintaxe dos demais tipos no Schema Markup Validator (https://validator.schema.org/)
+- [x] Schema Markup Validator (https://validator.schema.org/) em `/episodes/126`: 0 erros, 0 avisos, 2 itens (`BreadcrumbList`, `PodcastEpisode`)
+- [ ] Rodar o Schema Markup Validator também na home (`WebSite` + `PodcastSeries`)
 
 ## 4. Renderização (prerender/SSG)
 
