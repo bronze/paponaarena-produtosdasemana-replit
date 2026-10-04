@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Switch, Route } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,27 +6,29 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { RouteSeo } from "@/components/route-seo";
-import Dashboard from "@/pages/dashboard";
-import EpisodesPage from "@/pages/episodes";
-import ProductsPage from "@/pages/products";
-import CategoriesPage from "@/pages/categories";
-import PeoplePage from "@/pages/people";
-import NotFound from "@/pages/not-found";
+const Dashboard = lazy(() => import("@/pages/dashboard"));
+const EpisodesPage = lazy(() => import("@/pages/episodes"));
+const ProductsPage = lazy(() => import("@/pages/products"));
+const CategoriesPage = lazy(() => import("@/pages/categories"));
+const PeoplePage = lazy(() => import("@/pages/people"));
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/episodes" component={EpisodesPage} />
-      <Route path="/episodes/:id" component={EpisodesPage} />
-      <Route path="/products" component={ProductsPage} />
-      <Route path="/products/:id" component={ProductsPage} />
-      <Route path="/categories" component={CategoriesPage} />
-      <Route path="/categories/:name" component={CategoriesPage} />
-      <Route path="/people" component={PeoplePage} />
-      <Route path="/people/:id" component={PeoplePage} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={null}>
+      <Switch>
+        <Route path="/" component={Dashboard} />
+        <Route path="/episodes" component={EpisodesPage} />
+        <Route path="/episodes/:id" component={EpisodesPage} />
+        <Route path="/products" component={ProductsPage} />
+        <Route path="/products/:id" component={ProductsPage} />
+        <Route path="/categories" component={CategoriesPage} />
+        <Route path="/categories/:name" component={CategoriesPage} />
+        <Route path="/people" component={PeoplePage} />
+        <Route path="/people/:id" component={PeoplePage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 

@@ -41,9 +41,26 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 
 ## 6. Performance (Core Web Vitals)
 
-- [ ] Reduzir Google Fonts (hoje ~25 famílias) para só as usadas
-- [ ] Otimizar `og-image.png` e demais imagens
-- [ ] Rodar Lighthouse/PageSpeed antes e depois
+- [x] Reduzir Google Fonts (de ~25 famílias para só Open Sans 400/500/600/700 + itálico 400, as únicas usadas)
+- [x] Otimizar imagens: avatares de Arthur e Aíquis de PNG 800×800 (~1 MB) para WebP 256×256 (~14 KB); `og-image.png` era um JPEG com extensão errada, agora `og-image.jpg` (+ `og:image:type`)
+- [x] Code-splitting por rota (`React.lazy`); o gráfico (recharts, 377 KB) só carrega na home
+- [x] Rodar Lighthouse antes e depois (mobile, build de produção local)
+
+Lighthouse (performance / LCP), antes → depois:
+
+| Página | Performance | LCP | Peso |
+|---|---|---|---|
+| `/episodes/136` | 56 → 64 | 8,2 s → 6,2 s | 1329 → 881 KiB |
+| `/people/arthur` | 52 → 61 | 8,9 s → 7,0 s | 1809 → 951 KiB |
+| `/` (home) | 44 → 39–55* | 8,4 s → 8,6 s | 1330 → 1288 KiB |
+
+\* A variância entre rodadas é grande (mesma build: 39, 45, 45, 55, quase só por TBT). A home ficou estável, sem ganho real. Nota SEO continua 100.
+
+Ideias futuras (não feitas; mexem em analytics ou arquitetura):
+
+- [ ] Carregar o PostHog (259 KB sem gzip, ~35% do bundle principal) após o load/idle. Custo: pageviews de visitas muito curtas podem se perder
+- [ ] Separar os dados (`data.ts`, ~200 KB no bundle principal) do código das páginas
+- [ ] Carregar o gráfico da home depois do restante do dashboard
 
 ## 7. Fora do código (maior impacto para busca de marca)
 
@@ -65,3 +82,12 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 2. Bloco 4 (prerender)
 3. Bloco 7 (Search Console + backlinks) em paralelo
 4. Blocos 5 e 6
+
+
+## Pendencias
+
+Escolhas que você pode querer rever
+- Em PodcastSeries, o url aponta para o Spotify, já que este site é um complemento e não o site oficial do podcast. O WebSite representa o nosso .replit.app.
+- Não coloquei pessoas por episódio. O campo hosts existe só em 9 de 103 episódios e mistura convidados com hosts, então o dado seria impreciso.
+
+Pendente no bloco 4: checar as prévias de link no WhatsApp, LinkedIn e X. Só dá para fazer depois de publicar.
