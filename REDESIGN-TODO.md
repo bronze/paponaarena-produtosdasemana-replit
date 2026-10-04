@@ -54,9 +54,9 @@ Referências (prints na raiz):
 
 ## 7. Verificação
 
-- [ ] Rodar o app e revisar todas as páginas (dashboard, episódios, produtos, pessoas, categorias, sobre, 404)
-- [ ] Checar contraste (AA) dos principais pares de cor
-- [ ] Checar mobile
+- [x] Rodar o app e revisar todas as páginas (dashboard, episódios, produtos, pessoas, categorias, sobre, 404 e detalhes)
+- [x] Checar contraste (AA) dos principais pares de cor (tabela no `DESIGN.md`)
+- [x] Checar mobile (dashboard, produtos, episódio, sobre)
 - [ ] Decidir: merge na `main` ou descartar a branch
 
 
