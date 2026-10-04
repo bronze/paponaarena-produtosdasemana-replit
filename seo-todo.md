@@ -15,10 +15,10 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 
 ## 2. Meta tags por página
 
-- [ ] Criar componente/hook `<Seo>` (title, description, canonical, og:*) — `react-helmet-async` ou `document.title` + manipulação de meta
-- [ ] Aplicar em: Dashboard, Episódios (lista e detalhe), Produtos (lista e detalhe), Categorias, Pessoas
-- [ ] Padrão de title: `Ep136 – <título> | Papo na Arena`, `<Produto> – menções no Papo na Arena`
-- [ ] Description dinâmica por página (ex.: produtos citados no episódio)
+- [x] Criar componente/hook `<Seo>` (title, description, canonical, og:*) — `react-helmet-async` ou `document.title` + manipulação de meta
+- [x] Aplicar em: Dashboard, Episódios (lista e detalhe), Produtos (lista e detalhe), Categorias, Pessoas
+- [x] Padrão de title: `Ep136 – <título> | Papo na Arena`, `<Produto> – menções no Papo na Arena`
+- [x] Description dinâmica por página (ex.: produtos citados no episódio)
 
 ## 3. Dados estruturados (JSON-LD)
 

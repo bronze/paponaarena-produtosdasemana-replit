@@ -1,8 +1,9 @@
 import type { Express } from "express";
 import { episodes, products, people } from "../client/src/lib/data";
 import { getUniqueCategories } from "../client/src/lib/data-utils";
+import { SITE_URL } from "../client/src/lib/seo";
 
-export const SITE_URL = "https://paponaarena-produtosdasemana.replit.app";
+export { SITE_URL };
 
 const episodeIds = new Set(episodes.map((e) => String(e.id)));
 const productIds = new Set(products.map((p) => p.id));

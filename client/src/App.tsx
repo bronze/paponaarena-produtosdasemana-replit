@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppSidebar } from "@/components/app-sidebar";
+import { RouteSeo } from "@/components/route-seo";
 import Dashboard from "@/pages/dashboard";
 import EpisodesPage from "@/pages/episodes";
 import ProductsPage from "@/pages/products";
@@ -33,6 +34,7 @@ function App() {
     <ThemeProvider>
       <TooltipProvider>
         <Toaster />
+        <RouteSeo />
         <SidebarProvider style={{ "--sidebar-width": "16rem" } as React.CSSProperties}>
           <AppSidebar />
           <SidebarInset>
