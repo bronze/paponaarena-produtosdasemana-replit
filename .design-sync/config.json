@@ -1,0 +1,67 @@
+{
+  "projectId": "b993bca1-9f49-43f2-a514-cb8d3e13929d",
+  "shape": "package",
+  "pkg": "papo-na-arena-ds",
+  "globalName": "PapoNaArena",
+  "buildCmd": ".design-sync/build.sh",
+  "entry": ".design-sync/pkg/index.ts",
+  "tsconfig": "../../tsconfig.json",
+  "cssEntry": "dist/styles.css",
+  "runtimeFontPrefixes": [
+    "Plus Jakarta Sans"
+  ],
+  "componentSrcMap": {
+    "Button": "../../client/src/components/ui/button.tsx",
+    "Badge": "../../client/src/components/ui/badge.tsx",
+    "Card": "../../client/src/components/ui/card.tsx",
+    "StatBand": "../../client/src/components/stat-band.tsx",
+    "RankRow": "../../client/src/components/ranking.tsx",
+    "ShareBar": "../../client/src/components/ranking.tsx",
+    "SortButtons": "../../client/src/components/ranking.tsx",
+    "LoadMore": "../../client/src/components/ranking.tsx",
+    "ShowAllButton": "../../client/src/components/ranking.tsx",
+    "LatestEpisode": "../../client/src/components/latest-episode.tsx",
+    "CardHeader": null,
+    "CardFooter": null,
+    "CardTitle": null,
+    "CardDescription": null,
+    "CardContent": null
+  },
+  "srcDir": "../../client/src",
+  "docsMap": {
+    "Button": "../docs/Button.md",
+    "Badge": "../docs/Badge.md",
+    "Card": "../docs/Card.md",
+    "RankRow": "../docs/RankRow.md",
+    "ShareBar": "../docs/ShareBar.md",
+    "SortButtons": "../docs/SortButtons.md",
+    "LoadMore": "../docs/LoadMore.md",
+    "ShowAllButton": "../docs/ShowAllButton.md",
+    "StatBand": "../docs/StatBand.md",
+    "LatestEpisode": "../docs/LatestEpisode.md"
+  },
+  "overrides": {
+    "RankRow": {
+      "cardMode": "column"
+    },
+    "LatestEpisode": {
+      "cardMode": "column"
+    },
+    "StatBand": {
+      "cardMode": "column"
+    },
+    "Button": {
+      "cardMode": "column"
+    },
+    "Badge": {
+      "cardMode": "column"
+    },
+    "LoadMore": {
+      "cardMode": "column"
+    },
+    "Card": {
+      "cardMode": "column"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

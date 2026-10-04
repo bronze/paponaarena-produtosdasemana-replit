@@ -1,0 +1,7 @@
+{
+  "name": "papo-na-arena-ds",
+  "version": "1.0.0",
+  "private": true,
+  "module": "index.ts",
+  "types": "dist/types/.design-sync/pkg/index.d.ts"
+}

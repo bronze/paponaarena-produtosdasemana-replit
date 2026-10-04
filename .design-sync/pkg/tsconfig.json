@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["index.ts", "../../client/src/vite-env.d.ts"],
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "incremental": false,
+    "jsx": "react-jsx",
+    "rootDir": "../..",
+    "outDir": "dist/types",
+    "types": ["vite/client"]
+  }
+}
