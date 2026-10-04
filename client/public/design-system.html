@@ -79,6 +79,34 @@
   section.block { padding: 64px 0; }
   section.block + section.block { border-top: 1px solid var(--border); }
   section.hl { background: var(--highlight); }
+
+  /* destaque de episódio */
+  .ep-label { font-size: 14px; font-weight: 600; color: var(--muted); margin: 0 0 8px; }
+  .ep-title { margin: 0; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; text-wrap: balance; }
+  .ep-title a { text-decoration: none; }
+  .ep-title a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .ep-meta { margin: 0; font-size: 15px; color: var(--muted); }
+  .ep-products { margin: 0; font-size: 15px; }
+  .ep-products a { font-weight: 600; text-decoration: none; }
+  .ep-products a:hover { text-decoration: underline; }
+  .ep-cinza { background: var(--highlight); border-radius: var(--radius); padding: 32px; display: grid; gap: 24px; align-items: end; grid-template-columns: 1fr auto; }
+  .ep-cinza .ep-title { font-size: clamp(24px, 3vw, 30px); }
+  .ep-escuro { position: relative; overflow: hidden; background: var(--ink); color: var(--on-dark); border-radius: var(--radius); padding: 40px 320px 40px 40px; display: grid; gap: 16px; }
+  .ep-escuro .ep-title { font-size: clamp(30px, 3.5vw, 36px); letter-spacing: -.035em; line-height: 1.05; }
+  .ep-escuro .ep-meta, .ep-escuro .ep-products { color: var(--on-dark-muted); }
+  .ep-escuro .ep-products a { color: var(--on-dark); }
+  .ep-escuro .ep-num { position: absolute; right: 32px; bottom: -24px; margin: 0; font-size: 144px; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--coral); pointer-events: none; }
+  .ep-escuro .ep-actions { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px; }
+  .ep-editorial { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 32px 0; display: grid; grid-template-columns: 14rem 1fr; gap: 40px; }
+  .ep-editorial .ep-num { margin: 0; font-size: 60px; font-weight: 800; line-height: 1; letter-spacing: -.035em; }
+  .ep-editorial .ep-title { font-size: clamp(24px, 3vw, 30px); }
+  .ep-editorial .ep-body { display: grid; gap: 12px; align-content: start; }
+  @media (max-width: 760px) {
+    .ep-cinza { grid-template-columns: 1fr; padding: 24px; }
+    .ep-escuro { padding: 24px 24px 112px; }
+    .ep-escuro .ep-num { font-size: 96px; right: 16px; bottom: -16px; }
+    .ep-editorial { grid-template-columns: 1fr; gap: 16px; }
+  }
   .block-head { margin-bottom: 32px; display: grid; gap: 12px; }
   .block-head p { margin: 0; max-width: 680px; }
 
@@ -423,6 +451,61 @@
               <tr><td>#128</td><td>Construir mais rápido não significa decidir melhor</td><td>3</td><td><span class="tag outline">Decisão</span></td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTAQUE DE EPISÓDIO -->
+<section class="block" id="episodio">
+  <div class="wrap">
+    <div class="block-head">
+      <span class="eyebrow">Componente</span>
+      <h2 class="h1">Destaque de episódio<span class="dot">.</span></h2>
+      <p class="muted">Três variantes do mesmo conteúdo, guardadas como opções. No código: <code>&lt;LatestEpisode variant="cinza | escuro | editorial" /&gt;</code> em <code>client/src/components/latest-episode.tsx</code>.</p>
+    </div>
+
+    <div style="display:grid;gap:40px">
+      <div>
+        <p class="ep-label">A · cinza — integra com a página, coral só na ação</p>
+        <div class="ep-cinza">
+          <div style="display:grid;gap:12px;min-width:0">
+            <h3 class="ep-title"><a href="#episodio">O Vale faz algo diferente em produto e IA?</a></h3>
+            <p class="ep-meta">Último episódio · #136 · 30 de setembro de 2026 · com Arthur, Aíquis, Gabriel Hamú e Bruno Nunes</p>
+            <p class="ep-products"><span class="muted">5 menções: </span><a href="#episodio">Claude</a> · <a href="#episodio">Codex da OpenAI</a></p>
+          </div>
+          <a class="btn btn-primary" href="#episodio" style="height:48px">Ver episódio →</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="ep-label">B · escuro — destaque principal da tela (em uso na home)</p>
+        <div class="ep-escuro on-dark">
+          <p class="ep-num" aria-hidden="true">#136</p>
+          <h3 class="ep-title"><a href="#episodio">O Vale faz algo diferente em produto e IA?</a></h3>
+          <p class="ep-meta">Último episódio · 30 de setembro de 2026 · com Arthur, Aíquis, Gabriel Hamú e Bruno Nunes</p>
+          <p class="ep-products">5 menções: <a href="#episodio">Claude</a> · <a href="#episodio">Codex da OpenAI</a></p>
+          <div class="ep-actions">
+            <a class="btn btn-primary" href="#episodio" style="height:48px">Ver episódio →</a>
+            <a class="btn btn-ghost-dark" href="#episodio" style="height:48px">YouTube</a>
+            <a class="btn btn-ghost-dark" href="#episodio" style="height:48px">Spotify</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="ep-label">C · editorial — discreto, entre linhas finas</p>
+        <div class="ep-editorial">
+          <div>
+            <p class="ep-num">#136<span class="dot">.</span></p>
+            <p class="ep-meta" style="margin-top:12px">Último episódio<br>30 de setembro de 2026</p>
+          </div>
+          <div class="ep-body">
+            <h3 class="ep-title"><a href="#episodio">O Vale faz algo diferente em produto e IA? →</a></h3>
+            <p class="ep-meta">Com Arthur, Aíquis, Gabriel Hamú e Bruno Nunes</p>
+            <p class="ep-products"><span class="muted">5 menções: </span><a href="#episodio">Claude</a> · <a href="#episodio">Codex da OpenAI</a></p>
+          </div>
         </div>
       </div>
     </div>

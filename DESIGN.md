@@ -102,6 +102,18 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 - **Sidebar:** fundo `ink`; itens em `on-dark-muted`; ativo com fundo `ink-2`, texto `on-dark`, ícone coral e barra coral de 3px à esquerda.
 - **Aviso de fã:** card com borda esquerda coral de 4px — "**Projeto de fã, não oficial.** Este site não é afiliado à Product Arena."
 
+### Destaque de episódio (3 variantes)
+
+Componente `LatestEpisode` em `client/src/components/latest-episode.tsx`, com a prop `variant`. Serve para destacar um episódio (hoje, o último, na home). As três variantes compartilham o conteúdo: título do episódio como link, data por extenso, quem participou e os produtos citados como links (até 5, depois "+N"). Nenhuma usa rótulo pequeno acima do título nem pílulas; "Último episódio" fica na linha de metadados, abaixo do título.
+
+| Variante | Visual | Quando usar |
+|---|---|---|
+| `cinza` | Bloco `highlight`, título 24→30px, metadados em `muted`, botão primário coral "Ver episódio" à direita | Integra com a página, coral só na ação |
+| `escuro` | Fundo `ink`, título branco 30→36px, número do episódio gigante em coral cortado no canto, botão coral + links YouTube/Spotify | **Em uso na home.** Quando o episódio deve ser o destaque principal da tela; ecoa o card do podcast da Product Arena |
+| `editorial` | Sem caixa, entre linhas finas (como a faixa de números); "#136." grande à esquerda com a data, título com seta à direita | Quando a página já tem blocos pesados e o destaque deve ser discreto |
+
+Prévia visual: seção "Destaque de episódio" do `design-system.html`.
+
 ## Gráficos
 
 | Token | Hex | HSL |

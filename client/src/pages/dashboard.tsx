@@ -2,18 +2,18 @@ import { Link } from "wouter";
 import { lazy, Suspense, useMemo } from "react";
 import { motion } from "framer-motion";
 import { posthog } from "@/lib/analytics";
-import { BarChart3, Package, ArrowRight } from "lucide-react";
+import { BarChart3, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { LatestEpisode } from "@/components/latest-episode";
 import {
   episodes,
   getTotalStats,
   getLeaderboardProducts,
-  getCategoryStats,
   getMentionsPerEpisodeTrend,
   getParticipantsPerEpisodeTrend,
   getProduct,
   getMentionsForEpisode,
+  getEpisodeCast,
   resolveParent,
   getTopProductsAscension,
   getTopProductNames,
@@ -22,7 +22,6 @@ import {
 
 const TopProductsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TopProductsChart })));
 const AiCompanyChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AiCompanyChart })));
-const CategoryPieChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.CategoryPieChart })));
 const AscensionChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AscensionChart })));
 const TrendChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TrendChart })));
 const ParticipantsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.ParticipantsChart })));
@@ -62,7 +61,6 @@ function MilestoneConfetti() {
 export default function Dashboard() {
   const stats = getTotalStats();
   const topProducts = getLeaderboardProducts().slice(0, 10);
-  const categoryStats = getCategoryStats().slice(0, 8);
   const trend = getMentionsPerEpisodeTrend();
   const participantsTrend = getParticipantsPerEpisodeTrend();
 
@@ -72,7 +70,7 @@ export default function Dashboard() {
 
   const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
   const latestMentions = getMentionsForEpisode(latestEpisode.id);
-  const latestTop3 = Array.from(
+  const latestProducts = Array.from(
     latestMentions.reduce((acc, m) => {
       const id = resolveParent(m.productId);
       acc.set(id, (acc.get(id) || 0) + 1);
@@ -80,9 +78,9 @@ export default function Dashboard() {
     }, new Map<string, number>())
   )
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
     .map(([id]) => getProduct(id))
-    .filter(Boolean);
+    .filter((p) => p !== undefined);
+  const latestCast = getEpisodeCast(latestEpisode.id);
 
   const statCards = [
     { label: "Episódios", value: stats.totalEpisodes, href: "/episodes" },
@@ -146,87 +144,47 @@ export default function Dashboard() {
         </Card>
       </Link> */}
 
+      <LatestEpisode
+        variant="escuro"
+        episode={latestEpisode}
+        cast={[...latestCast.hosts, ...latestCast.cohosts]}
+        mentionCount={latestMentions.length}
+        products={latestProducts}
+      />
+
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Top 10 Produtos</CardTitle>
-              <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
-                Ver todos <ArrowRight className="h-3 w-3" />
-              </Link>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div style={{ height: 300 }} />}>
-                <TopProductsChart data={topProducts} />
-              </Suspense>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-base">Top 10 Produtos</CardTitle>
+            <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
+              Ver todos <ArrowRight className="h-3 w-3" />
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<div style={{ height: 300 }} />}>
+              <TopProductsChart data={topProducts} />
+            </Suspense>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div style={{ height: 192 }} />}>
-                <AiCompanyChart data={aiCompanyStats} />
-              </Suspense>
-              <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
-                <p><span className="company-legend" style={{ "--c": "#d97706" } as React.CSSProperties}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#10a37f" } as React.CSSProperties}>OpenAI:</span> ChatGPT, Codex e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#4285F4" } as React.CSSProperties}>Google:</span> Gemini, Google Flow e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#F26207" } as React.CSSProperties}>Replit:</span> Replit, Replit Canvas e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#8B5CF6" } as React.CSSProperties}>Cursor:</span> Cursor e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#64748B" } as React.CSSProperties}>xAI:</span> Grok, Grokbot e variantes</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Link href={`/episodes/${latestEpisode.id}`} onClick={() => posthog.capture("dashboard_latest_episode_clicked", { episode_id: latestEpisode.id, episode_title: latestEpisode.title })}>
-            <div className="rounded-lg bg-primary p-5 text-primary-foreground cursor-pointer transition-opacity hover:opacity-90" data-testid="card-latest-episode">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="bg-brand-tint text-foreground border-0">Último Episódio</Badge>
-                  <Badge variant="outline" className="border-foreground/30 text-foreground">#{latestEpisode.id}</Badge>
-                </div>
-                <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-sm">
-                    <Package className="h-3.5 w-3.5" />
-                    <span data-testid="text-latest-products">{latestMentions.length} menções</span>
-                  </div>
-                  <span className="text-sm font-medium flex items-center gap-1">
-                    Ver Episódio <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-                {latestTop3.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {latestTop3.map((product) => (
-                      <Badge key={product!.id} className="bg-brand-tint text-foreground border-0 text-xs">
-                        {product!.name}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<div style={{ height: 192 }} />}>
+              <AiCompanyChart data={aiCompanyStats} />
+            </Suspense>
+            <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
+              <p><span className="company-legend" style={{ "--c": "#d97706" } as React.CSSProperties}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#10a37f" } as React.CSSProperties}>OpenAI:</span> ChatGPT, Codex e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#4285F4" } as React.CSSProperties}>Google:</span> Gemini, Google Flow e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#F26207" } as React.CSSProperties}>Replit:</span> Replit, Replit Canvas e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#8B5CF6" } as React.CSSProperties}>Cursor:</span> Cursor e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#64748B" } as React.CSSProperties}>xAI:</span> Grok, Grokbot e variantes</p>
             </div>
-          </Link>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Categorias</CardTitle>
-              <Link href="/categories" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-categories">
-                Ver todas <ArrowRight className="h-3 w-3" />
-              </Link>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div style={{ height: 300 }} />}>
-                <CategoryPieChart data={categoryStats} />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Card>
