@@ -10,6 +10,17 @@ Nome da Pessoa - Nome do Produto (url: https://...)
 Nome da Pessoa - Nome do Produto (categoria: AI Tools)
 ```
 
+Opcionalmente, a primeira linha pode indicar quem apresentou o episódio:
+
+```
+Hosts: Arthur, Aíquis
+Cohosts: Nome do Convidado
+```
+
+- `hosts` = quem apresenta (normalmente Arthur e Aíquis, mas pode ser só um).
+- `cohosts` = convidados que participam ao vivo, no palco ou em call.
+- Quem apenas envia o produto por rede social/comentário **não** entra em `hosts` nem `cohosts`: só aparece nas menções (é a "Comunidade").
+
 Se não informar URL ou categoria, use bom senso para inferir a categoria com base nos produtos já existentes no arquivo.
 
 ## O que fazer
@@ -17,6 +28,8 @@ Se não informar URL ou categoria, use bom senso para inferir a categoria com ba
 1. **Leia o arquivo** `client/src/lib/data.ts` completo para entender o estado atual.
 
 2. **Identifique o episódio mais recente**: é o último item do array `episodes` (maior `id`).
+
+   **Hosts/cohosts**: confira os campos `hosts` (obrigatório, sem padrão implícito) e `cohosts` do episódio mais recente. Se foram informados `Hosts:`/`Cohosts:`, atualize o episódio (use os ids de `people`; crie a pessoa se não existir, como abaixo). Se não foram informados e o episódio não tiver `hosts`, pergunte quem apresentou.
 
 3. **Para cada entrada na lista fornecida:**
 
@@ -49,7 +62,7 @@ Se não informar URL ou categoria, use bom senso para inferir a categoria com ba
    - `productId`: ID do produto
    - `context`: inclua se houver contexto relevante mencionado
 
-4. **Verifique tipos com** `npx tsc --noEmit` ao final e corrija erros se houver.
+4. **Verifique tipos e dados com** `npx tsc --noEmit` e `npm run check:data` ao final e corrija erros se houver.
 
 ## Entradas
 

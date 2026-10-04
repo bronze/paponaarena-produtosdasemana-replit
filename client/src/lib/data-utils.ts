@@ -226,6 +226,22 @@ export function getParticipantsForEpisode(episodeId: number) {
     .filter((p): p is Person => p !== undefined);
 }
 
+/** Quem apresentou o episódio: hosts e cohosts, na ordem do dado (ids inexistentes são ignorados). */
+export function getEpisodeCast(episodeId: number) {
+  const episode = episodeMap.get(episodeId);
+  const resolve = (ids: string[] = []) =>
+    ids.map((id) => personMap.get(id)).filter((p): p is Person => p !== undefined);
+  return { hosts: resolve(episode?.hosts), cohosts: resolve(episode?.cohosts) };
+}
+
+/** Em quantos episódios a pessoa foi host e em quantos foi cohost. */
+export function getPersonRoleCounts(personId: string) {
+  return {
+    host: episodes.filter((e) => e.hosts.includes(personId)).length,
+    cohost: episodes.filter((e) => e.cohosts?.includes(personId)).length,
+  };
+}
+
 export function getLastEpisode() {
   return [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
 }

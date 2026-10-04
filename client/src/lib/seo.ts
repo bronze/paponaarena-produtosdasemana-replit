@@ -1,6 +1,7 @@
 import {
   episodes,
   getEpisode,
+  getEpisodeCast,
   getLeaderboardProducts,
   getMentionsForEpisode,
   getMentionsForPerson,
@@ -31,7 +32,13 @@ export interface PageMeta {
 
 function truncate(text: string, max = 158): string {
   if (text.length <= max) return text;
-  return text.slice(0, max - 1).replace(/\s+\S*$/, "") + "…";
+  return text.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:]+$/, "") + "…";
+}
+
+/** "A", "A e B", "A, B e C" */
+export function formatList(items: string[]): string {
+  if (items.length <= 1) return items.join("");
+  return `${items.slice(0, -1).join(", ")} e ${items[items.length - 1]}`;
 }
 
 function plural(n: number, singular: string, pluralForm: string): string {
@@ -138,10 +145,13 @@ export function getPageMeta(pathname: string): PageMeta {
         .filter((n): n is string => !!n)
         .slice(0, 6);
 
+      const cast = getEpisodeCast(episode.id);
+      const castNames = [...cast.hosts, ...cast.cohosts].map((p) => p.name);
+      const withCast = castNames.length ? ` Com ${formatList(castNames)}.` : "";
       const products = names.length ? ` Produtos citados: ${names.join(", ")}.` : "";
       return {
         title: `Ep${episode.id} – ${episode.title} | ${SITE_NAME}`,
-        description: truncate(`${episode.description}${products}`),
+        description: truncate(`${episode.description}${withCast}${products}`),
         canonicalPath: `/episodes/${episode.id}`,
       };
     }
@@ -298,6 +308,12 @@ export function getJsonLd(pathname: string): JsonLd[] {
   if (section === "episodes") {
     const episode = getEpisode(Number(id))!;
     const sameAs = [episode.youtubeLink, episode.spotifyLink].filter(Boolean);
+    const cast = getEpisodeCast(episode.id);
+    const actors = [...cast.hosts, ...cast.cohosts].map((p) => ({
+      "@type": "Person",
+      name: p.name,
+      ...(p.linkedinUrl ? { sameAs: [p.linkedinUrl] } : {}),
+    }));
     return [
       {
         "@type": "PodcastEpisode",
@@ -308,6 +324,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         episodeNumber: episode.id,
         inLanguage: "pt-BR",
         partOfSeries: { "@id": `${SITE_URL}/#podcast`, "@type": "PodcastSeries", name: SITE_NAME, url: SPOTIFY_SHOW_URL },
+        ...(actors.length ? { actor: actors } : {}),
         ...(sameAs.length ? { sameAs } : {}),
       },
       crumbs(`Ep${episode.id}`),

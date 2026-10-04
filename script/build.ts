@@ -1,6 +1,7 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
+import { checkData } from "./check-data";
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -33,6 +34,11 @@ const allowlist = [
 ];
 
 async function buildAll() {
+  const dataErrors = checkData();
+  if (dataErrors.length) {
+    throw new Error(`data.ts inválido:\n- ${dataErrors.join("\n- ")}`);
+  }
+
   await rm("dist", { recursive: true, force: true });
 
   console.log("building client...");

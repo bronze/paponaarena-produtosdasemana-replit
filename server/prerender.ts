@@ -1,6 +1,7 @@
 import {
   episodes,
   getEpisode,
+  getEpisodeCast,
   getLeaderboardProducts,
   getMentionsForEpisode,
   getMentionsForPerson,
@@ -103,8 +104,11 @@ function bodyContent(pathname: string): string {
       episode.youtubeLink && link(episode.youtubeLink, "Assistir no YouTube"),
       episode.spotifyLink && link(episode.spotifyLink, "Ouvir no Spotify"),
     ].filter(Boolean) as string[];
+    const cast = getEpisodeCast(episode.id);
+    const castLinks = [...cast.hosts, ...cast.cohosts].map((p) => link(`/people/${encodeURIComponent(p.id)}`, p.name));
     return (
       heading(episode.title) +
+      (castLinks.length ? `<p>Com ${castLinks.join(", ")}</p>` : "") +
       `<p>Publicado em ${esc(episode.date)}</p>` +
       list(external) +
       `<h2>Produtos citados</h2>` +

@@ -8,7 +8,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
 import {useState, useMemo, useRef} from "react";
-import {people, episodes, getMentionsForPerson, getProduct, getEpisode, getPersonMentionCount} from "@/lib/data-utils";
+import {people, episodes, getMentionsForPerson, getProduct, getEpisode, getPersonMentionCount, getPersonRoleCounts} from "@/lib/data-utils";
 import arthurImg from "@assets/arthur_1772132984125.webp";
 import aquisImg from "@assets/aiquis_1772132984122.webp";
 import arthurAudio from "@assets/audio/audio-arthur.mp3";
@@ -180,6 +180,13 @@ function PersonDetail() {
 
   const episodesParticipated = new Set(personMentions.map((m) => m.episodeId));
 
+  const roles = getPersonRoleCounts(person.id);
+  const epLabel = (n: number) => `${n} ${n === 1 ? "episódio" : "episódios"}`;
+  const roleLine = [
+    roles.host > 0 && `Host em ${epLabel(roles.host)}`,
+    roles.cohost > 0 && `Cohost em ${epLabel(roles.cohost)}`,
+  ].filter(Boolean).join(" · ");
+
   const statCards = [
     {label: "Total de Menções", value: personMentions.length, icon: TrendingUp, color: "text-purple-500"},
     {label: "Produtos Únicos", value: topProducts.length, icon: Package, color: "text-green-500"},
@@ -214,6 +221,7 @@ function PersonDetail() {
             {person.name}
           </h1>
           <p className="text-sm text-muted-foreground">Análise do participante</p>
+          {roleLine && <p className="text-sm text-muted-foreground" data-testid="text-person-roles">{roleLine}</p>}
           {person.linkedinUrl && (
             <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
               <Badge

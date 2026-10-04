@@ -70,6 +70,16 @@ Ideias futuras (não feitas; mexem em analytics ou arquitetura):
 - [ ] Backlinks: descrição dos episódios no Spotify/YouTube, site oficial do podcast, LinkedIn, Instagram, bio dos hosts
 - [ ] Monitorar posição para "Papo na Arena" no Search Console
 
+## Extra: hosts e cohosts por episódio
+
+- [x] `Episode.hosts` (obrigatório, sem padrão implícito) e `Episode.cohosts` (opcional); migrados os 103 episódios
+- [x] Ep 94 e 97: Arthur e Aíquis; ep 94 ganhou a menção Ray-Ban Meta do Arthur; ep 121: host Arthur, cohosts Júlia Jordão e Artur Negrão
+- [x] Página do episódio: linha "Com …" abaixo do título (links) e card Participantes com Hosts / Cohosts / Comunidade
+- [x] Página de pessoa: "Host em N episódios · Cohost em M episódios"
+- [x] SEO: `actor` no JSON-LD de `PodcastEpisode`, "Com X e Y." na description e links no prerender
+- [x] `npm run check:data` (ids de hosts/cohosts, menções, duplicados), também executado no build
+- [x] Comando `/add-produtos` atualizado (linhas opcionais `Hosts:` e `Cohosts:`)
+
 ## Decisões
 
 - Sem domínio próprio: o site fica no `.replit.app` de propósito (vitrine do Replit).

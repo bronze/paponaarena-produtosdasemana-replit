@@ -5,7 +5,10 @@ export interface Episode {
   description: string;
   youtubeLink?: string;
   spotifyLink?: string;
-  hosts?: string[];
+  /** Quem apresenta o episódio (ids de Person). Obrigatório: sem padrão implícito. */
+  hosts: string[];
+  /** Convidados que participam ao vivo, no palco ou em call (ids de Person). */
+  cohosts?: string[];
 }
 
 export interface Product {

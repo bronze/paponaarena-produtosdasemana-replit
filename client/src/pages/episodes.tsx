@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   episodes,
+  getEpisodeCast,
   getMentionsForEpisode,
   getProduct,
   getParticipantsForEpisode,
@@ -170,24 +171,24 @@ function EpisodeDetail() {
       return (a.product?.name || a.productId).localeCompare(b.product?.name || b.productId);
     });
 
-  const HOSTS = episode.hosts ?? ["aiquis", "arthur"];
-  const sortedParticipants = [...participants].sort((a, b) => {
-    const aHost = HOSTS.indexOf(a.id);
-    const bHost = HOSTS.indexOf(b.id);
-    if (aHost !== -1 || bHost !== -1) return (aHost === -1 ? 99 : aHost) - (bHost === -1 ? 99 : bHost);
-    return a.name.localeCompare(b.name, "pt");
-  });
+  const cast = getEpisodeCast(episode.id);
+  const castIds = new Set([...cast.hosts, ...cast.cohosts].map((p) => p.id));
 
-  const participantWithProducts = sortedParticipants.map((p) => ({
-    person: p,
-    products: epMentions.filter((m) => m.personId === p.id).map((m) => ({
+  const rowFor = (person: { id: string; name: string }) => ({
+    person,
+    products: epMentions.filter((m) => m.personId === person.id).map((m) => ({
       mention: m,
       product: getProduct(m.productId),
     })),
-  }));
+  });
 
-  const hosts = participantWithProducts.filter(({ person }) => HOSTS.includes(person.id));
-  const guests = participantWithProducts.filter(({ person }) => !HOSTS.includes(person.id));
+  const hosts = cast.hosts.map(rowFor);
+  const cohosts = cast.cohosts.map(rowFor);
+  const community = participants
+    .filter((p) => !castIds.has(p.id))
+    .sort((a, b) => a.name.localeCompare(b.name, "pt"))
+    .map(rowFor);
+  const castPeople = [...cast.hosts, ...cast.cohosts];
 
   return (
     <div className="space-y-6">
@@ -205,6 +206,17 @@ function EpisodeDetail() {
         <h1 className="text-2xl font-bold tracking-tight leading-snug" data-testid="text-episode-title">
           {episode.title}
         </h1>
+        {castPeople.length > 0 && (
+          <p className="text-sm mt-2" data-testid="text-episode-cast">
+            <span className="text-muted-foreground">Com </span>
+            {castPeople.map((person, i) => (
+              <span key={person.id}>
+                {i > 0 && <span className="text-muted-foreground">{i === castPeople.length - 1 ? " e " : ", "}</span>}
+                <Link href={`/people/${person.id}`} className="font-medium hover:underline">{person.name}</Link>
+              </span>
+            ))}
+          </p>
+        )}
         <p className="text-sm text-muted-foreground mt-2 max-w-2xl">{episode.description}</p>
       </div>
 
@@ -289,27 +301,23 @@ function EpisodeDetail() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {hosts.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Hosts</p>
-                  <div className="space-y-2.5">
-                    {hosts.map(({ person, products }) => (
-                      <ParticipantRow key={person.id} person={person} products={products} />
-                    ))}
+              {[
+                { label: "Hosts", rows: hosts },
+                { label: "Cohosts", rows: cohosts },
+                { label: "Comunidade", rows: community },
+              ]
+                .filter(({ rows }) => rows.length > 0)
+                .map(({ label, rows }, index) => (
+                  <div key={label}>
+                    {index > 0 && <div className="border-t border-border/50 mb-3" />}
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">{label}</p>
+                    <div className="space-y-2.5">
+                      {rows.map(({ person, products }) => (
+                        <ParticipantRow key={person.id} person={person} products={products} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              {guests.length > 0 && (
-                <div>
-                  {hosts.length > 0 && <div className="border-t border-border/50 mb-3" />}
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Comunidade</p>
-                  <div className="space-y-2.5">
-                    {guests.map(({ person, products }) => (
-                      <ParticipantRow key={person.id} person={person} products={products} />
-                    ))}
-                  </div>
-                </div>
-              )}
+                ))}
             </div>
           </CardContent>
         </Card>
