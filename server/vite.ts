@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { nanoid } from "nanoid";
 import { isKnownRoute } from "./seo";
+import { prerender } from "./prerender";
 
 const viteLogger = createLogger();
 
@@ -49,7 +50,7 @@ export async function setupVite(server: Server, app: Express) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
-      const page = await vite.transformIndexHtml(url, template);
+      const page = prerender(await vite.transformIndexHtml(url, template), url.split("?")[0]);
       res
         .status(isKnownRoute(req.originalUrl.split("?")[0]) ? 200 : 404)
         .set({ "Content-Type": "text/html" }).end(page);

@@ -9,6 +9,8 @@ import {
   getProduct,
   getProductsForCategory,
   getUniqueCategories,
+  people,
+  products,
   resolveParent,
 } from "./data-utils";
 
@@ -42,6 +44,26 @@ function safeDecode(value: string): string {
   } catch {
     return value;
   }
+}
+
+function nameCount<T extends { name: string }>(items: T[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const item of items) counts.set(item.name, (counts.get(item.name) || 0) + 1);
+  return counts;
+}
+const productNames = nameCount(products);
+const personNames = nameCount(people);
+
+/** Nome com desambiguação quando há outro produto com o mesmo nome (ex.: Zoom da loja x Zoom app). */
+function productLabel(product: { name: string; category: string }): string {
+  return (productNames.get(product.name) || 0) > 1 ? `${product.name} (${product.category})` : product.name;
+}
+
+/** Idem para pessoas homônimas (ex.: dois "Eduardo" em episódios diferentes). */
+function personLabel(person: { id: string; name: string }): string {
+  if ((personNames.get(person.name) || 0) <= 1) return person.name;
+  const firstEpisode = Math.min(...getMentionsForPerson(person.id).map((m) => m.episodeId));
+  return Number.isFinite(firstEpisode) ? `${person.name} (Ep${firstEpisode})` : person.name;
 }
 
 const notFound = (path: string): PageMeta => ({
@@ -126,7 +148,7 @@ export function getPageMeta(pathname: string): PageMeta {
       const mentions = getMentionsForProduct(canonical.id);
       const episodeCount = new Set(mentions.map((m) => m.episodeId)).size;
       return {
-        title: `${canonical.name} – menções no ${SITE_NAME}`,
+        title: `${productLabel(canonical)} – menções no ${SITE_NAME}`,
         description: truncate(
           `${canonical.name} (${canonical.category}) foi citado ${plural(mentions.length, "vez", "vezes")} em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja quem recomendou e em quais episódios.`,
         ),
@@ -141,9 +163,9 @@ export function getPageMeta(pathname: string): PageMeta {
       const mentions = getMentionsForPerson(person.id);
       const episodeCount = new Set(mentions.map((m) => m.episodeId)).size;
       return {
-        title: `${person.name} no ${SITE_NAME} – produtos recomendados`,
+        title: `${personLabel(person)} no ${SITE_NAME} – produtos recomendados`,
         description: truncate(
-          `${person.name} fez ${plural(mentions.length, "menção", "menções")} de produtos em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja o que recomendou.`,
+          `${personLabel(person)} fez ${plural(mentions.length, "menção", "menções")} de produtos em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja o que recomendou.`,
         ),
         canonicalPath: `/people/${encodeURIComponent(person.id)}`,
       };

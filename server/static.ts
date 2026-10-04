@@ -2,6 +2,7 @@ import express, { type Express } from "express";
 import fs from "fs";
 import path from "path";
 import { isKnownRoute } from "./seo";
+import { prerender } from "./prerender";
 
 export function serveStatic(app: Express) {
   const distPath = path.resolve(__dirname, "public");
@@ -11,13 +12,24 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // index: false -> "/" também passa pelo prerender, em vez de servir o index.html cru
+  app.use(express.static(distPath, { index: false }));
 
-  // fall through to index.html if the file doesn't exist
-  // (unknown routes still get the SPA shell, but with a real 404 status)
+  const template = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
+  const pages = new Map<string, string>();
+
+  // Toda rota recebe o shell da SPA com head/conteúdo prerenderizados
+  // (rotas desconhecidas saem com status 404 real)
   app.use("/{*path}", (req, res) => {
-    res
-      .status(isKnownRoute(req.originalUrl.split("?")[0]) ? 200 : 404)
-      .sendFile(path.resolve(distPath, "index.html"));
+    const pathname = req.originalUrl.split("?")[0];
+    const known = isKnownRoute(pathname);
+
+    let html = known ? pages.get(pathname) : undefined;
+    if (html === undefined) {
+      html = prerender(template, pathname);
+      if (known) pages.set(pathname, html);
+    }
+
+    res.status(known ? 200 : 404).type("html").send(html);
   });
 }
