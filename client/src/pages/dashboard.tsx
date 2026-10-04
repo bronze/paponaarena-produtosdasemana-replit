@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { lazy, Suspense, useMemo } from "react";
 import { motion } from "framer-motion";
 import { posthog } from "@/lib/analytics";
-import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight } from "lucide-react";
+import { BarChart3, Package, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,10 +12,7 @@ import {
   getCategoryStats,
   getMentionsPerEpisodeTrend,
   getParticipantsPerEpisodeTrend,
-  getRecentMentions,
   getProduct,
-  getPerson,
-  getEpisode,
   getMentionsForEpisode,
   resolveParent,
   getTopProductsAscension,
@@ -68,7 +65,6 @@ export default function Dashboard() {
   const categoryStats = getCategoryStats().slice(0, 8);
   const trend = getMentionsPerEpisodeTrend();
   const participantsTrend = getParticipantsPerEpisodeTrend();
-  const recentMentions = getRecentMentions(8);
 
   const ascensionData = getTopProductsAscension(6);
   const topProductNames = getTopProductNames(6);
@@ -89,10 +85,10 @@ export default function Dashboard() {
     .filter(Boolean);
 
   const statCards = [
-    { label: "Episódios", value: stats.totalEpisodes, icon: Mic, href: "/episodes" },
-    { label: "Produtos", value: stats.totalProducts, icon: Package, href: "/products" },
-    { label: "Pessoas", value: stats.totalPeople, icon: Users, href: "/people" },
-    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, href: "/products" },
+    { label: "Episódios", value: stats.totalEpisodes, href: "/episodes" },
+    { label: "Produtos", value: stats.totalProducts, href: "/products" },
+    { label: "Pessoas", value: stats.totalPeople, href: "/people" },
+    { label: "Menções", value: stats.totalMentions, href: "/products" },
   ];
 
   return (
@@ -100,27 +96,24 @@ export default function Dashboard() {
       <div>
         <h1 className="page-title" data-testid="text-page-title">Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="page-lead">
-          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com Arthur e Aíquis.
+          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com Arthur Castro e Aíquis Rodrigues.
           <Link href="/sobre" className="block w-fit underline-offset-2 hover:underline">Saiba mais</Link>
         </p>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+      {/* Faixa de números no estilo da Product Arena: números grandes, rótulos em caixa alta e divisórias finas */}
+      <div className="grid grid-cols-2 gap-px border-y bg-border lg:grid-cols-4">
         {statCards.map((stat) => (
-          <Link key={stat.label} href={stat.href} onClick={() => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href })}>
-            <Card className="cursor-pointer transition-colors hover:bg-accent/50">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold" data-testid={`stat-${stat.label.toLowerCase()}`}>{stat.value}</p>
-                  </div>
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-tint">
-                    <stat.icon className="h-5 w-5 text-foreground" aria-hidden="true" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <Link
+            key={stat.label}
+            href={stat.href}
+            className="bg-background px-6 py-6 outline-none ring-inset ring-ring transition-colors hover:bg-highlight focus-visible:ring-2"
+            onClick={() => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href })}
+          >
+            <p className="text-4xl font-extrabold leading-none tracking-[-0.035em] md:text-5xl" data-testid={`stat-${stat.label.toLowerCase()}`}>
+              {stat.value.toLocaleString("pt-BR")}
+            </p>
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{stat.label}</p>
           </Link>
         ))}
       </div>
@@ -266,50 +259,6 @@ export default function Dashboard() {
           <Suspense fallback={<div style={{ height: 250 }} />}>
             <ParticipantsChart data={participantsTrend} />
           </Suspense>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Menções Recentes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {recentMentions.map(({ mention, episodeDate }) => {
-              const product = getProduct(mention.productId);
-              const person = getPerson(mention.personId);
-              const episode = getEpisode(mention.episodeId);
-              return (
-                <div
-                  key={mention.id}
-                  className="flex items-center justify-between gap-2 py-2 border-b border-border/50 last:border-0"
-                  data-testid={`mention-${mention.id}`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex flex-col min-w-0">
-                      <Link href={`/products/${mention.productId}`} className="text-sm font-medium truncate hover:underline py-0.5">
-                        {product?.name || mention.productId}
-                      </Link>
-                      <span className="text-sm text-muted-foreground">
-                        por{" "}
-                        <Link href={`/people/${mention.personId}`} className="hover:underline">
-                          {person?.name || mention.personId}
-                        </Link>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Badge variant="outline" className="text-xs">
-                      <Link href={`/episodes/${mention.episodeId}`}>
-                        #{mention.episodeId}
-                      </Link>
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">{episodeDate}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </CardContent>
       </Card>
     </div>
