@@ -157,7 +157,9 @@ function CategoryDetail() {
   }
 
   const totalMentions = products.reduce((sum, p) => sum + p.mentionCount, 0);
-  const maxMentions = Math.max(...products.map((p) => p.mentionCount));
+  // O número da direita (com a barra) é sempre o critério da ordenação; o outro vai no texto
+  const byEpisodes = sortMode === "episodes";
+  const max = Math.max(...products.map((p) => (byEpisodes ? p.episodeCount : p.mentionCount)));
 
   return (
     <div className="space-y-8">
@@ -174,8 +176,8 @@ function CategoryDetail() {
         className="grid-cols-3"
         items={[
           { label: "Menções", value: totalMentions },
-          { label: "Produtos", value: products.length },
           { label: "Episódios", value: episodeCount },
+          { label: "Produtos", value: products.length },
         ]}
       />
 
@@ -192,11 +194,14 @@ function CategoryDetail() {
               rank={i + 1}
               title={product.name}
               href={`/products/${product.id}`}
-              count={product.mentionCount}
-              max={maxMentions}
+              count={byEpisodes ? product.episodeCount : product.mentionCount}
+              unit={byEpisodes ? ["episódio", "episódios"] : undefined}
+              max={max}
               testId={`row-product-${product.id}`}
             >
-              <p className="text-sm text-muted-foreground">em {plural(product.episodeCount, "episódio", "episódios")}</p>
+              <p className="text-sm text-muted-foreground">
+                {byEpisodes ? plural(product.mentionCount, "menção", "menções") : `em ${plural(product.episodeCount, "episódio", "episódios")}`}
+              </p>
             </RankRow>
           ))}
         </ol>

@@ -29,12 +29,16 @@ const MIN_EPISODES_FOR_CHART = 3;
 type SortMode = "mentions" | "episodes" | "alpha";
 
 function buildProductRows() {
-  return getLeaderboardProducts().map((p, i) => ({
+  const rows = getLeaderboardProducts().map((p, i) => ({
     ...p,
     rank: i + 1,
     episodeCount: new Set(getMentionsForProduct(p.id).map((m) => m.episodeId)).size,
     searchText: normalize([p.name, p.category, categoryLabel(p.category)].join(" ")),
+    episodeRank: 0,
   }));
+  const byEpisodes = [...rows].sort((a, b) => b.episodeCount - a.episodeCount || a.rank - b.rank);
+  byEpisodes.forEach((p, i) => (p.episodeRank = i + 1));
+  return rows;
 }
 
 function CategoryLink({ category, className = "font-semibold text-foreground" }: { category: string; className?: string }) {
@@ -50,15 +54,17 @@ function ProductList() {
   const [search, setSearch] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("mentions");
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const max = rows[0]?.mentionCount ?? 1;
 
   const query = normalize(search.trim());
   const filtered = useMemo(() => {
     const list = query ? rows.filter((r) => r.searchText.includes(query)) : rows;
     if (sortMode === "alpha") return [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-    if (sortMode === "episodes") return [...list].sort((a, b) => b.episodeCount - a.episodeCount || a.rank - b.rank);
+    if (sortMode === "episodes") return [...list].sort((a, b) => a.episodeRank - b.episodeRank);
     return list;
   }, [rows, query, sortMode]);
+  // O número da direita (com a barra) é sempre o critério da ordenação; o outro vai no texto
+  const byEpisodes = sortMode === "episodes";
+  const max = Math.max(1, ...rows.map((r) => (byEpisodes ? r.episodeCount : r.mentionCount)));
 
   return (
     <div className="space-y-8">
@@ -102,17 +108,18 @@ function ProductList() {
             {filtered.slice(0, visibleCount).map((product) => (
               <RankRow
                 key={product.id}
-                rank={product.rank}
+                rank={byEpisodes ? product.episodeRank : product.rank}
                 title={product.name}
                 href={`/products/${product.id}`}
                 onClick={() => posthog.capture("product_viewed", { product_id: product.id, product_name: product.name, source: "list" })}
-                count={product.mentionCount}
+                count={byEpisodes ? product.episodeCount : product.mentionCount}
+                unit={byEpisodes ? ["episódio", "episódios"] : undefined}
                 max={max}
                 testId={`row-product-${product.id}`}
               >
                 <p className="text-sm text-muted-foreground">
-                  <CategoryLink category={product.category} className="relative z-10" /> · em{" "}
-                  {plural(product.episodeCount, "episódio", "episódios")}
+                  <CategoryLink category={product.category} className="relative z-10" /> ·{" "}
+                  {byEpisodes ? plural(product.mentionCount, "menção", "menções") : `em ${plural(product.episodeCount, "episódio", "episódios")}`}
                 </p>
               </RankRow>
             ))}
@@ -207,8 +214,8 @@ function ProductDetail({ id }: { id: string }) {
         className="grid-cols-3"
         items={[
           { label: "Menções", value: allMentions.length },
-          { label: "Pessoas", value: personCounts.size },
           { label: "Episódios", value: episodeIds.length },
+          { label: "Pessoas", value: personCounts.size },
         ]}
       />
 

@@ -7,7 +7,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import { StatBand } from "@/components/stat-band";
-import { LoadMore, ShowAllButton } from "@/components/ranking";
+import { LoadMore, ShareBar, ShowAllButton, SortButtons, plural } from "@/components/ranking";
 import type { Mention } from "@/lib/types";
 import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
 import {useState, useMemo, useRef} from "react";
@@ -24,7 +24,7 @@ const hostAvatars: Record<string, string> = {
   aiquis: aquisImg,
 };
 
-type PeopleSortMode = "mentions" | "alpha";
+type PeopleSortMode = "mentions" | "episodes" | "alpha";
 
 const MAX_LIST_PRODUCTS = 4;
 const INITIAL_COUNT = 30;
@@ -43,6 +43,7 @@ type PersonRowData = {
   id: string;
   name: string;
   rank: number;
+  episodeRank: number;
   isHost: boolean;
   mentionCount: number;
   episodeCount: number;
@@ -51,7 +52,7 @@ type PersonRowData = {
 };
 
 function buildPersonRows(): PersonRowData[] {
-  return people
+  const rows = people
     .map((p) => {
       const m = getMentionsForPerson(p.id);
       const counts = new Map<string, number>();
@@ -64,6 +65,7 @@ function buildPersonRows(): PersonRowData[] {
         id: p.id,
         name: p.name,
         rank: 0,
+        episodeRank: 0,
         isHost: getPersonRoleCounts(p.id).host > 0,
         mentionCount: m.length,
         episodeCount: new Set(m.map((x) => x.episodeId)).size,
@@ -74,9 +76,16 @@ function buildPersonRows(): PersonRowData[] {
     .filter((p) => p.mentionCount > 0)
     .sort((a, b) => b.mentionCount - a.mentionCount || a.name.localeCompare(b.name, "pt-BR"))
     .map((p, i) => ({ ...p, rank: i + 1 }));
+  const byEpisodes = [...rows].sort((a, b) => b.episodeCount - a.episodeCount || a.rank - b.rank);
+  byEpisodes.forEach((p, i) => (p.episodeRank = i + 1));
+  return rows;
 }
 
-function PersonRow({ row, query }: { row: PersonRowData; query: string }) {
+/** O número da direita (com a barra) é sempre o critério da ordenação; o outro vai no texto. */
+function PersonRow({ row, query, byEpisodes, max }: { row: PersonRowData; query: string; byEpisodes: boolean; max: number }) {
+  const mentions = plural(row.mentionCount, "menção", "menções");
+  const episodesLabel = plural(row.episodeCount, "episódio", "episódios");
+  const primary = byEpisodes ? episodesLabel : mentions;
   // Na busca por produto, os produtos que batem aparecem primeiro
   const ordered = query
     ? [...row.products].sort((a, b) => Number(normalize(b.name).includes(query)) - Number(normalize(a.name).includes(query)))
@@ -85,10 +94,10 @@ function PersonRow({ row, query }: { row: PersonRowData; query: string }) {
   const rest = row.products.length - shown.length;
   return (
     <li
-      className="relative grid grid-cols-[3.5rem_3rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-5 transition-colors hover:bg-highlight sm:grid-cols-[4.5rem_3rem_1fr_auto] sm:gap-x-6 sm:px-4"
+      className="relative grid grid-cols-[3.5rem_3rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-5 transition-colors hover:bg-highlight sm:grid-cols-[4.5rem_3rem_1fr_8rem] sm:gap-x-6 sm:px-4"
       data-testid={`card-person-${row.id}`}
     >
-      <p className="pt-1.5 text-2xl font-extrabold leading-tight tracking-[-0.035em] tabular-nums text-muted-foreground sm:pt-1 sm:text-3xl">{row.rank}</p>
+      <p className="pt-1.5 text-2xl font-extrabold leading-tight tracking-[-0.035em] tabular-nums text-muted-foreground sm:pt-1 sm:text-3xl">{byEpisodes ? row.episodeRank : row.rank}</p>
       <Avatar className="h-12 w-12">
         {hostAvatars[row.id] ? <AvatarImage src={hostAvatars[row.id]} alt="" /> : null}
         <AvatarFallback className="text-sm font-semibold">{initials(row.name)}</AvatarFallback>
@@ -105,7 +114,7 @@ function PersonRow({ row, query }: { row: PersonRowData; query: string }) {
         </h2>
         <p className="text-sm text-muted-foreground" data-testid={`text-episodes-${row.id}`}>
           {row.isHost && <><span className="font-semibold text-foreground">Host</span> · </>}
-          em {row.episodeCount} {row.episodeCount === 1 ? "episódio" : "episódios"}
+          {byEpisodes ? mentions : `em ${episodesLabel}`}
         </p>
         {shown.length > 0 && (
           <p className="text-sm" data-testid={`text-products-${row.id}`}>
@@ -120,13 +129,12 @@ function PersonRow({ row, query }: { row: PersonRowData; query: string }) {
             {rest > 0 && <span className="text-muted-foreground"> · +{rest}</span>}
           </p>
         )}
-        <p className="text-sm text-muted-foreground sm:hidden">
-          {row.mentionCount} {row.mentionCount === 1 ? "menção" : "menções"}
-        </p>
+        <p className="text-sm text-muted-foreground sm:hidden">{primary}</p>
       </div>
-      <p className="hidden pt-1 text-right text-sm text-muted-foreground sm:block" data-testid={`text-mentions-${row.id}`}>
-        {row.mentionCount} {row.mentionCount === 1 ? "menção" : "menções"}
-      </p>
+      <div className="hidden space-y-2 pt-1 sm:block">
+        <p className="text-right text-sm text-muted-foreground" data-testid={`text-mentions-${row.id}`}>{primary}</p>
+        <ShareBar value={byEpisodes ? row.episodeCount : row.mentionCount} max={max} />
+      </div>
     </li>
   );
 }
@@ -140,8 +148,12 @@ function PeopleList() {
   const query = normalize(search.trim());
   const filtered = useMemo(() => {
     const list = query ? rows.filter((r) => r.searchText.includes(query)) : rows;
-    return sortMode === "alpha" ? [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR")) : list;
+    if (sortMode === "alpha") return [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+    if (sortMode === "episodes") return [...list].sort((a, b) => a.episodeRank - b.episodeRank);
+    return list;
   }, [rows, query, sortMode]);
+  const byEpisodes = sortMode === "episodes";
+  const max = Math.max(1, ...rows.map((r) => (byEpisodes ? r.episodeCount : r.mentionCount)));
 
   return (
     <div className="space-y-8">
@@ -167,20 +179,11 @@ function PeopleList() {
             data-testid="input-search"
           />
         </div>
-        <div className="flex gap-2">
-          {([["mentions", "Mais menções"], ["alpha", "Alfabética"]] as const).map(([mode, label]) => (
-            <Button
-              key={mode}
-              variant={sortMode === mode ? "default" : "outline"}
-              size="sm"
-              aria-pressed={sortMode === mode}
-              onClick={() => { setSortMode(mode); setVisibleCount(INITIAL_COUNT); posthog.capture("people_sort_changed", { sort_mode: mode }); }}
-              data-testid={`sort-${mode}`}
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
+        <SortButtons
+          options={[["mentions", "Menções"], ["episodes", "Episódios"], ["alpha", "A–Z"]] as const}
+          value={sortMode}
+          onChange={(mode) => { setSortMode(mode); setVisibleCount(INITIAL_COUNT); posthog.capture("people_sort_changed", { sort_mode: mode }); }}
+        />
       </div>
 
       {filtered.length === 0 ? (
@@ -194,7 +197,7 @@ function PeopleList() {
         <div className="space-y-6">
           <ul className="border-t">
             {filtered.slice(0, visibleCount).map((row) => (
-              <PersonRow key={row.id} row={row} query={query} />
+              <PersonRow key={row.id} row={row} query={query} byEpisodes={byEpisodes} max={max} />
             ))}
           </ul>
           <LoadMore
@@ -347,8 +350,8 @@ function PersonDetail() {
         className="grid-cols-3"
         items={[
           { label: "Menções", value: personMentions.length },
-          { label: "Produtos", value: topProducts.length },
           { label: "Episódios", value: episodeIds.length },
+          { label: "Produtos", value: topProducts.length },
         ]}
       />
 
