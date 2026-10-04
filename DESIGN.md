@@ -1,6 +1,6 @@
 # Design System — Papo na Arena
 
-Identidade visual do site, inspirada na [Product Arena](https://productarena.io/) e na [página do podcast](https://productarena.io/podcast) como **homenagem de fã**. Referência visual interativa: [`design-system.html`](design-system.html).
+Identidade visual do site, inspirada na [Product Arena](https://productarena.io/) e na [página do podcast](https://productarena.io/podcast) como **homenagem de fã**. Referência visual interativa: [`client/public/design-system.html`](client/public/design-system.html) (servido em `/design-system.html`).
 
 ## Princípios
 
