@@ -3,6 +3,7 @@ import { episodes, products, people } from "../client/src/lib/data";
 import { getCategoryBySlug, getUniqueCategories } from "../client/src/lib/data-utils";
 import { categoryPath } from "../client/src/lib/categories";
 import { SITE_URL } from "../client/src/lib/seo";
+import { buildLlmsFullTxt, buildLlmsTxt } from "./llms";
 
 export { SITE_URL };
 
@@ -120,5 +121,14 @@ export function registerSeoRoutes(app: Express) {
   const sitemap = buildSitemap();
   app.get("/sitemap.xml", (_req, res) => {
     res.type("application/xml").send(sitemap);
+  });
+
+  const llmsTxt = buildLlmsTxt();
+  const llmsFullTxt = buildLlmsFullTxt();
+  app.get("/llms.txt", (_req, res) => {
+    res.type("text/plain; charset=utf-8").send(llmsTxt);
+  });
+  app.get("/llms-full.txt", (_req, res) => {
+    res.type("text/plain; charset=utf-8").send(llmsFullTxt);
   });
 }

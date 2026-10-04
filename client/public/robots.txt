@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://paponaarena-produtosdasemana.replit.app/sitemap.xml
+
+# Resumo para LLMs: https://paponaarena-produtosdasemana.replit.app/llms.txt
+# Acervo completo: https://paponaarena-produtosdasemana.replit.app/llms-full.txt

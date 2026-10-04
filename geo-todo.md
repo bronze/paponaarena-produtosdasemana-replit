@@ -55,7 +55,7 @@ Na prática, as ~1.200 páginas de detalhe estão sem conteúdo para quem não e
 - [ ] (opcional) Usar a mesma união de tipos de seção nos dois arquivos (ou constantes compartilhadas), para que o TypeScript acuse se uma rota mudar de nome de novo. A checagem abaixo já cobre o risco
 - [x] `checkPrerender()` em `script/check-data.ts` (roda no `npm run check:data` e no build): prerenderiza todas as páginas de detalhe e confere `<h1>`, `PodcastEpisode` e `name` em todos os breadcrumbs. Com o código antigo, acusa 2.484 problemas
 - [x] Conferido com `curl` no build de produção local
-- [ ] Publicar e conferir com `curl` `/episodios/136`, `/produtos/claude`, `/pessoas/arthur` e `/categorias/<slug>`
+- [x] Publicado e conferido em produção com `curl` `/episodios/136`, `/produtos/claude`, `/pessoas/arthur` e `/categorias/<slug>`
 - [ ] Revalidar no Schema Markup Validator e no Rich Results Test (breadcrumb com `name` em todas as posições)
 
 ## 2. Conteúdo citável no HTML do servidor
@@ -83,10 +83,12 @@ Ideia: cada página abre com 1 ou 2 frases que respondem à pergunta principal s
 
 ## 4. Arquivos para LLMs
 
-- [ ] `/llms.txt` gerado no servidor (como o `sitemap.xml`): o que é o site, que não é oficial, os links principais (episódios, produtos, pessoas, categorias, sobre), os números atuais e o top 20 de produtos
-- [ ] `/llms-full.txt`: dump em Markdown de todos os episódios com data, participantes e produtos citados por pessoa. Com os dados em `data.ts` isso sai quase de graça, e assim um agente lê o acervo inteiro em uma única requisição
-- [ ] Garantir que os dois não caiam no fallback do SPA (`server/static.ts`) e saiam como `text/plain; charset=utf-8`
-- [ ] Linkar o `llms.txt` no `robots.txt` como comentário, e no rodapé da página `/sobre`
+- [x] `/llms.txt` gerado no servidor (`server/llms.ts`, 5 KB) (como o `sitemap.xml`): o que é o site, que não é oficial, os links principais (episódios, produtos, pessoas, categorias, sobre), os números atuais e o top 20 de produtos
+- [x] `/llms-full.txt` (155 KB): dump em Markdown de todos os episódios com data, participantes e produtos citados por pessoa. Com os dados em `data.ts` isso sai quase de graça, e assim um agente lê o acervo inteiro em uma única requisição
+- [x] Garantir que os dois não caiam no fallback do SPA (`server/static.ts`) e saiam como `text/plain; charset=utf-8`
+- [x] Linkar o `llms.txt` e o `llms-full.txt` no `robots.txt` como comentário
+- [ ] Linkar o `llms.txt` no rodapé da página `/sobre`
+- [ ] Publicar e conferir `/llms.txt` e `/llms-full.txt` em produção
 
 ## 5. Dados estruturados para entidades
 
