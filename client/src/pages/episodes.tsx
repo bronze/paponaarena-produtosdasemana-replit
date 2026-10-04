@@ -3,6 +3,7 @@ import { Link, useParams } from "wouter";
 import { ArrowLeft, Mic, Package, Search, Users } from "lucide-react";
 import { posthog } from "@/lib/analytics";
 import { formatLongDate, formatShortDate } from "@/lib/dates";
+import { joinNames, normalize } from "@/lib/text";
 import { SiYoutube, SiSpotify } from "react-icons/si";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,16 +20,6 @@ import {
 } from "@/lib/data-utils";
 
 const MAX_LIST_PRODUCTS = 4;
-
-function joinNames(names: string[]) {
-  if (names.length <= 1) return names.join("");
-  return `${names.slice(0, -1).join(", ")} e ${names[names.length - 1]}`;
-}
-
-/** Minúsculas e sem acento, para a busca achar "aiquis" em "Aíquis". */
-function normalize(text: string) {
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-}
 
 type EpisodeRowData = {
   episode: (typeof episodes)[number];
