@@ -17,7 +17,7 @@ Referências (prints na raiz):
 - [x] Ajustar `--card`, `--muted`, `--secondary`, `--accent`, `--border`, `--popover`
 - [x] Tokens extras `--highlight` e `--brand-tint` (com classes `bg-highlight` e `bg-brand-tint` no Tailwind)
 - [x] Raios do Tailwind para 12/8/4px
-- [ ] Revisar as cores fixas nas páginas (ícones coloridos dos cards do dashboard, `text-blue-500`, `text-gray-*`, `bg-gray-50`, card âmbar) e trocar por tokens
+- [x] Cores fixas nas páginas trocadas por tokens (ícones dos cards em caixa `brand-tint`, tags do último episódio, página 404). Mantidas: cores das empresas de IA (são cores de marca) e o banner âmbar do marco #1000 (comentado no código)
 
 ## 2. Sidebar escura
 
@@ -44,8 +44,8 @@ Referências (prints na raiz):
 
 ## 5. Gráficos
 
-- [ ] Nova paleta `--chart-1..5` puxando do coral, com cores secundárias distinguíveis
-- [ ] Conferir legibilidade dos gráficos em `dashboard-charts.tsx`
+- [x] Nova paleta `--chart-1..8` puxando do coral (6–8 só para a pizza de categorias)
+- [x] Rótulos da pizza em `foreground` (antes herdavam a cor da fatia) e raio menor para não cortar os rótulos
 
 ## 6. Identidade fan-made
 
@@ -58,3 +58,10 @@ Referências (prints na raiz):
 - [ ] Checar contraste (AA) dos principais pares de cor
 - [ ] Checar mobile
 - [ ] Decidir: merge na `main` ou descartar a branch
+
+
+## 8. Manual
+Pontos que ainda destoam (já anotados no REDESIGN-TODO.md):
+- Os ícones dos cards de números do dashboard continuam azul, verde, laranja e roxo, com cores fixas no código.
+- O gráfico de pizza de categorias e o de "Menções por Empresa de AI" usam cores fixas próprias, além da nova paleta.
+- O card "Último episódio" ficou coral com texto preto e funciona bem. As tags dentro dele aparecem num coral mais escuro, o que vale revisar.

@@ -188,9 +188,9 @@ function PersonDetail() {
   ].filter(Boolean).join(" · ");
 
   const statCards = [
-    {label: "Total de Menções", value: personMentions.length, icon: TrendingUp, color: "text-purple-500"},
-    {label: "Produtos Únicos", value: topProducts.length, icon: Package, color: "text-green-500"},
-    {label: "Episódios", value: episodesParticipated.size, icon: Mic, color: "text-blue-500"},
+    {label: "Total de Menções", value: personMentions.length, icon: TrendingUp},
+    {label: "Produtos Únicos", value: topProducts.length, icon: Package},
+    {label: "Episódios", value: episodesParticipated.size, icon: Mic},
   ];
 
   return (
@@ -244,7 +244,9 @@ function PersonDetail() {
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className="text-2xl font-bold">{stat.value}</p>
                 </div>
-                <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-tint">
+                  <stat.icon className="h-5 w-5 text-foreground" aria-hidden="true" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -254,7 +256,7 @@ function PersonDetail() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-purple-500" /> Top Produtos Mencionados
+            <TrendingUp className="h-4 w-4 text-primary" aria-hidden="true" /> Top Produtos Mencionados
           </CardTitle>
         </CardHeader>
         <CardContent>

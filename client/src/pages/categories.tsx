@@ -199,9 +199,9 @@ function CategoryDetail() {
   }
 
   const statCards = [
-    { label: "Total de Menções", value: totalMentions, icon: TrendingUp, color: "text-purple-500" },
-    { label: "Produtos", value: productsInCat.length, icon: Package, color: "text-green-500" },
-    { label: "Episódios", value: `${categoryEpisodeCount}/${episodes.length}`, icon: Mic, color: "text-blue-500" },
+    { label: "Total de Menções", value: totalMentions, icon: TrendingUp },
+    { label: "Produtos", value: productsInCat.length, icon: Package },
+    { label: "Episódios", value: `${categoryEpisodeCount}/${episodes.length}`, icon: Mic },
   ];
 
   return (
@@ -227,7 +227,9 @@ function CategoryDetail() {
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className="text-2xl font-bold">{stat.value}</p>
                 </div>
-                <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-tint">
+                  <stat.icon className="h-5 w-5 text-foreground" aria-hidden="true" />
+                </div>
               </div>
             </CardContent>
           </Card>

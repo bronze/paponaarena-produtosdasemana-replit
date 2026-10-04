@@ -109,8 +109,11 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 | `chart-3` | `#F2A65A` | `30 85% 65%` |
 | `chart-4` | `#5B7DB1` | `216 36% 53%` |
 | `chart-5` | `#A1A1AA` | `240 5% 65%` |
+| `chart-6` | `#3E9C8F` | `172 43% 43%` |
+| `chart-7` | `#9B5DA5` | `292 29% 51%` |
+| `chart-8` | `#8C2F39` | `354 50% 37%` |
 
-Série única (ex.: ranking de menções) usa só `chart-1`.
+Série única (ex.: ranking de menções) usa só `chart-1`. `chart-6..8` só entram quando há mais de 5 séries (pizza de categorias). Rótulos de gráfico sempre em `foreground`, nunca na cor da fatia. Cores de empresas (Anthropic, OpenAI, Google…) no gráfico de empresas de IA são cores das marcas e ficam como estão.
 
 ## Mapeamento para `client/src/index.css` (shadcn)
 
@@ -153,6 +156,9 @@ Valores para o bloco `:root`. O bloco `.dark` deve ser removido.
 --chart-3: 30 85% 65%;
 --chart-4: 216 36% 53%;
 --chart-5: 240 5% 65%;
+--chart-6: 172 43% 43%;
+--chart-7: 292 29% 51%;
+--chart-8: 354 50% 37%;
 
 --radius: .75rem;
 ```

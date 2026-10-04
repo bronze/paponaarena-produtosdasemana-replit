@@ -19,9 +19,9 @@ const COLORS = [
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
   "hsl(var(--chart-5))",
-  "#8b5cf6",
-  "#ec4899",
-  "#14b8a6",
+  "hsl(var(--chart-6))",
+  "hsl(var(--chart-7))",
+  "hsl(var(--chart-8))",
 ];
 
 export function TopProductsChart({ data }: { data: { name: string; mentionCount: number }[] }) {
@@ -95,10 +95,12 @@ export function CategoryPieChart({ data }: { data: { category: string; count: nu
         nameKey="category"
         cx="50%"
         cy="50%"
-        outerRadius={100}
-        label={({ category, percent }) =>
-          `${category} (${(percent * 100).toFixed(0)}%)`
-        }
+        outerRadius={80}
+        label={({ x, y, textAnchor, category, percent }) => (
+          <text x={x} y={y} textAnchor={textAnchor} dominantBaseline="central" fontSize={12} fill="hsl(var(--foreground))">
+            {`${category} (${(percent * 100).toFixed(0)}%)`}
+          </text>
+        )}
         labelLine={false}
       >
         {data.map((_, index) => (

@@ -89,10 +89,10 @@ export default function Dashboard() {
     .filter(Boolean);
 
   const statCards = [
-    { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500", href: "/episodes" },
-    { label: "Produtos", value: stats.totalProducts, icon: Package, color: "text-green-500", href: "/products" },
-    { label: "Pessoas", value: stats.totalPeople, icon: Users, color: "text-orange-500", href: "/people" },
-    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, color: "text-purple-500", href: "/products" },
+    { label: "Episódios", value: stats.totalEpisodes, icon: Mic, href: "/episodes" },
+    { label: "Produtos", value: stats.totalProducts, icon: Package, href: "/products" },
+    { label: "Pessoas", value: stats.totalPeople, icon: Users, href: "/people" },
+    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, href: "/products" },
   ];
 
   return (
@@ -115,7 +115,9 @@ export default function Dashboard() {
                     <p className="text-sm text-muted-foreground">{stat.label}</p>
                     <p className="text-2xl font-bold" data-testid={`stat-${stat.label.toLowerCase()}`}>{stat.value}</p>
                   </div>
-                  <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-tint">
+                    <stat.icon className="h-5 w-5 text-foreground" aria-hidden="true" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -192,8 +194,8 @@ export default function Dashboard() {
             <div className="rounded-lg bg-primary p-5 text-primary-foreground cursor-pointer transition-opacity hover:opacity-90" data-testid="card-latest-episode">
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="bg-black/20 text-primary-foreground border-0">Último Episódio</Badge>
-                  <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
+                  <Badge className="bg-brand-tint text-foreground border-0">Último Episódio</Badge>
+                  <Badge variant="outline" className="border-foreground/30 text-foreground">#{latestEpisode.id}</Badge>
                 </div>
                 <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
                 <div className="flex items-center justify-between">
@@ -208,7 +210,7 @@ export default function Dashboard() {
                 {latestTop3.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {latestTop3.map((product) => (
-                      <Badge key={product!.id} className="bg-black/20 text-primary-foreground border-0 text-xs">
+                      <Badge key={product!.id} className="bg-brand-tint text-foreground border-0 text-xs">
                         {product!.name}
                       </Badge>
                     ))}
