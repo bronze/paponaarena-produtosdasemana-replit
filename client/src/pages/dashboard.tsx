@@ -84,10 +84,10 @@ export default function Dashboard() {
   const latestCast = getEpisodeCast(latestEpisode.id);
 
   const statCards = [
-    { label: "Episódios", value: stats.totalEpisodes, href: "/episodes" },
+    {label: "Menções", value: stats.totalMentions, href: "/products"},
+    {label: "Episódios", value: stats.totalEpisodes, href: "/episodes"},
     { label: "Produtos", value: stats.totalProducts, href: "/products" },
     { label: "Pessoas", value: stats.totalPeople, href: "/people" },
-    { label: "Menções", value: stats.totalMentions, href: "/products" },
   ];
 
   return (
