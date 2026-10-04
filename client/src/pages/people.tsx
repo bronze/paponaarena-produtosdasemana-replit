@@ -7,6 +7,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import { StatBand } from "@/components/stat-band";
+import { LoadMore, ShowAllButton } from "@/components/ranking";
 import type { Mention } from "@/lib/types";
 import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
 import {useState, useMemo, useRef} from "react";
@@ -196,51 +197,16 @@ function PeopleList() {
               <PersonRow key={row.id} row={row} query={query} />
             ))}
           </ul>
-          {filtered.length > visibleCount && (() => {
-            const remaining = filtered.length - visibleCount;
-            const showMore = (next: number, mode: "more" | "all") => {
+          <LoadMore
+            visible={visibleCount}
+            total={filtered.length}
+            step={LOAD_MORE_COUNT}
+            noun={{ all: "Mostrar todas", lastOne: "a última pessoa", lastMany: "as últimas" }}
+            onShow={(next, mode) => {
               setVisibleCount(next);
               posthog.capture("people_list_expanded", { mode, visible_count: next, total: filtered.length });
-            };
-            return (
-              <div className="flex flex-col items-center gap-3">
-                <div className="flex flex-wrap justify-center gap-3">
-                  {remaining > LOAD_MORE_COUNT ? (
-                    <>
-                      <Button
-                        variant="outline"
-                        className="h-12 rounded-full px-6 font-semibold"
-                        onClick={() => showMore(visibleCount + LOAD_MORE_COUNT, "more")}
-                        data-testid="button-load-more"
-                      >
-                        Carregar mais {LOAD_MORE_COUNT}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="h-12 rounded-full px-6 font-semibold"
-                        onClick={() => showMore(filtered.length, "all")}
-                        data-testid="button-load-all"
-                      >
-                        Mostrar todas ({filtered.length})
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="h-12 rounded-full px-6 font-semibold"
-                      onClick={() => showMore(filtered.length, "all")}
-                      data-testid="button-load-all"
-                    >
-                      Mostrar {remaining === 1 ? "a última pessoa" : `as últimas ${remaining}`}
-                    </Button>
-                  )}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Mostrando {visibleCount} de {filtered.length}
-                </p>
-              </div>
-            );
-          })()}
+            }}
+          />
         </div>
       )}
     </div>
@@ -277,13 +243,6 @@ function MentionedProduct({ mention }: { mention: Mention }) {
   );
 }
 
-function ShowAllButton({ total, onClick }: { total: number; onClick: () => void }) {
-  return (
-    <Button variant="outline" className="mt-4 h-12 w-full rounded-full font-semibold" onClick={onClick}>
-      Mostrar todos ({total})
-    </Button>
-  );
-}
 
 function PersonDetail() {
   const {id} = useParams<{id: string}>();

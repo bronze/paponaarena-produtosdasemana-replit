@@ -4,44 +4,13 @@ import { posthog } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatBand } from "@/components/stat-band";
+import { RankRow, SortButtons, plural } from "@/components/ranking";
 import { useState, useMemo } from "react";
 import { normalize } from "@/lib/text";
 import { categoryLabel } from "@/lib/categories";
 import { getCategoryStats, getProductsForCategory, getMentionsForProduct } from "@/lib/data-utils";
 
 const MAX_LIST_PRODUCTS = 3;
-
-function plural(n: number, one: string, many: string) {
-  return `${n.toLocaleString("pt-BR")} ${n === 1 ? one : many}`;
-}
-
-/** Barra fina com o peso do item em relação ao primeiro do ranking. */
-function ShareBar({ value, max }: { value: number; max: number }) {
-  return (
-    <div className="h-1.5 overflow-hidden rounded-full bg-highlight" aria-hidden="true">
-      <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(2, (value / max) * 100)}%` }} />
-    </div>
-  );
-}
-
-function SortButtons<T extends string>({ options, value, onChange }: { options: readonly (readonly [T, string])[]; value: T; onChange: (mode: T) => void }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map(([mode, label]) => (
-        <Button
-          key={mode}
-          variant={value === mode ? "default" : "outline"}
-          size="sm"
-          aria-pressed={value === mode}
-          onClick={() => onChange(mode)}
-          data-testid={`sort-${mode}`}
-        >
-          {label}
-        </Button>
-      ))}
-    </div>
-  );
-}
 
 type SortMode = "mentions" | "alpha";
 
@@ -67,42 +36,28 @@ function CategoryRow({ row, max, query }: { row: CategoryRowData; max: number; q
   const shown = ordered.slice(0, MAX_LIST_PRODUCTS);
   const rest = row.products.length - shown.length;
   return (
-    <li
-      className="relative grid grid-cols-[2rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-4 transition-colors hover:bg-highlight sm:grid-cols-[2.5rem_1fr_8rem] sm:gap-x-4 sm:px-4"
-      data-testid={`card-category-${row.category}`}
+    <RankRow
+      rank={row.rank}
+      title={categoryLabel(row.category)}
+      href={`/categories/${encodeURIComponent(row.category)}`}
+      onClick={() => posthog.capture("category_viewed", { category: row.category, mention_count: row.count })}
+      count={row.count}
+      max={max}
+      testId={`card-category-${row.category}`}
     >
-      <span className="pt-0.5 text-right text-sm font-bold tabular-nums text-muted-foreground">{row.rank}</span>
-      <div className="min-w-0 space-y-1">
-        <h2 className="text-lg font-bold leading-snug tracking-[-0.01em]">
-          <Link
-            href={`/categories/${encodeURIComponent(row.category)}`}
-            className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
-            onClick={() => posthog.capture("category_viewed", { category: row.category, mention_count: row.count })}
-          >
-            {categoryLabel(row.category)}
-          </Link>
-        </h2>
-        <p className="text-sm" data-testid={`text-products-${row.category}`}>
-          <span className="text-muted-foreground">{plural(row.products.length, "produto", "produtos")}: </span>
-          {shown.map((product, i) => (
-            <span key={product.id}>
-              {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-              <Link href={`/products/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
-                {product.name}
-              </Link>
-            </span>
-          ))}
-          {rest > 0 && <span className="text-muted-foreground"> · +{rest}</span>}
-        </p>
-        <p className="text-sm text-muted-foreground sm:hidden">{plural(row.count, "menção", "menções")}</p>
-      </div>
-      <div className="hidden space-y-2 pt-1 sm:block">
-        <p className="text-right text-sm text-muted-foreground" data-testid={`text-mentions-${row.category}`}>
-          {plural(row.count, "menção", "menções")}
-        </p>
-        <ShareBar value={row.count} max={max} />
-      </div>
-    </li>
+      <p className="text-sm" data-testid={`text-products-${row.category}`}>
+        <span className="text-muted-foreground">{plural(row.products.length, "produto", "produtos")}: </span>
+        {shown.map((product, i) => (
+          <span key={product.id}>
+            {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
+            <Link href={`/products/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+              {product.name}
+            </Link>
+          </span>
+        ))}
+        {rest > 0 && <span className="text-muted-foreground"> · +{rest}</span>}
+      </p>
+    </RankRow>
   );
 }
 
@@ -232,31 +187,17 @@ function CategoryDetail() {
         />
         <ol className="border-t">
           {sorted.map((product, i) => (
-            <li
+            <RankRow
               key={product.id}
-              className="relative grid grid-cols-[2rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-4 transition-colors hover:bg-highlight sm:grid-cols-[2.5rem_1fr_8rem] sm:gap-x-4 sm:px-4"
-              data-testid={`row-product-${product.id}`}
+              rank={i + 1}
+              title={product.name}
+              href={`/products/${product.id}`}
+              count={product.mentionCount}
+              max={maxMentions}
+              testId={`row-product-${product.id}`}
             >
-              <span className="pt-0.5 text-right text-sm font-bold tabular-nums text-muted-foreground">{i + 1}</span>
-              <div className="min-w-0 space-y-1">
-                <h2 className="text-lg font-bold leading-snug tracking-[-0.01em]">
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
-                  >
-                    {product.name}
-                  </Link>
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  <span className="sm:hidden">{plural(product.mentionCount, "menção", "menções")} · </span>
-                  em {plural(product.episodeCount, "episódio", "episódios")}
-                </p>
-              </div>
-              <div className="hidden space-y-2 pt-1 sm:block">
-                <p className="text-right text-sm text-muted-foreground">{plural(product.mentionCount, "menção", "menções")}</p>
-                <ShareBar value={product.mentionCount} max={maxMentions} />
-              </div>
-            </li>
+              <p className="text-sm text-muted-foreground">em {plural(product.episodeCount, "episódio", "episódios")}</p>
+            </RankRow>
           ))}
         </ol>
       </div>

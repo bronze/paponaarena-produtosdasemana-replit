@@ -99,7 +99,7 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 - **Card:** `surface`, borda `border`, raio 12px, padding 24px.
 - **Bloco de destaque:** fundo `highlight`, sem borda.
 - **Faixa de números (`StatBand`, `client/src/components/stat-band.tsx`):** padrão da Product Arena para números-resumo. Números 36→48px peso 800 (formatados em pt-BR), rótulo 12px em caixa alta com tracking 0.12em em `muted`, divisórias de 1px e linhas finas em cima e embaixo, sem cards nem ícones. Cada item pode ser link (hover em `highlight`). Usada na home (episódios, produtos, pessoas, menções) e nas páginas de episódio, pessoa e categoria.
-- **Linha de ranking:** listas (episódios, pessoas, categorias, produtos da categoria) são linhas entre divisórias finas, não grades de cards: posição em `muted`, nome 18px negrito com o link cobrindo a linha toda, detalhe em 15px e contagem à direita. Hover em `highlight`.
+- **Linha de ranking (`RankRow`, `client/src/components/ranking.tsx`, junto com `ShareBar`, `SortButtons`, `LoadMore` e `ShowAllButton`):** listas (episódios, pessoas, produtos, categorias, produtos da categoria) são linhas entre divisórias finas, não grades de cards: posição em `muted`, nome 18px negrito com o link cobrindo a linha toda, detalhe em 15px e contagem à direita. Hover em `highlight`.
 - **Barra de proporção:** barra de 6px em `coral` sobre `highlight`, sob a contagem, com o peso do item em relação ao primeiro do ranking. Só no desktop; no celular a contagem vai em texto.
 - **Faixa CTA:** fundo `coral`, texto `ink`, botão escuro.
 - **Sidebar:** fundo `ink`; itens em `on-dark-muted`; ativo com fundo `ink-2`, texto `on-dark`, ícone coral e barra coral de 3px à esquerda.
