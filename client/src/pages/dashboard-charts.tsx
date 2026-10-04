@@ -95,7 +95,7 @@ export function CategoryPieChart({ data }: { data: { category: string; count: nu
         nameKey="category"
         cx="50%"
         cy="50%"
-        outerRadius={80}
+        outerRadius={70}
         label={({ x, y, textAnchor, category, percent }) => (
           <text x={x} y={y} textAnchor={textAnchor} dominantBaseline="central" fontSize={12} fill="hsl(var(--foreground))">
             {`${category} (${(percent * 100).toFixed(0)}%)`}

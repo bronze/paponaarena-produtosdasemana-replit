@@ -44,7 +44,7 @@ function App() {
           <header className="flex h-12 items-center border-b px-4 lg:hidden">
             <SidebarTrigger />
           </header>
-          <main className="flex-1 overflow-auto p-4 md:p-6">
+          <main className="flex-1 overflow-auto p-4 md:p-8">
             <Router />
           </main>
         </SidebarInset>

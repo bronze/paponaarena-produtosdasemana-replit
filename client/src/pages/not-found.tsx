@@ -11,7 +11,7 @@ export default function NotFound() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-tint">
               <AlertCircle className="h-5 w-5 text-foreground" aria-hidden="true" />
             </div>
-            <h1 className="text-2xl font-bold">Página não encontrada</h1>
+            <h1 className="detail-title">Página não encontrada</h1>
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground">

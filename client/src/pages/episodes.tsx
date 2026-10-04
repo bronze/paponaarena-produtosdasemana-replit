@@ -25,9 +25,9 @@ function EpisodeList() {
     : sorted.filter((ep) => ep.date.startsWith(selectedYear));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Episódios</h1>
+        <h1 className="page-title" data-testid="text-page-title">Episódios<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="text-muted-foreground">
           {selectedYear === "Todos"
             ? `${episodes.length} episódios do podcast`
@@ -191,7 +191,7 @@ function EpisodeDetail() {
   const castPeople = [...cast.hosts, ...cast.cohosts];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <Link href="/episodes">
@@ -203,7 +203,7 @@ function EpisodeDetail() {
           <Badge variant="secondary" className="text-sm px-2.5 py-0.5">#{episode.id}</Badge>
           <span className="text-sm text-muted-foreground">{episode.date}</span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight leading-snug" data-testid="text-episode-title">
+        <h1 className="detail-title" data-testid="text-episode-title">
           {episode.title}
         </h1>
         {castPeople.length > 0 && (

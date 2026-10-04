@@ -54,9 +54,9 @@ function CategoryList() {
   }, [statsWithProducts, search, sortMode]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Categorias</h1>
+        <h1 className="page-title" data-testid="text-page-title">Categorias<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="text-muted-foreground">Categorias de produtos mencionados no podcast</p>
       </div>
 
@@ -205,7 +205,7 @@ function CategoryDetail() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center gap-2">
         <Link href="/categories">
           <Button variant="ghost" size="icon" data-testid="button-back">
@@ -213,7 +213,7 @@ function CategoryDetail() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-xl font-bold tracking-tight" data-testid="text-category-name">{category}</h1>
+          <h1 className="detail-title" data-testid="text-category-name">{category}</h1>
           <p className="text-sm text-muted-foreground">Visão geral da categoria</p>
         </div>
       </div>

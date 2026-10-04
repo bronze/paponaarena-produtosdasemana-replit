@@ -16,9 +16,9 @@ export default function AboutPage() {
   const copy = getAboutCopy();
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-8 max-w-3xl">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Sobre o Papo na Arena Radar</h1>
+        <h1 className="page-title" data-testid="text-page-title">Sobre o Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="text-muted-foreground">O podcast, o site e quem faz parte dele</p>
       </div>
 

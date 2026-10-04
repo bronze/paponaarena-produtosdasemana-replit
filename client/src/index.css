@@ -103,6 +103,17 @@
   }
 }
 
+/* Títulos no estilo do DESIGN.md: pesados e com tracking negativo */
+@layer components {
+  .page-title {
+    @apply mb-2 text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] md:text-4xl;
+  }
+
+  .detail-title {
+    @apply text-2xl font-extrabold leading-tight tracking-[-0.02em] md:text-3xl;
+  }
+}
+
 /**
  * Using the elevate system.
  * Automatic contrast adjustment.

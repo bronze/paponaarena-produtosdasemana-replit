@@ -56,10 +56,10 @@ function PeopleList() {
   }, [allPeople, search, sortMode]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">
-          Pessoas
+        <h1 className="page-title" data-testid="text-page-title">
+          Pessoas<span className="text-primary" aria-hidden="true">.</span>
         </h1>
         <p className="text-muted-foreground">{allPeople.length} participantes do podcast</p>
       </div>
@@ -194,7 +194,7 @@ function PersonDetail() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center gap-4">
         <Link href="/people" aria-label="Voltar para Pessoas">
           <Button variant="ghost" size="icon" aria-label="Voltar para Pessoas" data-testid="button-back">
@@ -217,7 +217,7 @@ function PersonDetail() {
         </Avatar>
         {audioSrc && <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />}
         <div>
-          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-person-name">
+          <h1 className="detail-title" data-testid="text-person-name">
             {person.name}
           </h1>
           <p className="text-sm text-muted-foreground">Análise do participante</p>

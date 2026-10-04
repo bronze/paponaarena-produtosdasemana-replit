@@ -105,9 +105,9 @@ function ProductList() {
   const displayed = search ? rankedSorted : showAll ? rankedSorted : primary;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Produtos</h1>
+        <h1 className="page-title" data-testid="text-page-title">Produtos<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="text-muted-foreground">Ranking de produtos mencionados no podcast</p>
       </div>
 
@@ -239,7 +239,7 @@ function ProductDetail() {
     .slice(0, 10);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-start gap-2">
         <Link href="/products">
           <Button variant="ghost" size="icon" data-testid="button-back">
@@ -247,7 +247,7 @@ function ProductDetail() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-xl font-bold tracking-tight" data-testid="text-product-name">{product.name}</h1>
+          <h1 className="detail-title" data-testid="text-product-name">{product.name}</h1>
           <div className="flex items-center gap-2 mt-1.5">
             <Badge variant="secondary">{product.category}</Badge>
             <span className="text-sm text-muted-foreground">{allMentions.length} menções</span>

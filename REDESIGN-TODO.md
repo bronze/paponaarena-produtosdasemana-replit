@@ -36,11 +36,11 @@ Referências (prints na raiz):
 
 ## 4. Tipografia e espaçamento
 
-- [ ] Manter Plus Jakarta Sans (já é próxima da fonte deles)
-- [ ] Aumentar títulos de página (hoje `text-2xl`) e cabeçalhos de seção
-- [ ] Títulos mais pesados/apertados (tracking negativo leve), no estilo deles
-- [ ] Aumentar respiro entre blocos/seções
-- [ ] **Não** aumentar tabelas, listas e ranking — manter densidade
+- [x] Manter Plus Jakarta Sans (carregando também o peso 800)
+- [x] Títulos de página maiores (classe `.page-title`: 30→36px) com ponto final coral; títulos de detalhe em `.detail-title` (24→30px)
+- [x] Títulos em peso 800 com tracking negativo; títulos de card em negrito
+- [x] Mais respiro: blocos da página com `space-y-8` e área principal com `md:p-8`
+- [x] Tabelas, listas e ranking mantidos na densidade atual
 
 ## 5. Gráficos
 
