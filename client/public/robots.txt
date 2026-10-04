@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://paponaarena-produtosdasemana.replit.app/sitemap.xml

@@ -4,14 +4,14 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 
 ## 1. Fundamentos (index.html + arquivos estáticos)
 
-- [ ] Trocar `<html lang="en">` por `lang="pt-BR"`
-- [ ] Melhorar `<title>` e `description` da home (incluir "Papo na Arena", "produtos da semana", "episódios", "menções")
-- [ ] Adicionar `<link rel="canonical">`
-- [ ] Adicionar `og:site_name`, `og:locale=pt_BR`, `og:image:width/height/alt`
-- [ ] Criar `client/public/robots.txt` (apontando para o sitemap)
-- [ ] Criar `sitemap.xml` (estático ou gerado no build a partir de `client/src/lib/data.ts`: episódios, produtos, pessoas, categorias)
-- [ ] Garantir que `/robots.txt` e `/sitemap.xml` não caiam no fallback `index.html` do Express (`server/static.ts`)
-- [ ] Retornar status 404 real para rotas inexistentes
+- [x] Trocar `<html lang="en">` por `lang="pt-BR"`
+- [x] Melhorar `<title>` e `description` da home (incluir "Papo na Arena", "produtos da semana", "episódios", "menções")
+- [x] Adicionar `<link rel="canonical">`
+- [x] Adicionar `og:site_name`, `og:locale=pt_BR`, `og:image:width/height/alt`
+- [x] Criar `client/public/robots.txt` (apontando para o sitemap)
+- [x] Criar `sitemap.xml` (estático ou gerado no build a partir de `client/src/lib/data.ts`: episódios, produtos, pessoas, categorias)
+- [x] Garantir que `/robots.txt` e `/sitemap.xml` não caiam no fallback `index.html` do Express (`server/static.ts`)
+- [x] Retornar status 404 real para rotas inexistentes
 
 ## 2. Meta tags por página
 
