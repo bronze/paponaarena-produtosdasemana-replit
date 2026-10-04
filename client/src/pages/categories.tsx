@@ -1,6 +1,6 @@
 import { Link, useParams, useLocation } from "wouter";
 import { ArrowLeft, ChevronRight, TrendingUp, Mic, Package, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
-import posthog from "posthog-js";
+import { posthog } from "@/lib/analytics";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

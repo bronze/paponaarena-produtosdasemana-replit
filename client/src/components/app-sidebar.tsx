@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { BarChart3, Mic, Package, FolderOpen, Users, Info, Sun, Moon } from "lucide-react";
-import posthog from "posthog-js";
+import { posthog } from "@/lib/analytics";
 import {
   Sidebar,
   SidebarContent,

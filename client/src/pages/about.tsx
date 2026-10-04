@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import posthog from "posthog-js";
+import { posthog } from "@/lib/analytics";
 import { SiSpotify, SiYoutube } from "react-icons/si";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAboutCopy, REPLIT_URL } from "@/lib/about";

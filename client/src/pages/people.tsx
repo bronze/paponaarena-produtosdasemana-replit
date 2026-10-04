@@ -1,6 +1,6 @@
 import {Link, useParams} from "wouter";
 import {ArrowLeft, User, Package, Mic, TrendingUp} from "lucide-react";
-import posthog from "posthog-js";
+import { posthog } from "@/lib/analytics";
 import {SiLinkedin} from "react-icons/si";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";

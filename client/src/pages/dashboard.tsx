@@ -1,24 +1,10 @@
 import { Link } from "wouter";
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { motion } from "framer-motion";
-import posthog from "posthog-js";
+import { posthog } from "@/lib/analytics";
 import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  Legend,
-  XAxis,
-  YAxis,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
 import {
   episodes,
   getTotalStats,
@@ -36,6 +22,13 @@ import {
   getTopProductNames,
   getAICompanyMentionStats,
 } from "@/lib/data-utils";
+
+const TopProductsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TopProductsChart })));
+const AiCompanyChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AiCompanyChart })));
+const CategoryPieChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.CategoryPieChart })));
+const AscensionChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AscensionChart })));
+const TrendChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TrendChart })));
+const ParticipantsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.ParticipantsChart })));
 
 const CONFETTI_COLORS = ["#f59e0b", "#fbbf24", "#fcd34d", "#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#ec4899"];
 
@@ -68,16 +61,6 @@ function MilestoneConfetti() {
   );
 }
 
-const COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-  "#8b5cf6",
-  "#ec4899",
-  "#14b8a6",
-];
 
 export default function Dashboard() {
   const stats = getTotalStats();
@@ -178,26 +161,9 @@ export default function Dashboard() {
               </Link>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={topProducts} layout="vertical" margin={{ left: 0, right: 16 }}>
-                  <XAxis type="number" />
-                  <YAxis
-                    type="category"
-                    dataKey="name"
-                    width={120}
-                    tick={{ fontSize: 11 }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: 8,
-                      color: "hsl(var(--card-foreground))",
-                    }}
-                  />
-                  <Bar dataKey="mentionCount" fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} name="Menções" />
-                </BarChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<div style={{ height: 300 }} />}>
+                <TopProductsChart data={topProducts} />
+              </Suspense>
             </CardContent>
           </Card>
 
@@ -206,37 +172,9 @@ export default function Dashboard() {
               <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={192}>
-                <BarChart data={aiCompanyStats} layout="vertical" margin={{ left: 0, right: 16 }}>
-                  <XAxis type="number" tick={{ fill: "hsl(var(--foreground))", fontSize: 11 }} />
-                  <YAxis type="category" dataKey="company" width={80} interval={0} tick={{ fontSize: 12, fill: "hsl(var(--foreground))" }} />
-                  <Tooltip
-                    content={({ active, payload, label }) => {
-                      if (!active || !payload?.length) return null;
-                      const d = payload[0].payload;
-                      return (
-                        <div style={{
-                          backgroundColor: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: 8,
-                          padding: "6px 12px",
-                        }}>
-                          <p style={{ color: "hsl(var(--card-foreground))", margin: 0, marginBottom: 4 }}>{label}</p>
-                          {d.breakdown.map((item: { name: string; mentions: number }) => (
-                            <p key={item.name} style={{ color: d.color, margin: 0 }}>{item.name}: {item.mentions}</p>
-                          ))}
-                          <p style={{ color: d.color, margin: 0, marginTop: 4, fontWeight: 600 }}>Total: {d.mentions}</p>
-                        </div>
-                      );
-                    }}
-                  />
-                  <Bar dataKey="mentions" radius={[0, 4, 4, 0]} name="Menções">
-                    {aiCompanyStats.map((entry) => (
-                      <Cell key={entry.company} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<div style={{ height: 192 }} />}>
+                <AiCompanyChart data={aiCompanyStats} />
+              </Suspense>
               <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
                 <p><span className="company-legend" style={{ "--c": "#d97706" } as React.CSSProperties}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
                 <p><span className="company-legend" style={{ "--c": "#10a37f" } as React.CSSProperties}>OpenAI:</span> ChatGPT, Codex e variantes</p>
@@ -288,35 +226,9 @@ export default function Dashboard() {
               </Link>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={categoryStats}
-                    dataKey="count"
-                    nameKey="category"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    label={({ category, percent }) =>
-                      `${category} (${(percent * 100).toFixed(0)}%)`
-                    }
-                    labelLine={false}
-                  >
-                    {categoryStats.map((_, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} aria-label={`${categoryStats[index].category}: ${categoryStats[index].count}`} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: 8,
-                      color: "hsl(var(--card-foreground))",
-                    }}
-                    itemStyle={{ color: "hsl(var(--card-foreground))" }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<div style={{ height: 300 }} />}>
+                <CategoryPieChart data={categoryStats} />
+              </Suspense>
             </CardContent>
           </Card>
         </div>
@@ -327,31 +239,9 @@ export default function Dashboard() {
           <CardTitle className="text-base">Ascensão dos Top 6 Produtos</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={ascensionData} margin={{ left: 0, right: 16 }}>
-              <XAxis dataKey="episode" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-              <YAxis />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: 8,
-                  color: "hsl(var(--card-foreground))",
-                }}
-              />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
-              {topProductNames.map((name, i) => (
-                <Line
-                  key={name}
-                  type="monotone"
-                  dataKey={name}
-                  stroke={COLORS[i % COLORS.length]}
-                  dot={false}
-                  strokeWidth={2}
-                />
-              ))}
-            </LineChart>
-          </ResponsiveContainer>
+          <Suspense fallback={<div style={{ height: 280 }} />}>
+            <AscensionChart data={ascensionData} names={topProductNames} />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -360,25 +250,9 @@ export default function Dashboard() {
           <CardTitle className="text-base">Menções por Episódio</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={trend} margin={{ left: 0, right: 16 }}>
-              <XAxis dataKey="episode" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-              <YAxis />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: 8,
-                  color: "hsl(var(--card-foreground))",
-                }}
-                labelFormatter={(label) => {
-                  const item = trend.find((t) => t.episode === label);
-                  return item ? `Ep ${label} - ${item.date}` : label;
-                }}
-              />
-              <Bar dataKey="mentions" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} name="Menções" />
-            </BarChart>
-          </ResponsiveContainer>
+          <Suspense fallback={<div style={{ height: 250 }} />}>
+            <TrendChart data={trend} />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -387,25 +261,9 @@ export default function Dashboard() {
           <CardTitle className="text-base">Participantes por Episódio</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={participantsTrend} margin={{ left: 0, right: 16 }}>
-              <XAxis dataKey="episode" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-              <YAxis allowDecimals={false} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: 8,
-                  color: "hsl(var(--card-foreground))",
-                }}
-                labelFormatter={(label) => {
-                  const item = participantsTrend.find((t) => t.episode === label);
-                  return item ? `Ep ${label} - ${item.date}` : label;
-                }}
-              />
-              <Bar dataKey="participants" fill="hsl(var(--chart-3))" radius={[4, 4, 0, 0]} name="Participantes" />
-            </BarChart>
-          </ResponsiveContainer>
+          <Suspense fallback={<div style={{ height: 250 }} />}>
+            <ParticipantsChart data={participantsTrend} />
+          </Suspense>
         </CardContent>
       </Card>
 
