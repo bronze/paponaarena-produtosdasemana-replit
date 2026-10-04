@@ -106,11 +106,16 @@
 /* Títulos no estilo do DESIGN.md: pesados e com tracking negativo */
 @layer components {
   .page-title {
-    @apply mb-2 text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] md:text-4xl;
+    @apply mb-3 text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.035em] md:text-[3.5rem];
+  }
+
+  /* Frase de abertura logo abaixo do título da página (18px, como nas seções da Product Arena) */
+  .page-lead {
+    @apply text-lg leading-relaxed text-muted-foreground;
   }
 
   .detail-title {
-    @apply text-2xl font-extrabold leading-tight tracking-[-0.02em] md:text-3xl;
+    @apply text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] md:text-4xl;
   }
 }
 

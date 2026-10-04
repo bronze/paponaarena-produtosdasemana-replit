@@ -99,9 +99,9 @@ export default function Dashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="page-title" data-testid="text-page-title">Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
-        <p className="text-muted-foreground max-w-2xl">
-          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, de Arthur e Aíquis.{" "}
-          <Link href="/sobre" className="underline-offset-2 hover:underline">Saiba mais</Link>
+        <p className="page-lead">
+          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com Arthur e Aíquis.
+          <Link href="/sobre" className="block w-fit underline-offset-2 hover:underline">Saiba mais</Link>
         </p>
       </div>
 

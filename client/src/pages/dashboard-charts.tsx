@@ -33,6 +33,7 @@ export function TopProductsChart({ data }: { data: { name: string; mentionCount:
         type="category"
         dataKey="name"
         width={120}
+        interval={0}
         tick={{ fontSize: 11 }}
       />
       <Tooltip

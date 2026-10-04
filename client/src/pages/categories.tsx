@@ -57,7 +57,7 @@ function CategoryList() {
     <div className="space-y-8">
       <div>
         <h1 className="page-title" data-testid="text-page-title">Categorias<span className="text-primary" aria-hidden="true">.</span></h1>
-        <p className="text-muted-foreground">Categorias de produtos mencionados no podcast</p>
+        <p className="page-lead">Categorias de produtos mencionados no podcast</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
@@ -244,7 +244,7 @@ function CategoryDetail() {
           <ResponsiveContainer width="100%" height={Math.max(200, Math.min(productsInCat.length, 10) * 30)}>
             <BarChart data={productsWithEpisodes.slice(0, 10)} layout="vertical" margin={{ left: 0, right: 16 }}>
               <XAxis type="number" />
-              <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 11 }} />
+              <YAxis type="category" dataKey="name" width={130} interval={0} tick={{ fontSize: 11 }} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "hsl(var(--card))",

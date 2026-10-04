@@ -10,6 +10,10 @@ export default {
         md: ".5rem", /* 8px */
         sm: ".25rem", /* 4px */
       },
+      // text-sm em 15px, na faixa do texto dos cards da Product Arena (14,5–15,5px)
+      fontSize: {
+        sm: ["0.9375rem", { lineHeight: "1.375rem" }], // 15px
+      },
       colors: {
         // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",

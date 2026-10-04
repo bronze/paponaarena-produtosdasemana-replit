@@ -61,7 +61,7 @@ function PeopleList() {
         <h1 className="page-title" data-testid="text-page-title">
           Pessoas<span className="text-primary" aria-hidden="true">.</span>
         </h1>
-        <p className="text-muted-foreground">{allPeople.length} participantes do podcast</p>
+        <p className="page-lead">{allPeople.length} participantes do podcast</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">

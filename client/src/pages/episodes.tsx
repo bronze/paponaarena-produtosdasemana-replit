@@ -28,7 +28,7 @@ function EpisodeList() {
     <div className="space-y-8">
       <div>
         <h1 className="page-title" data-testid="text-page-title">Episódios<span className="text-primary" aria-hidden="true">.</span></h1>
-        <p className="text-muted-foreground">
+        <p className="page-lead">
           {selectedYear === "Todos"
             ? `${episodes.length} episódios do podcast`
             : `${filtered.length} de ${episodes.length} episódios`}

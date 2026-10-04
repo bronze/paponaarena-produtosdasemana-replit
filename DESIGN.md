@@ -71,11 +71,13 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 | Estilo | Tamanho / peso / tracking | Uso |
 |---|---|---|
 | Display | 64px (clamp 36–64) / 800 / -0.035em | Só capa/hero, se houver |
-| H1 | 40px (clamp 28–40) / 800 / -0.03em | Título de página |
+| Page title (`.page-title`) | 56px (40px no mobile) / 800 / -0.035em / line-height 1.05 | Título das páginas principais, com ponto final coral — igual aos títulos de seção da Product Arena |
+| Page lead (`.page-lead`) | 18px / 400 / `muted` | Frase logo abaixo do título da página — igual à abertura de seção deles |
+| Detail title (`.detail-title`) | 36px (30px no mobile) / 800 / -0.03em | Título de episódio, produto, pessoa, categoria |
 | H2 | 24px / 700 / -0.02em | Cabeçalho de seção |
 | H3 | 18px / 700 / -0.01em | Título de card |
 | Body | 16px / 400 / line-height 1.55 | Texto corrido |
-| Small | 14px | Tabelas, listas, metadados — **não aumentar** |
+| Small (`text-sm`) | **15px** / line-height 22px | Tabelas, listas, cards, metadados — na faixa dos cards deles (14,5–15,5px) |
 | XS | 12px | Legendas |
 | Eyebrow | 12px / 700 / +0.12em / caixa alta | Rótulo acima do título; ponto coral no claro, texto coral no escuro |
 
@@ -84,7 +86,7 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 - **Raio:** 12px em cards e blocos (`--radius: .75rem`); 8px em itens de navegação; botões e tags em pílula (`999px`).
 - **Sombras:** nenhuma. Separação por borda `border` ou mudança de fundo.
 - **Espaçamento:** seções com 64px vertical; gap de 16px entre cards; padding interno de card 24px; página do app com 32px (20px/16px no mobile).
-- **Alvos de toque:** botões com altura mínima de 44px; itens da sidebar 40px.
+- **Alvos de toque:** botões com altura mínima de 44px; itens da sidebar 48px.
 - **Foco:** contorno de 2px em `ink` com offset de 3px (em `on-dark` sobre superfícies escuras).
 
 ## Componentes

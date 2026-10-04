@@ -108,7 +108,7 @@ function ProductList() {
     <div className="space-y-8">
       <div>
         <h1 className="page-title" data-testid="text-page-title">Produtos<span className="text-primary" aria-hidden="true">.</span></h1>
-        <p className="text-muted-foreground">Ranking de produtos mencionados no podcast</p>
+        <p className="page-lead">Ranking de produtos mencionados no podcast</p>
       </div>
 
       <Input

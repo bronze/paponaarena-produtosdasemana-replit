@@ -58,7 +58,7 @@ export function AppSidebar() {
                 const isActive = item.path === "/" ? location === "/" : location.startsWith(item.path);
                 return (
                   <SidebarMenuItem key={item.path}>
-                    <SidebarMenuButton asChild isActive={isActive}>
+                    <SidebarMenuButton asChild isActive={isActive} className="h-12 px-3">
                       <Link href={item.path} onClick={closeMobile} data-testid={`nav-${item.title.toLowerCase()}`}>
                         <item.icon className={isActive ? "h-4 w-4 text-sidebar-primary" : "h-4 w-4"} />
                         <span>{item.title}</span>
