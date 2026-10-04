@@ -87,7 +87,7 @@ Ideia: cada página abre com 1 ou 2 frases que respondem à pergunta principal s
 - [x] `/llms-full.txt` (155 KB): dump em Markdown de todos os episódios com data, participantes e produtos citados por pessoa. Com os dados em `data.ts` isso sai quase de graça, e assim um agente lê o acervo inteiro em uma única requisição
 - [x] Garantir que os dois não caiam no fallback do SPA (`server/static.ts`) e saiam como `text/plain; charset=utf-8`
 - [x] Linkar o `llms.txt` e o `llms-full.txt` no `robots.txt` como comentário
-- [ ] Linkar o `llms.txt` no rodapé da página `/sobre`
+- [x] Linkar o `llms.txt` e o `llms-full.txt` no rodapé da página `/sobre` (app e prerender)
 - [ ] Publicar e conferir `/llms.txt` e `/llms-full.txt` em produção
 
 ## 5. Dados estruturados para entidades

@@ -103,7 +103,8 @@ function bodyContent(pathname: string): string {
           milestoneHtml() +
           `<h2>Quem faz</h2><p>${esc(copy.maintainer)}</p>` +
           list([link(MAINTAINER.siteUrl, "carlosbronze.com.br"), link(MAINTAINER.linkedinUrl, "LinkedIn")]) +
-          `<p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
+          `<p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>` +
+          `<p>Para IAs e agentes: ${link("/llms.txt", "llms.txt")} · ${link("/llms-full.txt", "acervo completo (llms-full.txt)")}</p>`
         );
       }
       case "pessoas":

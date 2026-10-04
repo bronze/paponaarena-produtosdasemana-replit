@@ -193,6 +193,17 @@ export default function AboutPage() {
               </a>
               .
             </p>
+            {/* <a> comum, não <Link>: são arquivos do servidor, fora das rotas do app */}
+            <p className="text-sm text-sidebar-foreground/60">
+              Para IAs e agentes:{" "}
+              <a href="/llms.txt" className="font-semibold text-sidebar-foreground/80 underline-offset-4 hover:underline">
+                llms.txt
+              </a>{" "}
+              ·{" "}
+              <a href="/llms-full.txt" className="font-semibold text-sidebar-foreground/80 underline-offset-4 hover:underline">
+                acervo completo (llms-full.txt)
+              </a>
+            </p>
           </div>
         </div>
       </Band>
