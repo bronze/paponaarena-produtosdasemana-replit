@@ -64,6 +64,9 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <p className="px-4 py-2 text-xs text-sidebar-foreground/70">
+          <Link href="/sobre" className="block py-1 underline-offset-2 hover:underline" data-testid="link-fan-notice">
+            Projeto de fã, não oficial
+          </Link>
           Feito com{" "}
           <a
             href={REPLIT_URL}

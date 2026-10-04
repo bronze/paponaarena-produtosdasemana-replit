@@ -86,7 +86,7 @@ function bodyContent(pathname: string): string {
           `<h2>O podcast Papo na Arena</h2><p>${esc(copy.podcast)}</p>` +
           `<p>Hosts: ${link("/people/arthur", "Arthur")} e ${link("/people/aiquis", "Aíquis")}.</p>` +
           list([link(SPOTIFY_SHOW_URL, "Ouvir no Spotify"), link(YOUTUBE_CHANNEL_URL, "Assistir no YouTube")]) +
-          `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
+          `<h2>O que é este site</h2><p>${esc(copy.site)}</p><p>${esc(copy.fan)}</p>` +
           `<h2>Feito com Replit</h2><p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
         );
       }

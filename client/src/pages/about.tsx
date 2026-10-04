@@ -66,6 +66,9 @@ export default function AboutPage() {
               </li>
             ))}
           </ul>
+          <p className="rounded-md border-l-4 border-primary bg-highlight px-4 py-3" data-testid="text-fan-notice">
+            {copy.fan}
+          </p>
         </CardContent>
       </Card>
 

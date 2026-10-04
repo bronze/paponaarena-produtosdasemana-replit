@@ -49,8 +49,8 @@ Referências (prints na raiz):
 
 ## 6. Identidade fan-made
 
-- [ ] Não usar o logo/wordmark "Product Arena"
-- [ ] Aviso visível "Projeto de fã, não oficial" (rodapé da sidebar e/ou página Sobre)
+- [x] Não usar o logo/wordmark "Product Arena"
+- [x] Aviso "Projeto de fã, não oficial" no rodapé da sidebar (link para /sobre) e na página Sobre (inclusive no HTML prerenderizado)
 
 ## 7. Verificação
 
