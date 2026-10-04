@@ -12,7 +12,7 @@ Key capabilities:
 - Products leaderboard + detail (mention history, child variants, combos)
 - Categories leaderboard + detail
 - People list + detail (all products a person has mentioned)
-- Dark/light theme toggle
+- Light-only visual theme inspired by Product Arena (see `DESIGN.md`)
 - Sidebar navigation
 - Smart mention aggregation: child products roll up to parent; combo products credit multiple products simultaneously
 
@@ -32,10 +32,10 @@ Preferred communication style: Simple, everyday language.
 - **Language:** TypeScript
 - **Routing:** `wouter` — lightweight client-side routing with routes for `/`, `/episodes/:id`, `/products/:id`, `/categories/:name`, `/people/:id`
 - **UI Components:** shadcn/ui (New York style) built on Radix UI primitives
-- **Styling:** Tailwind CSS with CSS variables for theming; custom light and dark mode tokens in `client/src/index.css`
+- **Styling:** Tailwind CSS with CSS variables for theming; custom light-only tokens in `client/src/index.css` (palette, typography and usage rules documented in `DESIGN.md`)
 - **Charts:** Recharts (BarChart, PieChart, LineChart via ResponsiveContainer)
 - **State/Data Fetching:** TanStack React Query is installed, but all app data is currently served from in-memory static arrays in `client/src/lib/data.ts` — no API calls are made for podcast data
-- **Theme:** Custom `ThemeProvider` context persists dark/light preference to `localStorage`; defaults to dark mode
+- **Theme:** Light only — there is no theme toggle and no dark mode
 
 ### Data Model (Frontend, Hardcoded)
 
