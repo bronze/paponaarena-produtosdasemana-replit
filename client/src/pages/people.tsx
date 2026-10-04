@@ -85,10 +85,10 @@ function PersonRow({ row, query }: { row: PersonRowData; query: string }) {
   const rest = row.products.length - shown.length;
   return (
     <li
-      className="relative grid grid-cols-[2rem_3rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-4 transition-colors hover:bg-highlight sm:grid-cols-[2.5rem_3rem_1fr_auto] sm:gap-x-4 sm:px-4"
+      className="relative grid grid-cols-[3.5rem_3rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-5 transition-colors hover:bg-highlight sm:grid-cols-[4.5rem_3rem_1fr_auto] sm:gap-x-6 sm:px-4"
       data-testid={`card-person-${row.id}`}
     >
-      <span className="pt-3 text-right text-sm font-bold tabular-nums text-muted-foreground">{row.rank}</span>
+      <p className="pt-1.5 text-2xl font-extrabold leading-tight tracking-[-0.035em] tabular-nums text-muted-foreground sm:pt-1 sm:text-3xl">{row.rank}</p>
       <Avatar className="h-12 w-12">
         {hostAvatars[row.id] ? <AvatarImage src={hostAvatars[row.id]} alt="" /> : null}
         <AvatarFallback className="text-sm font-semibold">{initials(row.name)}</AvatarFallback>

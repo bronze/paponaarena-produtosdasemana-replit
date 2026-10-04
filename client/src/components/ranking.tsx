@@ -71,10 +71,10 @@ export function RankRow({
   const countLabel = plural(count, unit[0], unit[1]);
   return (
     <li
-      className="relative grid grid-cols-[2rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-4 transition-colors hover:bg-highlight sm:grid-cols-[2.5rem_1fr_8rem] sm:gap-x-4 sm:px-4"
+      className="relative grid grid-cols-[3.5rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-5 transition-colors hover:bg-highlight sm:grid-cols-[4.5rem_1fr_8rem] sm:gap-x-6 sm:px-4"
       data-testid={testId}
     >
-      <span className="pt-0.5 text-right text-sm font-bold tabular-nums text-muted-foreground">{rank}</span>
+      <p className="text-2xl font-extrabold leading-tight tracking-[-0.035em] tabular-nums text-muted-foreground sm:text-3xl">{rank}</p>
       <div className="min-w-0 space-y-1">
         <h2 className="text-lg font-bold leading-snug tracking-[-0.01em]">
           <Link
