@@ -125,16 +125,16 @@ export default function Dashboard() {
 
       {/* 1000th mention milestone banner */}
       {/* <Link href="/episodes/108" className="mt-2 block">
-        <Card className="relative border-amber-400 bg-amber-50 dark:bg-amber-950/20 cursor-pointer transition-opacity hover:opacity-90">
+        <Card className="relative border-amber-400 bg-amber-50 cursor-pointer transition-opacity hover:opacity-90">
           <MilestoneConfetti />
           <CardContent className="pt-5 pb-5 relative z-10">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <span className="text-3xl">🏆</span>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-amber-800 dark:text-amber-300 text-base leading-snug">
+                <p className="font-bold text-amber-800 text-base leading-snug">
                   Produto #1000 — Marco histórico!
                 </p>
-                <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+                <p className="text-sm text-amber-700 mt-0.5">
                   <Link href="/people/larissa-araujo" className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
                     Larissa Araújo
                   </Link>
@@ -145,7 +145,7 @@ export default function Dashboard() {
                   {" "}no Ep. 108
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 hidden sm:block" />
+              <ArrowRight className="h-4 w-4 text-amber-600 shrink-0 hidden sm:block" />
             </div>
           </CardContent>
         </Card>

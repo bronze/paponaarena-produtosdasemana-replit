@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { BarChart3, Mic, Package, FolderOpen, Users, Info, Sun, Moon } from "lucide-react";
+import { BarChart3, Mic, Package, FolderOpen, Users, Info } from "lucide-react";
 import { posthog } from "@/lib/analytics";
 import {
   Sidebar,
@@ -13,8 +13,6 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { useTheme } from "./theme-provider";
-import { Button } from "@/components/ui/button";
 import { REPLIT_URL } from "@/lib/about";
 
 const navItems = [
@@ -28,7 +26,6 @@ const navItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
-  const { theme, toggleTheme } = useTheme();
 
   return (
     <Sidebar>
@@ -39,7 +36,7 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-semibold" data-testid="sidebar-title">Papo na Arena</span>
-            <span className="text-xs text-muted-foreground">Radar</span>
+            <span className="text-xs text-sidebar-foreground/70">Radar</span>
           </div>
         </div>
       </SidebarHeader>
@@ -54,7 +51,7 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton asChild isActive={isActive}>
                       <Link href={item.path} data-testid={`nav-${item.title.toLowerCase()}`}>
-                        <item.icon className="h-4 w-4" />
+                        <item.icon className={isActive ? "h-4 w-4 text-sidebar-primary" : "h-4 w-4"} />
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -66,19 +63,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-2 py-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleTheme}
-            className="w-full justify-start gap-2"
-            data-testid="button-theme-toggle"
-          >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            <span>{theme === "dark" ? "Modo Claro" : "Modo Escuro"}</span>
-          </Button>
-        </div>
-        <p className="px-4 pb-2 text-xs text-muted-foreground">
+        <p className="px-4 py-2 text-xs text-sidebar-foreground/70">
           Feito com{" "}
           <a
             href={REPLIT_URL}

@@ -10,27 +10,29 @@ Referências (prints na raiz):
 
 ## 1. Paleta
 
-- [ ] Extrair os hex exatos dos prints (coral, preto do hero, off-white das seções claras, cinza dos textos secundários)
-- [ ] Definir duas variantes de coral:
-  - coral vivo (decorativo: ícones, detalhes, títulos grandes)
-  - coral escuro acessível (botões/links com texto — contraste AA ≥ 4.5:1 com branco)
-- [ ] Trocar `--primary`, `--ring`, `--sidebar-primary`, `--sidebar-ring` em `client/src/index.css`
-- [ ] Trocar `--background` de branco puro para o off-white deles
-- [ ] Ajustar `--card`, `--muted`, `--secondary`, `--accent`, `--border`, `--popover` para harmonizar com o off-white
-- [ ] Revisar as cores fixas nas páginas (`text-blue-500`, `text-red-500`, `text-orange-500`, `text-gray-*`, `bg-gray-50`) e trocar por tokens
+- [x] Extrair os hex exatos dos prints (ver `DESIGN.md`)
+- [x] ~~Duas variantes de coral~~ → decidido: uma cor só (`#FF5757`) com texto preto em cima
+- [x] Trocar `--primary`, `--ring`, `--sidebar-primary`, `--sidebar-ring` em `client/src/index.css`
+- [x] Trocar `--background` de branco puro para o off-white (`#FBFBFC`)
+- [x] Ajustar `--card`, `--muted`, `--secondary`, `--accent`, `--border`, `--popover`
+- [x] Tokens extras `--highlight` e `--brand-tint` (com classes `bg-highlight` e `bg-brand-tint` no Tailwind)
+- [x] Raios do Tailwind para 12/8/4px
+- [ ] Revisar as cores fixas nas páginas (ícones coloridos dos cards do dashboard, `text-blue-500`, `text-gray-*`, `bg-gray-50`, card âmbar) e trocar por tokens
 
 ## 2. Sidebar escura
 
-- [ ] Sidebar em preto/grafite (lembrando o hero e as seções escuras deles)
-- [ ] Ajustar `--sidebar-*` (foreground, accent, border) e item ativo em coral
-- [ ] Conferir contraste dos textos e ícones da sidebar
+- [x] Sidebar em preto (`#0E0E10`)
+- [x] Ajustar `--sidebar-*` e ícone do item ativo em coral
+- [x] Textos secundários da sidebar em `sidebar-foreground/70` (o `muted-foreground` não passava no escuro)
+- [ ] Barra coral à esquerda do item ativo (opcional)
 
 ## 3. Remover dark mode
 
-- [ ] Remover `client/src/components/theme-provider.tsx` e seu uso no `App.tsx`
-- [ ] Remover o botão de alternar tema em `app-sidebar.tsx`
-- [ ] Remover o bloco `.dark` de `index.css` e classes `dark:` em páginas/componentes (`dashboard.tsx`, `ui/*`)
-- [ ] Limpar preferência de tema salva no `localStorage`, se houver
+- [x] Remover `theme-provider.tsx` e seu uso no `App.tsx`
+- [x] Remover o botão de alternar tema em `app-sidebar.tsx`
+- [x] Remover os blocos `.dark` de `index.css` e as classes `dark:` do `dashboard.tsx`
+- [x] ~~Limpar `localStorage`~~ → desnecessário: sem o provider, a chave `theme` é ignorada
+- [ ] (opcional) Classes `dark:` restantes em `components/ui/*` são inofensivas; dá para limpar depois
 
 ## 4. Tipografia e espaçamento
 

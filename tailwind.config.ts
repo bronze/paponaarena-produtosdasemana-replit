@@ -6,9 +6,9 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        lg: ".5625rem", /* 9px */
-        md: ".375rem", /* 6px */
-        sm: ".1875rem", /* 3px */
+        lg: ".75rem", /* 12px */
+        md: ".5rem", /* 8px */
+        sm: ".25rem", /* 4px */
       },
       colors: {
         // Flat / base colors (regular buttons)
@@ -30,6 +30,7 @@ export default {
           youtube: "hsl(var(--brand-youtube) / <alpha-value>)",
           spotify: "hsl(var(--brand-spotify) / <alpha-value>)",
           linkedin: "hsl(var(--brand-linkedin) / <alpha-value>)",
+          tint: "hsl(var(--brand-tint) / <alpha-value>)",
         },
         primary: {
           DEFAULT: "hsl(var(--primary) / <alpha-value>)",
@@ -57,6 +58,7 @@ export default {
           border: "var(--destructive-border)",
         },
         ring: "hsl(var(--ring) / <alpha-value>)",
+        highlight: "hsl(var(--highlight) / <alpha-value>)",
         chart: {
           "1": "hsl(var(--chart-1) / <alpha-value>)",
           "2": "hsl(var(--chart-2) / <alpha-value>)",
