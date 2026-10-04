@@ -587,7 +587,7 @@ export const products: Product[] = [
   { id: "zenchef", name: "Zenchef", category: "Business", url: "https://zenchef.com" },
   { id: "splitwise", name: "Splitwise", category: "Business", url: "https://splitwise.com" },
   { id: "tricount", name: "Tricount", category: "Business" },
-  { id: "boosteroid", name: "Boosteroid", category: "Business" },
+  { id: "boosteroid", name: "Boosteroid", category: "Entertainment", url: "https://boosteroid.com/" },
   { id: "skoob", name: "Skoob", category: "Business" },
   { id: "skeelo", name: "Skeelo", category: "Business" },
   { id: "etsy", name: "Etsy", category: "Business", url: "https://etsy.com" },
