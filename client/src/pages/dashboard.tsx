@@ -62,7 +62,7 @@ export default function Dashboard() {
       <div>
         <h1 className="page-title" data-testid="text-page-title">Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="page-lead">
-          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com Arthur Castro e Aíquis Rodrigues.
+          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com <strong className="font-semibold text-foreground">Arthur Castro</strong> e <strong className="font-semibold text-foreground">Aíquis Rodrigues</strong>.
           <Link href="/sobre" className="block w-fit underline-offset-2 hover:underline">Saiba mais</Link>
         </p>
       </div>
