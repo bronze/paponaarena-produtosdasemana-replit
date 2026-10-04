@@ -44,6 +44,13 @@ function SectionTitle({ children }: { children: ReactNode }) {
   return <h2 className="text-3xl font-extrabold leading-[1.05] tracking-[-0.035em] text-balance md:text-[2.75rem]">{children}</h2>;
 }
 
+/** Deixa em negrito "Papo na Arena" (o podcast, não o "Papo na Arena Radar") e "Product Arena" no texto corrido. */
+function boldNames(text: string, className = "font-semibold"): ReactNode[] {
+  return text
+    .split(/(Papo na Arena(?! Radar)|Product Arena)/)
+    .map((part, i) => (i % 2 === 1 ? <strong key={i} className={className}>{part}</strong> : part));
+}
+
 export default function AboutPage() {
   const copy = getAboutCopy();
   const milestone = getThousandthMention();
@@ -52,11 +59,11 @@ export default function AboutPage() {
     <div className="-mb-4 text-lg leading-relaxed md:-mb-8">
       <div className="pb-14 md:pb-20">
         <h1 className="page-title" data-testid="text-page-title">Sobre o Radar<span className="text-primary" aria-hidden="true">.</span></h1>
-        <p className="page-lead max-w-2xl">Um radar feito por fã dos produtos da semana do Papo na Arena</p>
+        <p className="page-lead max-w-2xl">{boldNames("Um radar feito por fã dos produtos da semana do Papo na Arena", "font-semibold text-foreground")}</p>
         {/* Compromisso de marca: o aviso de fã é o destaque da página (coral como fundo, texto escuro) */}
         <div className="mt-8 rounded-lg bg-primary px-6 py-6 text-primary-foreground md:px-8 md:py-7" data-testid="text-fan-notice">
           <p className="text-2xl font-extrabold leading-tight tracking-[-0.03em] md:text-3xl">{copy.fanTitle}</p>
-          <p className="mt-2 text-lg leading-relaxed">{copy.fanBody}</p>
+          <p className="mt-2 text-lg leading-relaxed">{boldNames(copy.fanBody)}</p>
         </div>
       </div>
 
@@ -65,7 +72,7 @@ export default function AboutPage() {
         <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16">
           <div className="max-w-2xl space-y-5">
             <SectionTitle>O podcast Papo na Arena<span className="text-primary" aria-hidden="true">.</span></SectionTitle>
-            <p>{copy.podcast}</p>
+            <p>{boldNames(copy.podcast)}</p>
             <div className="flex flex-wrap gap-3 pt-1">
               <ExternalPill href={SPOTIFY_SHOW_URL} onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify", source: "about" })}>
                 <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
