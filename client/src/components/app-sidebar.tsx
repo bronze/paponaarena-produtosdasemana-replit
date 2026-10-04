@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { REPLIT_URL } from "@/lib/about";
 
@@ -26,19 +27,27 @@ const navItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
+  const { setOpenMobile } = useSidebar();
+  // No mobile a sidebar é um painel sobreposto: fecha ao clicar em qualquer link interno
+  const closeMobile = () => setOpenMobile(false);
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+        <Link
+          href="/"
+          onClick={closeMobile}
+          className="flex items-center gap-2 rounded-md px-2 py-3 outline-none ring-sidebar-ring transition-colors hover:bg-sidebar-accent focus-visible:ring-2"
+          data-testid="link-sidebar-home"
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm" aria-hidden="true">
             PA
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-semibold" data-testid="sidebar-title">Papo na Arena</span>
             <span className="text-xs text-sidebar-foreground/70">Radar</span>
           </div>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -50,7 +59,7 @@ export function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.path} data-testid={`nav-${item.title.toLowerCase()}`}>
+                      <Link href={item.path} onClick={closeMobile} data-testid={`nav-${item.title.toLowerCase()}`}>
                         <item.icon className={isActive ? "h-4 w-4 text-sidebar-primary" : "h-4 w-4"} />
                         <span>{item.title}</span>
                       </Link>
@@ -64,7 +73,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <p className="px-4 py-2 text-xs text-sidebar-foreground/70">
-          <Link href="/sobre" className="block py-1 underline-offset-2 hover:underline" data-testid="link-fan-notice">
+          <Link href="/sobre" onClick={closeMobile} className="block py-1 underline-offset-2 hover:underline" data-testid="link-fan-notice">
             Projeto de fã, não oficial
           </Link>
           Feito com{" "}
