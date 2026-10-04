@@ -31,12 +31,12 @@ export default function AboutPage() {
             <Link href="/people/arthur" className="font-medium hover:underline">Arthur</Link> e{" "}
             <Link href="/people/aiquis" className="font-medium hover:underline">Aíquis</Link>.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3">
             <a
               href={SPOTIFY_SHOW_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium hover:underline"
+              className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify", source: "about" })}
             >
               <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
@@ -45,7 +45,7 @@ export default function AboutPage() {
               href={YOUTUBE_CHANNEL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium hover:underline"
+              className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube", source: "about" })}
             >
               <SiYoutube aria-hidden="true" className="h-4 w-4 text-brand-youtube" /> Assistir no YouTube

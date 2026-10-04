@@ -189,11 +189,11 @@ function CategoryDetail() {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Categoria não encontrada.</p>
-        <Link href="/categories">
-          <Button variant="ghost" className="mt-4">
+        <Button asChild variant="ghost" className="mt-4">
+          <Link href="/categories">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }
@@ -207,11 +207,11 @@ function CategoryDetail() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-2">
-        <Link href="/categories">
-          <Button variant="ghost" size="icon" data-testid="button-back">
+        <Button asChild variant="ghost" size="icon" className="shrink-0" data-testid="button-back">
+          <Link href="/categories" aria-label="Voltar para Categorias">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
         <div>
           <h1 className="detail-title" data-testid="text-category-name">{category}</h1>
           <p className="text-sm text-muted-foreground">Visão geral da categoria</p>
@@ -266,7 +266,7 @@ function CategoryDetail() {
               <TableHead className="w-12 text-center">#</TableHead>
               <TableHead>
                 <button
-                  className="flex items-center text-xs font-medium uppercase tracking-wide"
+                  className="min-h-12 flex items-center text-xs font-medium uppercase tracking-wide"
                   onClick={() => handleSort("name")}
                   data-testid="sort-name"
                 >
@@ -275,7 +275,7 @@ function CategoryDetail() {
               </TableHead>
               <TableHead className="text-right">
                 <button
-                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  className="min-h-12 ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
                   onClick={() => handleSort("mentions")}
                   data-testid="sort-mentions"
                 >
@@ -284,7 +284,7 @@ function CategoryDetail() {
               </TableHead>
               <TableHead className="text-right">
                 <button
-                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  className="min-h-12 ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
                   onClick={() => handleSort("episodes")}
                   data-testid="sort-episodes"
                 >

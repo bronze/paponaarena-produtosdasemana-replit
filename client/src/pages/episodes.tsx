@@ -139,7 +139,7 @@ function EpisodeList() {
             aria-label="Buscar episódios"
             value={search}
             onChange={(e) => { setSearch(e.target.value); if (e.target.value.length > 2) posthog.capture("episode_searched", { query: e.target.value }); }}
-            className="h-11 pl-9"
+            className="h-12 pl-9"
             data-testid="input-search"
           />
         </div>
@@ -149,7 +149,6 @@ function EpisodeList() {
               key={year}
               variant={selectedYear === year ? "default" : "outline"}
               size="sm"
-              className="h-11 px-4"
               aria-pressed={selectedYear === year}
               onClick={() => { setSelectedYear(year); posthog.capture("episode_year_filtered", { year }); }}
               data-testid={`button-filter-${year.toLowerCase()}`}
@@ -241,11 +240,11 @@ function EpisodeDetail() {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Episódio não encontrado.</p>
-        <Link href="/episodes">
-          <Button variant="ghost" className="mt-4">
+        <Button asChild variant="ghost" className="mt-4">
+          <Link href="/episodes">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }
@@ -290,11 +289,11 @@ function EpisodeDetail() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <Link href="/episodes">
-          <Button variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
+        <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
+          <Link href="/episodes">
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Episódios
-          </Button>
-        </Link>
+          </Link>
+        </Button>
         <p className="mb-2 text-sm text-muted-foreground" data-testid="text-episode-date">
           <span className="font-semibold text-foreground">#{episode.id}</span> · {formatLongDate(episode.date)}
         </p>

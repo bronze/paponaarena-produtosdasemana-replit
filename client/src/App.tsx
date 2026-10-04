@@ -41,7 +41,7 @@ function App() {
       <SidebarProvider style={{ "--sidebar-width": "16rem" } as React.CSSProperties}>
         <AppSidebar />
         <SidebarInset>
-          <header className="flex h-12 items-center border-b px-4 lg:hidden">
+          <header className="flex h-14 items-center border-b px-2 lg:hidden">
             <SidebarTrigger />
           </header>
           <main className="flex-1 overflow-auto p-4 md:p-8">

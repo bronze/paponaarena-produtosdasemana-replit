@@ -86,7 +86,7 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 - **Raio:** 12px em cards e blocos (`--radius: .75rem`); 8px em itens de navegação; botões e tags em pílula (`999px`).
 - **Sombras:** nenhuma. Separação por borda `border` ou mudança de fundo.
 - **Espaçamento:** seções com 64px vertical; gap de 16px entre cards; padding interno de card 24px; página do app com 32px (20px/16px no mobile).
-- **Alvos de toque:** botões com altura mínima de 44px; itens da sidebar 48px.
+- **Alvos de toque:** todo botão e controle tem no mínimo **48×48px** (recomendação do Google/Material; cobre o 44px da Apple e o AAA do WCAG). Vale para o componente `Button` em todos os tamanhos, botões de voltar, botão do menu no mobile, cabeçalhos ordenáveis de tabela, pílulas de links externos e itens da sidebar. Links dentro de texto corrido (nomes de produto numa frase) ficam de fora, como prevê o WCAG.
 - **Foco:** contorno de 2px em `ink` com offset de 3px (em `on-dark` sobre superfícies escuras).
 
 ## Componentes

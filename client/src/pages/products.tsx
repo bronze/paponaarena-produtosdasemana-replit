@@ -126,7 +126,7 @@ function ProductList() {
               <TableHead className="w-12 text-center">#</TableHead>
               <TableHead>
                 <button
-                  className="flex items-center text-xs font-medium uppercase tracking-wide"
+                  className="min-h-12 flex items-center text-xs font-medium uppercase tracking-wide"
                   onClick={() => handleSort("name")}
                   data-testid="sort-name"
                 >
@@ -136,7 +136,7 @@ function ProductList() {
               <TableHead className="hidden sm:table-cell">Categoria</TableHead>
               <TableHead className="text-right">
                 <button
-                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  className="min-h-12 ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
                   onClick={() => handleSort("mentions")}
                   data-testid="sort-mentions"
                 >
@@ -145,7 +145,7 @@ function ProductList() {
               </TableHead>
               <TableHead className="text-right">
                 <button
-                  className="ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
+                  className="min-h-12 ml-auto flex items-center text-xs font-medium uppercase tracking-wide"
                   onClick={() => handleSort("episodes")}
                   data-testid="sort-episodes"
                 >
@@ -203,11 +203,11 @@ function ProductDetail() {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Produto não encontrado.</p>
-        <Link href="/products">
-          <Button variant="ghost" className="mt-4">
+        <Button asChild variant="ghost" className="mt-4">
+          <Link href="/products">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }
@@ -241,22 +241,22 @@ function ProductDetail() {
   return (
     <div className="space-y-8">
       <div className="flex items-start gap-2">
-        <Link href="/products">
-          <Button variant="ghost" size="icon" data-testid="button-back">
+        <Button asChild variant="ghost" size="icon" className="shrink-0" data-testid="button-back">
+          <Link href="/products" aria-label="Voltar para Produtos">
             <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
         <div>
           <h1 className="detail-title" data-testid="text-product-name">{product.name}</h1>
           <div className="flex items-center gap-2 mt-1.5">
             <Badge variant="secondary">{product.category}</Badge>
             <span className="text-sm text-muted-foreground">{allMentions.length} menções</span>
             {product.url && (
-              <a href={product.url} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("product_url_clicked", { product_id: product.id, product_name: product.name })}>
-                <Button variant="outline" size="sm" data-testid="link-product-url">
-                  <ExternalLink className="mr-1 h-3 w-3" /> Visitar site
-                </Button>
-              </a>
+              <Button asChild variant="outline" size="sm" data-testid="link-product-url">
+                <a href={product.url} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("product_url_clicked", { product_id: product.id, product_name: product.name })}>
+                  <ExternalLink className="mr-1 h-3 w-3" aria-hidden="true" /> Visitar site
+                </a>
+              </Button>
             )}
           </div>
         </div>
