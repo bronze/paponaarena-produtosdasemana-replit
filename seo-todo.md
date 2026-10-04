@@ -43,7 +43,7 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 
 ## 6. Performance (Core Web Vitals)
 
-- [x] Reduzir Google Fonts (de ~25 famílias para só Open Sans 400/500/600/700 + itálico 400, as únicas usadas)
+- [x] Reduzir Google Fonts (de ~25 famílias para uma só, nos pesos 400/500/600/700 + itálico 400, os únicos usados). A família era Open Sans e passou a ser Plus Jakarta Sans, a mesma do productarena.io
 - [x] Otimizar imagens: avatares de Arthur e Aíquis de PNG 800×800 (~1 MB) para WebP 256×256 (~14 KB); `og-image.png` era um JPEG com extensão errada, agora `og-image.jpg` (+ `og:image:type`)
 - [x] Code-splitting por rota (`React.lazy`); o gráfico (recharts, 377 KB) só carrega na home
 - [x] Rodar Lighthouse antes e depois (mobile, build de produção local)
