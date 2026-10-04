@@ -16,12 +16,16 @@ import {
   products,
   resolveParent,
   getCategoryBySlug,
+  getLastEpisode,
 } from "./data-utils";
+import { categorySummary, episodeSummary, personSummary, productSummary } from "./summaries";
 
 export const SITE_URL = "https://paponaarena-produtosdasemana.replit.app";
-export const SITE_NAME = "Papo na Arena";
+/** Nome deste site (projeto de fã), separado do nome do podcast para as IAs não confundirem os dois. */
+export const SITE_NAME = "Papo na Arena Radar";
+export const PODCAST_NAME = "Papo na Arena";
 
-export const DEFAULT_TITLE = "Papo na Arena – Produtos da Semana, Episódios e Menções";
+export const DEFAULT_TITLE = "Papo na Arena Radar – Produtos da Semana, Episódios e Menções";
 export const DEFAULT_DESCRIPTION =
   "Todos os produtos da semana citados no podcast Papo na Arena por Arthur e Aíquis: rankings, episódios, categorias e quem recomendou o quê.";
 
@@ -168,7 +172,7 @@ export function getPageMeta(pathname: string): PageMeta {
       const mentions = getMentionsForProduct(canonical.id);
       const episodeCount = new Set(mentions.map((m) => m.episodeId)).size;
       return {
-        title: `${productLabel(canonical)} – menções no ${SITE_NAME}`,
+        title: `${productLabel(canonical)} – menções no ${PODCAST_NAME}`,
         description: truncate(
           `${canonical.name} (${categoryLabel(canonical.category)}) foi citado ${plural(mentions.length, "vez", "vezes")} em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja quem recomendou e em quais episódios.`,
         ),
@@ -183,7 +187,7 @@ export function getPageMeta(pathname: string): PageMeta {
       const mentions = getMentionsForPerson(person.id);
       const episodeCount = new Set(mentions.map((m) => m.episodeId)).size;
       return {
-        title: `${personLabel(person)} no ${SITE_NAME} – produtos recomendados`,
+        title: `${personLabel(person)} no ${PODCAST_NAME} – produtos recomendados`,
         description: truncate(
           `${personLabel(person)} fez ${plural(mentions.length, "menção", "menções")} de produtos em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja o que recomendou.`,
         ),
@@ -198,7 +202,7 @@ export function getPageMeta(pathname: string): PageMeta {
       const list = getProductsForCategory(category);
       const top = list.slice(0, 5).map((p) => p.name);
       return {
-        title: `${categoryLabel(category)} – produtos da semana do ${SITE_NAME}`,
+        title: `${categoryLabel(category)} – produtos da semana do ${PODCAST_NAME}`,
         description: truncate(
           `${plural(list.length, "produto", "produtos")} da categoria ${categoryLabel(category)} citados no Papo na Arena${top.length ? `, como ${top.join(", ")}` : ""}.`,
         ),
@@ -218,26 +222,71 @@ type JsonLd = Record<string, unknown>;
 
 const absolute = (path: string) => `${SITE_URL}${path === "/" ? "/" : path}`;
 
-function podcastSeries(): JsonLd {
-  const hosts = ["arthur", "aiquis"]
-    .map((id) => getPerson(id))
-    .filter((p): p is NonNullable<typeof p> => !!p)
-    .map((p) => ({
-      "@type": "Person",
-      name: p.name,
-      ...(p.linkedinUrl ? { sameAs: [p.linkedinUrl] } : {}),
-    }));
+// @id estáveis: a mesma entidade é referenciada igual em todas as páginas do grafo
+const ids = {
+  website: `${SITE_URL}/#website`,
+  podcast: `${SITE_URL}/#podcast`,
+  maintainer: `${SITE_URL}/#maintainer`,
+  person: (id: string) => `${absolute(`/pessoas/${encodeURIComponent(id)}`)}#person`,
+  product: (id: string) => `${absolute(`/produtos/${encodeURIComponent(id)}`)}#product`,
+  episode: (id: number) => `${absolute(`/episodios/${id}`)}#episode`,
+};
 
+/** Listas longas no JSON-LD ficam no topo; o resto está nas páginas e no sitemap. */
+const ITEM_LIST_LIMIT = 50;
+
+function personRef(id: string): JsonLd | undefined {
+  const person = getPerson(id);
+  if (!person) return undefined;
+  return {
+    "@type": "Person",
+    "@id": ids.person(person.id),
+    name: person.name,
+    url: absolute(`/pessoas/${encodeURIComponent(person.id)}`),
+    ...(person.linkedinUrl ? { sameAs: [person.linkedinUrl] } : {}),
+  };
+}
+
+function productRef(id: string): JsonLd | undefined {
+  const product = getProduct(id);
+  if (!product) return undefined;
+  return { "@type": "Thing", "@id": ids.product(product.id), name: product.name };
+}
+
+function episodeRef(id: number): JsonLd | undefined {
+  const episode = getEpisode(id);
+  if (!episode) return undefined;
+  return {
+    "@type": "PodcastEpisode",
+    "@id": ids.episode(episode.id),
+    name: `Ep${episode.id} – ${episode.title}`,
+    url: absolute(`/episodios/${episode.id}`),
+  };
+}
+
+const defined = <T,>(items: (T | undefined)[]) => items.filter((i): i is T => i !== undefined);
+
+function podcastSeries(): JsonLd {
   return {
     "@type": "PodcastSeries",
-    "@id": `${SITE_URL}/#podcast`,
-    name: SITE_NAME,
+    "@id": ids.podcast,
+    name: PODCAST_NAME,
     url: SPOTIFY_SHOW_URL,
     inLanguage: "pt-BR",
     description:
       "Podcast de Arthur e Aíquis sobre produto, tecnologia e inteligência artificial, com os produtos da semana em cada episódio.",
-    author: hosts,
+    author: defined(["arthur", "aiquis"].map(personRef)),
     sameAs: [YOUTUBE_CHANNEL_URL, SPOTIFY_SHOW_URL],
+  };
+}
+
+function maintainer(): JsonLd {
+  return {
+    "@type": "Person",
+    "@id": ids.maintainer,
+    name: MAINTAINER.name,
+    url: MAINTAINER.siteUrl,
+    sameAs: [MAINTAINER.linkedinUrl],
   };
 }
 
@@ -253,6 +302,24 @@ function breadcrumbs(items: { name: string; path: string }[]): JsonLd {
   };
 }
 
+function itemList(name: string, total: number, items: { name: string; path: string }[]): JsonLd {
+  return {
+    "@type": "ItemList",
+    name,
+    numberOfItems: total,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    itemListElement: items.slice(0, ITEM_LIST_LIMIT).map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      url: absolute(item.path),
+    })),
+  };
+}
+
+const productItems = (list: { id: string; name: string }[]) =>
+  list.map((p) => ({ name: p.name, path: `/produtos/${encodeURIComponent(p.id)}` }));
+
 /** Dados estruturados (schema.org) da rota. Vazio para rotas inexistentes. */
 export function getJsonLd(pathname: string): JsonLd[] {
   const meta = getPageMeta(pathname);
@@ -260,20 +327,24 @@ export function getJsonLd(pathname: string): JsonLd[] {
 
   const path = meta.canonicalPath;
   const [, section, rawId] = path.split("/");
+  const lastEpisode = getLastEpisode();
 
   if (path === "/") {
+    const leaderboard = getLeaderboardProducts();
     return [
       {
         "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
-        name: `${SITE_NAME} – Produtos da Semana`,
-        alternateName: SITE_NAME,
+        "@id": ids.website,
+        name: SITE_NAME,
         url: absolute("/"),
         inLanguage: "pt-BR",
         description: DEFAULT_DESCRIPTION,
-        about: { "@id": `${SITE_URL}/#podcast` },
+        about: { "@id": ids.podcast },
+        author: maintainer(),
+        dateModified: lastEpisode.date,
       },
       podcastSeries(),
+      itemList(`Produtos mais citados no ${PODCAST_NAME}`, leaderboard.length, productItems(leaderboard.slice(0, 15))),
     ];
   }
 
@@ -285,9 +356,9 @@ export function getJsonLd(pathname: string): JsonLd[] {
         url: absolute(path),
         inLanguage: "pt-BR",
         description: meta.description,
-        about: { "@id": `${SITE_URL}/#podcast` },
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        author: { "@type": "Person", name: MAINTAINER.name, url: MAINTAINER.siteUrl, sameAs: [MAINTAINER.linkedinUrl] },
+        about: [{ "@id": ids.podcast }, { "@id": ids.website }],
+        isPartOf: { "@id": ids.website },
+        author: maintainer(),
       },
       breadcrumbs([
         { name: SITE_NAME, path: "/" },
@@ -305,7 +376,41 @@ export function getJsonLd(pathname: string): JsonLd[] {
   const home = { name: SITE_NAME, path: "/" };
   const list = { name: sectionNames[section], path: `/${section}` };
 
-  if (!rawId) return [breadcrumbs([home, list])];
+  if (!rawId) {
+    const crumbs = breadcrumbs([home, list]);
+    switch (section) {
+      case "episodios": {
+        const sorted = [...episodes].sort((a, b) => b.date.localeCompare(a.date));
+        return [
+          crumbs,
+          itemList(
+            `Episódios do ${PODCAST_NAME}`,
+            sorted.length,
+            sorted.map((e) => ({ name: `Ep${e.id} – ${e.title}`, path: `/episodios/${e.id}` })),
+          ),
+        ];
+      }
+      case "produtos": {
+        const leaderboard = getLeaderboardProducts();
+        return [crumbs, itemList(`Produtos mais citados no ${PODCAST_NAME}`, leaderboard.length, productItems(leaderboard))];
+      }
+      case "categorias": {
+        const categories = getUniqueCategories();
+        return [
+          crumbs,
+          {
+            ...itemList(
+              `Categorias de produtos do ${PODCAST_NAME}`,
+              categories.length,
+              categories.map((c) => ({ name: categoryLabel(c), path: categoryPath(c) })),
+            ),
+            itemListOrder: "https://schema.org/ItemListUnordered",
+          },
+        ];
+      }
+    }
+    return [crumbs];
+  }
 
   const id = safeDecode(rawId);
   const crumbs = (name: string) => breadcrumbs([home, list, { name, path }]);
@@ -314,33 +419,81 @@ export function getJsonLd(pathname: string): JsonLd[] {
     const episode = getEpisode(Number(id))!;
     const sameAs = [episode.youtubeLink, episode.spotifyLink].filter(Boolean);
     const cast = getEpisodeCast(episode.id);
-    const actors = [...cast.hosts, ...cast.cohosts].map((p) => ({
-      "@type": "Person",
-      name: p.name,
-      ...(p.linkedinUrl ? { sameAs: [p.linkedinUrl] } : {}),
-    }));
+    const actors = defined([...cast.hosts, ...cast.cohosts].map((p) => personRef(p.id)));
+    const mentioned = defined(
+      Array.from(new Set(getMentionsForEpisode(episode.id).map((m) => resolveParent(m.productId)))).map(productRef),
+    );
     return [
       {
         "@type": "PodcastEpisode",
+        "@id": ids.episode(episode.id),
         name: episode.title,
         description: episode.description,
+        abstract: episodeSummary(episode.id),
         url: absolute(path),
         datePublished: episode.date,
         episodeNumber: episode.id,
         inLanguage: "pt-BR",
-        partOfSeries: { "@id": `${SITE_URL}/#podcast`, "@type": "PodcastSeries", name: SITE_NAME, url: SPOTIFY_SHOW_URL },
+        partOfSeries: { "@id": ids.podcast, "@type": "PodcastSeries", name: PODCAST_NAME, url: SPOTIFY_SHOW_URL },
         ...(actors.length ? { actor: actors } : {}),
+        ...(mentioned.length ? { mentions: mentioned } : {}),
         ...(sameAs.length ? { sameAs } : {}),
       },
       crumbs(`Ep${episode.id}`),
     ];
   }
 
-  const category = section === "categorias" ? getCategoryBySlug(id) : undefined;
-  const names: Record<string, string | undefined> = {
-    produtos: getProduct(id)?.name,
-    pessoas: getPerson(id)?.name,
-    categorias: category && categoryLabel(category),
-  };
-  return [crumbs(names[section] ?? id)];
+  if (section === "produtos") {
+    const product = getProduct(resolveParent(id))!;
+    const episodeIds = Array.from(new Set(getMentionsForProduct(product.id).map((m) => m.episodeId))).sort(
+      (a, b) => b - a,
+    );
+    return [
+      {
+        "@type": "Thing",
+        "@id": ids.product(product.id),
+        name: product.name,
+        description: productSummary(product.id),
+        mainEntityOfPage: absolute(path),
+        ...(product.url ? { url: product.url, sameAs: [product.url] } : {}),
+        subjectOf: defined(episodeIds.map(episodeRef)),
+      },
+      crumbs(product.name),
+    ];
+  }
+
+  if (section === "pessoas") {
+    const person = getPerson(id)!;
+    return [
+      {
+        "@type": "ProfilePage",
+        name: meta.title,
+        url: absolute(path),
+        inLanguage: "pt-BR",
+        isPartOf: { "@id": ids.website },
+        mainEntity: { ...personRef(person.id), description: personSummary(person.id) },
+      },
+      crumbs(person.name),
+    ];
+  }
+
+  // categorias: o endereço traz o slug em português, os dados usam o nome original
+  const category = getCategoryBySlug(id)!;
+  const categoryProducts = getProductsForCategory(category);
+  return [
+    {
+      "@type": "CollectionPage",
+      name: meta.title,
+      url: absolute(path),
+      inLanguage: "pt-BR",
+      description: categorySummary(category),
+      isPartOf: { "@id": ids.website },
+      mainEntity: itemList(
+        `${categoryLabel(category)} – produtos mais citados no ${PODCAST_NAME}`,
+        categoryProducts.length,
+        productItems(categoryProducts),
+      ),
+    },
+    crumbs(categoryLabel(category)),
+  ];
 }

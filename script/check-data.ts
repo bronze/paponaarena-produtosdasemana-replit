@@ -58,9 +58,9 @@ export function checkPrerender(): string[] {
     ...episodes.map((e) => ({ path: `/episodios/${e.id}`, h1: e.title, type: "PodcastEpisode" })),
     ...products
       .filter((p) => !p.parentId)
-      .map((p) => ({ path: `/produtos/${encodeURIComponent(p.id)}`, h1: p.name })),
-    ...people.map((p) => ({ path: `/pessoas/${encodeURIComponent(p.id)}`, h1: p.name })),
-    ...getUniqueCategories().map((c) => ({ path: categoryPath(c), h1: categoryLabel(c) })),
+      .map((p) => ({ path: `/produtos/${encodeURIComponent(p.id)}`, h1: p.name, type: "Thing" })),
+    ...people.map((p) => ({ path: `/pessoas/${encodeURIComponent(p.id)}`, h1: p.name, type: "ProfilePage" })),
+    ...getUniqueCategories().map((c) => ({ path: categoryPath(c), h1: categoryLabel(c), type: "CollectionPage" })),
   ];
 
   for (const page of pages) {

@@ -95,12 +95,16 @@ Frases geradas em `client/src/lib/summaries.ts` e usadas só no prerender (logo 
 
 ## 5. Dados estruturados para entidades
 
-- [ ] Renomear a entidade do site: `WebSite.name` = "Papo na Arena Radar", com `about` → `PodcastSeries` "Papo na Arena". Revisar `og:site_name` e o sufixo `| Papo na Arena` nos titles (talvez "| Papo na Arena Radar")
-- [ ] `ItemList` em `/produtos`, `/episodios`, `/categorias/<x>` e no top 15 da home (posição, nome, url)
-- [ ] Página de pessoa: `ProfilePage` + `Person` (`sameAs` LinkedIn quando houver)
-- [ ] Página de produto: `Thing`/`SoftwareApplication` (quando for app) com `name`, `url` oficial e `subjectOf` → episódios
-- [ ] `PodcastEpisode.mentions` → produtos citados (liga episódio ↔ produto no grafo)
-- [ ] Hosts com `@id` estável (`/pessoas/arthur#person`) reutilizado em série, episódio e página de pessoa
+- [x] Entidade do site separada da do podcast: `SITE_NAME` = "Papo na Arena Radar" (WebSite, `og:site_name`, breadcrumbs, sufixo dos titles) e `PODCAST_NAME` = "Papo na Arena" (`PodcastSeries` e textos sobre o podcast). Titles de produto, pessoa e categoria continuam com "no Papo na Arena", que é o termo buscado
+- [x] `WebSite` com `author` (mantenedor) e `dateModified` (data do último episódio)
+- [x] `ItemList`: top 15 na home; em `/produtos`, `/episodios` e `/categorias/<x>` o topo da lista (até 50) com `numberOfItems` total; `/categorias` com as 28 categorias
+- [x] Página de pessoa: `ProfilePage` + `Person` (`sameAs` LinkedIn quando houver, `description` com o resumo)
+- [x] Página de produto: `Thing` com `description` (resumo), `url`/`sameAs` oficial quando houver, `mainEntityOfPage` e `subjectOf` → episódios. Não usei `SoftwareApplication`/`Product`: o Google cobra `offers`/`aggregateRating` neles e muitos produtos não são apps
+- [x] Página de categoria: `CollectionPage` com `ItemList` dos produtos
+- [x] `PodcastEpisode.mentions` → produtos citados (variações resolvidas para o produto principal) e `abstract` com o resumo
+- [x] `@id` estáveis reutilizados em todo o grafo: `/#website`, `/#podcast`, `/pessoas/<id>#person`, `/produtos/<id>#product`, `/episodios/<id>#episode`
+- [x] `checkPrerender()` confere também `Thing`, `ProfilePage` e `CollectionPage`
+- [ ] Depois de publicar: Schema Markup Validator em `/`, `/episodios/136`, `/produtos/claude`, `/pessoas/arthur` e `/categorias/ferramentas-de-ia`; Rich Results Test (breadcrumbs, `ProfilePage`)
 
 ## 6. Enriquecer os dados (`data.ts`)
 
