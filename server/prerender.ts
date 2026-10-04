@@ -1,6 +1,7 @@
 import { categoryLabel, categoryPath } from "../client/src/lib/categories";
 import {
   episodes,
+  getCategoryBySlug,
   getEpisode,
   getEpisodeCast,
   getLeaderboardProducts,
@@ -112,7 +113,7 @@ function bodyContent(pathname: string): string {
 
   const id = decodeURIComponent(rawId);
 
-  if (section === "episodes") {
+  if (section === "episodios") {
     const episode = getEpisode(Number(id))!;
     const items = unique(getMentionsForEpisode(episode.id).map((m) => resolveParent(m.productId)));
     const external = [
@@ -131,7 +132,7 @@ function bodyContent(pathname: string): string {
     );
   }
 
-  if (section === "products") {
+  if (section === "produtos") {
     const product = getProduct(id)!;
     const canonical = getProduct(resolveParent(product.id)) ?? product;
     const eps = unique(getMentionsForProduct(canonical.id).map((m) => m.episodeId)).sort((a, b) => b - a);
@@ -143,7 +144,7 @@ function bodyContent(pathname: string): string {
     );
   }
 
-  if (section === "people") {
+  if (section === "pessoas") {
     const person = getPerson(id)!;
     const mentions = getMentionsForPerson(person.id);
     return (
@@ -155,8 +156,9 @@ function bodyContent(pathname: string): string {
     );
   }
 
-  // categories
-  return heading(categoryLabel(id)) + list(getProductsForCategory(id).map((p) => productLink(p.id)));
+  // categorias: o endereço traz o slug em português, os dados usam o nome original
+  const category = getCategoryBySlug(id)!;
+  return heading(categoryLabel(category)) + list(getProductsForCategory(category).map((p) => productLink(p.id)));
 }
 
 function replaceMeta(html: string, attr: "name" | "property", key: string, content: string): string {

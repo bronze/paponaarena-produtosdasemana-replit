@@ -1,7 +1,7 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
-import { checkData } from "./check-data";
+import { checkData, checkPrerender } from "./check-data";
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -37,6 +37,10 @@ async function buildAll() {
   const dataErrors = checkData();
   if (dataErrors.length) {
     throw new Error(`data.ts inválido:\n- ${dataErrors.join("\n- ")}`);
+  }
+  const prerenderErrors = checkPrerender();
+  if (prerenderErrors.length) {
+    throw new Error(`prerender inválido:\n- ${prerenderErrors.slice(0, 20).join("\n- ")}`);
   }
 
   await rm("dist", { recursive: true, force: true });

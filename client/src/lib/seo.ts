@@ -297,10 +297,10 @@ export function getJsonLd(pathname: string): JsonLd[] {
   }
 
   const sectionNames: Record<string, string> = {
-    episodes: "Episódios",
-    products: "Produtos",
-    categories: "Categorias",
-    people: "Pessoas",
+    episodios: "Episódios",
+    produtos: "Produtos",
+    categorias: "Categorias",
+    pessoas: "Pessoas",
   };
   const home = { name: SITE_NAME, path: "/" };
   const list = { name: sectionNames[section], path: `/${section}` };
@@ -310,7 +310,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
   const id = safeDecode(rawId);
   const crumbs = (name: string) => breadcrumbs([home, list, { name, path }]);
 
-  if (section === "episodes") {
+  if (section === "episodios") {
     const episode = getEpisode(Number(id))!;
     const sameAs = [episode.youtubeLink, episode.spotifyLink].filter(Boolean);
     const cast = getEpisodeCast(episode.id);
@@ -336,10 +336,11 @@ export function getJsonLd(pathname: string): JsonLd[] {
     ];
   }
 
+  const category = section === "categorias" ? getCategoryBySlug(id) : undefined;
   const names: Record<string, string | undefined> = {
-    products: getProduct(id)?.name,
-    people: getPerson(id)?.name,
-    categories: categoryLabel(id),
+    produtos: getProduct(id)?.name,
+    pessoas: getPerson(id)?.name,
+    categorias: category && categoryLabel(category),
   };
   return [crumbs(names[section] ?? id)];
 }
