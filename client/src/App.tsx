@@ -11,6 +11,7 @@ const EpisodesPage = lazy(() => import("@/pages/episodes"));
 const ProductsPage = lazy(() => import("@/pages/products"));
 const CategoriesPage = lazy(() => import("@/pages/categories"));
 const PeoplePage = lazy(() => import("@/pages/people"));
+const AboutPage = lazy(() => import("@/pages/about"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Router() {
@@ -26,6 +27,7 @@ function Router() {
         <Route path="/categories/:name" component={CategoriesPage} />
         <Route path="/people" component={PeoplePage} />
         <Route path="/people/:id" component={PeoplePage} />
+        <Route path="/sobre" component={AboutPage} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

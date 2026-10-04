@@ -159,7 +159,13 @@ function ProductList() {
               <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => { navigate(`/products/${product.id}`); posthog.capture("product_viewed", { product_id: product.id, product_name: product.name, source: "list" }); }} data-testid={`row-product-${product.id}`}>
                 <TableCell className="text-center font-bold text-muted-foreground">{product.rank}</TableCell>
                 <TableCell className="font-medium text-sm" data-testid={`link-product-${product.id}`}>
-                  {product.name}
+                  <Link
+                    href={`/products/${product.id}`}
+                    className="hover:underline"
+                    onClick={(e) => { e.stopPropagation(); posthog.capture("product_viewed", { product_id: product.id, product_name: product.name, source: "list" }); }}
+                  >
+                    {product.name}
+                  </Link>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   <Badge variant="outline" className="text-xs">{product.category}</Badge>

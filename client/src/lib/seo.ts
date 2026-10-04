@@ -101,6 +101,13 @@ export function getPageMeta(pathname: string): PageMeta {
           description: `Os produtos da semana do Papo na Arena organizados em ${getUniqueCategories().length} categorias.`,
           canonicalPath: "/categories",
         };
+      case "sobre":
+        return {
+          title: `Sobre o Papo na Arena e o Radar de Produtos da Semana | ${SITE_NAME}`,
+          description:
+            "Conheça o podcast Papo na Arena, de Arthur e Aíquis, e o Radar que reúne todos os produtos da semana citados nos episódios. Site feito com Replit.",
+          canonicalPath: "/sobre",
+        };
       case "people":
         return {
           title: `Quem fala no Papo na Arena – convidados e hosts | ${SITE_NAME}`,
@@ -253,6 +260,24 @@ export function getJsonLd(pathname: string): JsonLd[] {
         about: { "@id": `${SITE_URL}/#podcast` },
       },
       podcastSeries(),
+    ];
+  }
+
+  if (path === "/sobre") {
+    return [
+      {
+        "@type": "AboutPage",
+        name: meta.title,
+        url: absolute(path),
+        inLanguage: "pt-BR",
+        description: meta.description,
+        about: { "@id": `${SITE_URL}/#podcast` },
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      breadcrumbs([
+        { name: SITE_NAME, path: "/" },
+        { name: "Sobre", path },
+      ]),
     ];
   }
 

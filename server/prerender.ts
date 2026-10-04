@@ -12,7 +12,8 @@ import {
   people,
   resolveParent,
 } from "../client/src/lib/data-utils";
-import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL } from "../client/src/lib/seo";
+import { getAboutCopy, REPLIT_URL } from "../client/src/lib/about";
+import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL, SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "../client/src/lib/seo";
 
 function esc(value: string): string {
   return value
@@ -42,6 +43,7 @@ const nav = `<nav>${[
   link("/products", "Produtos"),
   link("/categories", "Categorias"),
   link("/people", "Pessoas"),
+  link("/sobre", "Sobre"),
 ].join(" · ")}</nav>`;
 
 /** Conteúdo semântico com links reais, para crawlers que não executam JS. */
@@ -76,6 +78,17 @@ function bodyContent(pathname: string): string {
           heading("Categorias") +
           list(getUniqueCategories().map((c) => link(`/categories/${encodeURIComponent(c)}`, c)))
         );
+      case "sobre": {
+        const copy = getAboutCopy();
+        return (
+          heading("Sobre o Papo na Arena Radar") +
+          `<h2>O podcast Papo na Arena</h2><p>${esc(copy.podcast)}</p>` +
+          `<p>Hosts: ${link("/people/arthur", "Arthur")} e ${link("/people/aiquis", "Aíquis")}.</p>` +
+          list([link(SPOTIFY_SHOW_URL, "Ouvir no Spotify"), link(YOUTUBE_CHANNEL_URL, "Assistir no YouTube")]) +
+          `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
+          `<h2>Feito com Replit</h2><p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
+        );
+      }
       case "people":
         return heading("Pessoas") + list(people.map((p) => link(`/people/${encodeURIComponent(p.id)}`, p.name)));
     }

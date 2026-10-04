@@ -10,7 +10,7 @@ const productIds = new Set(products.map((p) => p.id));
 const personIds = new Set(people.map((p) => p.id));
 const categoryNames = new Set(getUniqueCategories());
 
-const listRoutes = ["/episodes", "/products", "/categories", "/people"];
+const listRoutes = ["/episodes", "/products", "/categories", "/people", "/sobre"];
 
 export function isKnownRoute(pathname: string): boolean {
   const path = pathname.replace(/\/+$/, "") || "/";

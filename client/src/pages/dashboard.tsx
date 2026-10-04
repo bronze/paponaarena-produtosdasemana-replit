@@ -116,7 +116,10 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Papo na Arena Radar</h1>
-        <p className="text-muted-foreground">Dashboard de produtos e serviços mencionados no podcast</p>
+        <p className="text-muted-foreground max-w-2xl">
+          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, de Arthur e Aíquis.{" "}
+          <Link href="/sobre" className="underline-offset-2 hover:underline">Saiba mais</Link>
+        </p>
       </div>
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">

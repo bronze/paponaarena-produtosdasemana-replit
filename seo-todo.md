@@ -35,9 +35,9 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 
 ## 5. Conteúdo
 
-- [ ] Criar página `/sobre` explicando o que é o Papo na Arena (Arthur e Aíquis, tema, frequência), com o nome da marca em texto real
-- [ ] Texto introdutório indexável na home
-- [ ] Links internos entre episódio ↔ produto ↔ pessoa ↔ categoria (o prerender já inclui `<a href>` reais; conferir também no app renderizado)
+- [x] Criar página `/sobre` explicando o que é o Papo na Arena (Arthur e Aíquis, tema, frequência), com o nome da marca em texto real
+- [x] Texto introdutório indexável na home
+- [x] Links internos entre episódio ↔ produto ↔ pessoa ↔ categoria (o prerender já inclui `<a href>` reais; nas tabelas de produtos o nome agora é um `Link` real, não só `onClick`)
 
 ## 6. Performance (Core Web Vitals)
 
@@ -65,7 +65,7 @@ Ideias futuras (não feitas; mexem em analytics ou arquitetura):
 ## 7. Fora do código (maior impacto para busca de marca)
 
 - [x] ~~Domínio próprio~~ — decisão: **manter `paponaarena-produtosdasemana.replit.app`** (o site mostra que foi feito com Replit; Arthur é embaixador do Replit). Canonicals, sitemap e og:url usam essa URL.
-- [ ] Reforçar a vinculação com o Replit no site (ex.: "Feito com Replit" no rodapé/sobre) — também vira conteúdo indexável
+- [x] Reforçar a vinculação com o Replit no site: "Feito com Replit" no rodapé da sidebar e na página `/sobre`
 - [ ] Cadastrar no Google Search Console e Bing Webmaster Tools e enviar o sitemap
 - [ ] Backlinks: descrição dos episódios no Spotify/YouTube, site oficial do podcast, LinkedIn, Instagram, bio dos hosts
 - [ ] Monitorar posição para "Papo na Arena" no Search Console
@@ -84,10 +84,12 @@ Ideias futuras (não feitas; mexem em analytics ou arquitetura):
 4. Blocos 5 e 6
 
 
-## Pendencias
+## Pendencias (Editadas à mão)
 
 Escolhas que você pode querer rever
 - Em PodcastSeries, o url aponta para o Spotify, já que este site é um complemento e não o site oficial do podcast. O WebSite representa o nosso .replit.app.
 - Não coloquei pessoas por episódio. O campo hosts existe só em 9 de 103 episódios e mistura convidados com hosts, então o dado seria impreciso.
 
 Pendente no bloco 4: checar as prévias de link no WhatsApp, LinkedIn e X. Só dá para fazer depois de publicar.
+
+O que ainda pesa na home: o bundle principal tem 743 KB, e o PostHog é o maior bloco, com 259 KB (35%). Os dados do data.ts ocupam ~200 KB. Carregar o PostHog depois do load tiraria esse peso do caminho crítico. Não fiz porque mexe nas suas analytics: pageviews de visitas muito curtas poderiam se perder. Deixei isso como ideia futura no seo-todo.md, junto com a tabela antes/depois. Se você topar a troca, eu faço.

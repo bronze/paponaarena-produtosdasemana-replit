@@ -295,7 +295,11 @@ function CategoryDetail() {
             {sorted.map((product, i) => (
               <TableRow key={product.id} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/products/${product.id}`)} data-testid={`row-product-${product.id}`}>
                 <TableCell className="text-center font-bold text-muted-foreground">{i + 1}</TableCell>
-                <TableCell className="font-medium text-sm">{product.name}</TableCell>
+                <TableCell className="font-medium text-sm">
+                  <Link href={`/products/${product.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>
+                    {product.name}
+                  </Link>
+                </TableCell>
                 <TableCell className="text-right font-semibold">{product.mentionCount}</TableCell>
                 <TableCell className="text-right text-muted-foreground">{product.episodeCount}</TableCell>
               </TableRow>
