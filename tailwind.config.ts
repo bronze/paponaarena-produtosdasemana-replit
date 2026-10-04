@@ -26,6 +26,11 @@ export default {
           foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
           border: "hsl(var(--popover-border) / <alpha-value>)",
         },
+        brand: {
+          youtube: "hsl(var(--brand-youtube) / <alpha-value>)",
+          spotify: "hsl(var(--brand-spotify) / <alpha-value>)",
+          linkedin: "hsl(var(--brand-linkedin) / <alpha-value>)",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary) / <alpha-value>)",
           foreground: "hsl(var(--primary-foreground) / <alpha-value>)",

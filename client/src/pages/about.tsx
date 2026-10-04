@@ -39,7 +39,7 @@ export default function AboutPage() {
               className="inline-flex items-center gap-2 font-medium hover:underline"
               onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify", source: "about" })}
             >
-              <SiSpotify className="h-4 w-4 text-[#1DB954]" /> Ouvir no Spotify
+              <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
             </a>
             <a
               href={YOUTUBE_CHANNEL_URL}
@@ -48,7 +48,7 @@ export default function AboutPage() {
               className="inline-flex items-center gap-2 font-medium hover:underline"
               onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube", source: "about" })}
             >
-              <SiYoutube className="h-4 w-4 text-[#FF0000]" /> Assistir no YouTube
+              <SiYoutube aria-hidden="true" className="h-4 w-4 text-brand-youtube" /> Assistir no YouTube
             </a>
           </div>
         </CardContent>

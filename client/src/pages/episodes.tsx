@@ -241,15 +241,15 @@ function EpisodeDetail() {
         <div className="flex gap-2 ml-auto">
           {episode.youtubeLink && (
             <a href={episode.youtubeLink} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("episode_external_link_clicked", { episode_id: episode.id, platform: "youtube" })}>
-              <Button variant="outline" size="sm" className="border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10" data-testid="link-youtube">
-                <SiYoutube className="mr-1.5 h-3.5 w-3.5" /> YouTube
+              <Button variant="outline" size="sm" className="border-brand-youtube/40 text-brand-youtube hover:bg-brand-youtube/10" data-testid="link-youtube">
+                <SiYoutube aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" /> YouTube
               </Button>
             </a>
           )}
           {episode.spotifyLink && (
             <a href={episode.spotifyLink} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("episode_external_link_clicked", { episode_id: episode.id, platform: "spotify" })}>
-              <Button variant="outline" size="sm" className="border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10" data-testid="link-spotify">
-                <SiSpotify className="mr-1.5 h-3.5 w-3.5" /> Spotify
+              <Button variant="outline" size="sm" className="border-brand-spotify/40 text-brand-spotify hover:bg-brand-spotify/10" data-testid="link-spotify">
+                <SiSpotify aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" /> Spotify
               </Button>
             </a>
           )}

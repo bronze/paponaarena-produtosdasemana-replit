@@ -196,8 +196,8 @@ function PersonDetail() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/people">
-          <Button variant="ghost" size="icon" data-testid="button-back">
+        <Link href="/people" aria-label="Voltar para Pessoas">
+          <Button variant="ghost" size="icon" aria-label="Voltar para Pessoas" data-testid="button-back">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -226,9 +226,9 @@ function PersonDetail() {
             <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
               <Badge
                 variant="outline"
-                className="mt-2 cursor-pointer text-sm px-3 py-1 border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/10"
+                className="mt-2 cursor-pointer text-sm px-3 py-1 border-brand-linkedin/40 text-brand-linkedin hover:bg-brand-linkedin/10"
                 data-testid="link-linkedin">
-                <SiLinkedin className="mr-1.5 h-4 w-4" /> LinkedIn
+                <SiLinkedin aria-hidden="true" className="mr-1.5 h-4 w-4" /> LinkedIn
               </Badge>
             </a>
           )}

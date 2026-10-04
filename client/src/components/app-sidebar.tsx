@@ -69,13 +69,13 @@ export function AppSidebar() {
       <SidebarFooter>
         <div className="flex gap-2 px-2 pt-2">
           <a href="https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ" target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify" })}>
-            <Button variant="outline" size="sm" className="w-full gap-2 border-[#1DB954]/40 text-[#1DB954] hover:bg-[#1DB954]/10">
-              <SiSpotify className="h-4 w-4" /> Spotify
+            <Button variant="outline" size="sm" className="w-full gap-2 border-brand-spotify/40 text-brand-spotify hover:bg-brand-spotify/10">
+              <SiSpotify aria-hidden="true" className="h-4 w-4" /> Spotify
             </Button>
           </a>
           <a href="https://www.youtube.com/@PaponaArena" target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube" })}>
-            <Button variant="outline" size="sm" className="w-full gap-2 border-[#FF0000]/40 text-[#FF0000] hover:bg-[#FF0000]/10">
-              <SiYoutube className="h-4 w-4" /> YouTube
+            <Button variant="outline" size="sm" className="w-full gap-2 border-brand-youtube/40 text-brand-youtube hover:bg-brand-youtube/10">
+              <SiYoutube aria-hidden="true" className="h-4 w-4" /> YouTube
             </Button>
           </a>
         </div>

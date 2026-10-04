@@ -238,12 +238,12 @@ export default function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
               <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
-                <p><span style={{ color: "#d97706" }}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
-                <p><span style={{ color: "#10a37f" }}>OpenAI:</span> ChatGPT, Codex e variantes</p>
-                <p><span style={{ color: "#4285F4" }}>Google:</span> Gemini, Google Flow e variantes</p>
-                <p><span style={{ color: "#F26207" }}>Replit:</span> Replit, Replit Canvas e variantes</p>
-                <p><span style={{ color: "#8B5CF6" }}>Cursor:</span> Cursor e variantes</p>
-                <p><span style={{ color: "#64748B" }}>xAI:</span> Grok, Grokbot e variantes</p>
+                <p><span className="company-legend" style={{ "--c": "#d97706" } as React.CSSProperties}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
+                <p><span className="company-legend" style={{ "--c": "#10a37f" } as React.CSSProperties}>OpenAI:</span> ChatGPT, Codex e variantes</p>
+                <p><span className="company-legend" style={{ "--c": "#4285F4" } as React.CSSProperties}>Google:</span> Gemini, Google Flow e variantes</p>
+                <p><span className="company-legend" style={{ "--c": "#F26207" } as React.CSSProperties}>Replit:</span> Replit, Replit Canvas e variantes</p>
+                <p><span className="company-legend" style={{ "--c": "#8B5CF6" } as React.CSSProperties}>Cursor:</span> Cursor e variantes</p>
+                <p><span className="company-legend" style={{ "--c": "#64748B" } as React.CSSProperties}>xAI:</span> Grok, Grokbot e variantes</p>
               </div>
             </CardContent>
           </Card>
@@ -254,23 +254,23 @@ export default function Dashboard() {
             <div className="rounded-lg bg-primary p-5 text-primary-foreground cursor-pointer transition-opacity hover:opacity-90" data-testid="card-latest-episode">
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="bg-primary-foreground/20 text-primary-foreground border-0">Último Episódio</Badge>
+                  <Badge className="bg-black/20 text-primary-foreground border-0">Último Episódio</Badge>
                   <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
                 </div>
                 <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-sm opacity-80">
+                  <div className="flex items-center gap-1 text-sm">
                     <Package className="h-3.5 w-3.5" />
                     <span data-testid="text-latest-products">{latestMentions.length} menções</span>
                   </div>
-                  <span className="text-sm font-medium opacity-80 flex items-center gap-1">
+                  <span className="text-sm font-medium flex items-center gap-1">
                     Ver Episódio <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
                 {latestTop3.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {latestTop3.map((product) => (
-                      <Badge key={product!.id} className="bg-primary-foreground/20 text-primary-foreground border-0 text-xs">
+                      <Badge key={product!.id} className="bg-black/20 text-primary-foreground border-0 text-xs">
                         {product!.name}
                       </Badge>
                     ))}
@@ -303,7 +303,7 @@ export default function Dashboard() {
                     labelLine={false}
                   >
                     {categoryStats.map((_, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} aria-label={`${categoryStats[index].category}: ${categoryStats[index].count}`} />
                     ))}
                   </Pie>
                   <Tooltip
@@ -427,7 +427,7 @@ export default function Dashboard() {
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex flex-col min-w-0">
-                      <Link href={`/products/${mention.productId}`} className="text-sm font-medium truncate hover:underline">
+                      <Link href={`/products/${mention.productId}`} className="text-sm font-medium truncate hover:underline py-0.5">
                         {product?.name || mention.productId}
                       </Link>
                       <span className="text-sm text-muted-foreground">
