@@ -1,7 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { BarChart3, Mic, Package, FolderOpen, Users, Info, Sun, Moon } from "lucide-react";
 import posthog from "posthog-js";
-import { SiSpotify, SiYoutube } from "react-icons/si";
 import {
   Sidebar,
   SidebarContent,
@@ -67,18 +66,6 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex gap-2 px-2 pt-2">
-          <a href="https://open.spotify.com/show/7lcBkPYn5HgEZjTkJhNUFJ" target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify" })}>
-            <Button variant="outline" size="sm" className="w-full gap-2 border-brand-spotify/40 text-brand-spotify hover:bg-brand-spotify/10">
-              <SiSpotify aria-hidden="true" className="h-4 w-4" /> Spotify
-            </Button>
-          </a>
-          <a href="https://www.youtube.com/@PaponaArena" target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube" })}>
-            <Button variant="outline" size="sm" className="w-full gap-2 border-brand-youtube/40 text-brand-youtube hover:bg-brand-youtube/10">
-              <SiYoutube aria-hidden="true" className="h-4 w-4" /> YouTube
-            </Button>
-          </a>
-        </div>
         <div className="px-2 py-2">
           <Button
             variant="ghost"
