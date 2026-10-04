@@ -15,6 +15,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { REPLIT_URL } from "@/lib/about";
+import { getLastEpisode } from "@/lib/data-utils";
+import { formatShortDate } from "@/lib/dates";
 
 const navItems = [
   { title: "Dashboard", path: "/", icon: BarChart3 },
@@ -33,6 +35,8 @@ function RadarIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+const lastEpisode = getLastEpisode();
 
 export function AppSidebar() {
   const [location] = useLocation();
@@ -93,6 +97,9 @@ export function AppSidebar() {
           >
             Replit
           </a>
+          <time dateTime={lastEpisode.date} className="block py-1" data-testid="text-last-updated">
+            Atualizado em {formatShortDate(lastEpisode.date)}
+          </time>
         </p>
       </SidebarFooter>
     </Sidebar>

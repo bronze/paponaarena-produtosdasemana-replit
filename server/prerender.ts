@@ -12,9 +12,11 @@ import {
   getProduct,
   getProductsForCategory,
   getUniqueCategories,
+  getLastEpisode,
   people,
   resolveParent,
 } from "../client/src/lib/data-utils";
+import { formatLongDate } from "../client/src/lib/dates";
 import { getAboutCopy, getThousandthMention, MAINTAINER, REPLIT_URL } from "../client/src/lib/about";
 import { categorySummary, episodeSummary, homeSummary, personSummary, productSummary } from "../client/src/lib/summaries";
 import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL, SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "../client/src/lib/seo";
@@ -57,6 +59,14 @@ function milestoneHtml(): string {
     `<h2>O produto nº 1.000</h2>` +
     `<p>O milésimo produto da semana registrado no Radar foi ${link(`/produtos/${encodeURIComponent(m.product.id)}`, m.product.name)}, ` +
     `citado por ${link(`/pessoas/${encodeURIComponent(m.person.id)}`, m.person.name)} no episódio ${episodeLink(m.episode.id)}.</p>`
+  );
+}
+
+function footer(): string {
+  const last = getLastEpisode();
+  return (
+    `<footer><p>Atualizado em <time datetime="${last.date}">${esc(formatLongDate(last.date))}</time>, ` +
+    `com o ${episodeLink(last.id)}.</p></footer>`
   );
 }
 
@@ -198,7 +208,7 @@ function renderPage(template: string, pathname: string): string {
   // Visualmente oculto: o React substitui o #root no primeiro render.
   const fallback =
     `<div id="seo-fallback" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">` +
-    `${nav}<main>${bodyContent(pathname)}</main></div>`;
+    `${nav}<main>${bodyContent(pathname)}</main>${footer()}</div>`;
   return html.replace('<div id="root"></div>', () => `<div id="root">${fallback}</div>`);
 }
 

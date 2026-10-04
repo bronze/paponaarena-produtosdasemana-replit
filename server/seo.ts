@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { episodes, products, people } from "../client/src/lib/data";
 import { getCategoryBySlug, getUniqueCategories } from "../client/src/lib/data-utils";
 import { categoryPath } from "../client/src/lib/categories";
-import { SITE_URL } from "../client/src/lib/seo";
+import { getLastModified, SITE_URL } from "../client/src/lib/seo";
 import { buildLlmsFullTxt, buildLlmsTxt } from "./llms";
 
 export { SITE_URL };
@@ -51,29 +51,20 @@ function escapeXml(value: string): string {
 }
 
 function buildSitemap(): string {
-  const latestEpisodeDate = episodes.reduce(
-    (latest, e) => (e.date > latest ? e.date : latest),
-    "",
-  );
-
-  const urls: { path: string; lastmod?: string }[] = [
-    { path: "/", lastmod: latestEpisodeDate },
-    ...listRoutes.map((path) => ({ path, lastmod: latestEpisodeDate })),
-    ...episodes.map((e) => ({ path: `/episodios/${e.id}`, lastmod: e.date })),
+  const paths: string[] = [
+    "/",
+    ...listRoutes,
+    ...episodes.map((e) => `/episodios/${e.id}`),
     // produtos filhos (parentId) são variações; a página canônica é a do pai
-    ...products
-      .filter((p) => !p.parentId)
-      .map((p) => ({ path: `/produtos/${encodeURIComponent(p.id)}` })),
-    ...people.map((p) => ({ path: `/pessoas/${encodeURIComponent(p.id)}` })),
-    ...getUniqueCategories().map((c) => ({
-      path: categoryPath(c),
-    })),
+    ...products.filter((p) => !p.parentId).map((p) => `/produtos/${encodeURIComponent(p.id)}`),
+    ...people.map((p) => `/pessoas/${encodeURIComponent(p.id)}`),
+    ...getUniqueCategories().map((c) => categoryPath(c)),
   ];
 
-  const body = urls
-    .map(({ path, lastmod }) => {
+  const body = paths
+    .map((path) => {
       const loc = escapeXml(`${SITE_URL}${path === "/" ? "/" : path}`);
-      return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+      return `  <url><loc>${loc}</loc><lastmod>${getLastModified(path)}</lastmod></url>`;
     })
     .join("\n");
 

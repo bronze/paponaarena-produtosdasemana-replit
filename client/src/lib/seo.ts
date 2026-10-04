@@ -235,6 +235,39 @@ const ids = {
 /** Listas longas no JSON-LD ficam no topo; o resto está nas páginas e no sitemap. */
 const ITEM_LIST_LIMIT = 50;
 
+const latest = (dates: (string | undefined)[]) =>
+  dates.reduce<string>((max, d) => (d && d > max ? d : max), "");
+const mentionDates = (mentions: { episodeId: number }[]) => mentions.map((m) => getEpisode(m.episodeId)?.date);
+
+/**
+ * Data da última mudança no conteúdo da rota (AAAA-MM-DD): o episódio mais recente que a afeta.
+ * Usada no dateModified do JSON-LD e no lastmod do sitemap.
+ */
+export function getLastModified(pathname: string): string {
+  const meta = getPageMeta(pathname);
+  const [, section, rawId] = meta.canonicalPath.split("/");
+  const fallback = getLastEpisode().date;
+  if (meta.noindex || !rawId) return fallback;
+
+  const id = safeDecode(rawId);
+  switch (section) {
+    case "episodios":
+      return getEpisode(Number(id))?.date ?? fallback;
+    case "produtos":
+      return latest(mentionDates(getMentionsForProduct(id))) || fallback;
+    case "pessoas": {
+      const cast = episodes.filter((e) => e.hosts.includes(id) || e.cohosts?.includes(id)).map((e) => e.date);
+      return latest([...mentionDates(getMentionsForPerson(id)), ...cast]) || fallback;
+    }
+    case "categorias": {
+      const category = getCategoryBySlug(id);
+      if (!category) return fallback;
+      return latest(getProductsForCategory(category).flatMap((p) => mentionDates(getMentionsForProduct(p.id)))) || fallback;
+    }
+  }
+  return fallback;
+}
+
 function personRef(id: string): JsonLd | undefined {
   const person = getPerson(id);
   if (!person) return undefined;
@@ -359,6 +392,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         about: [{ "@id": ids.podcast }, { "@id": ids.website }],
         isPartOf: { "@id": ids.website },
         author: maintainer(),
+        dateModified: getLastModified(path),
       },
       breadcrumbs([
         { name: SITE_NAME, path: "/" },
@@ -450,6 +484,16 @@ export function getJsonLd(pathname: string): JsonLd[] {
     );
     return [
       {
+        // Thing não tem dateModified; a página que fala do produto tem
+        "@type": "WebPage",
+        name: meta.title,
+        url: absolute(path),
+        inLanguage: "pt-BR",
+        isPartOf: { "@id": ids.website },
+        mainEntity: { "@id": ids.product(product.id) },
+        dateModified: getLastModified(path),
+      },
+      {
         "@type": "Thing",
         "@id": ids.product(product.id),
         name: product.name,
@@ -471,6 +515,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         url: absolute(path),
         inLanguage: "pt-BR",
         isPartOf: { "@id": ids.website },
+        dateModified: getLastModified(path),
         mainEntity: { ...personRef(person.id), description: personSummary(person.id) },
       },
       crumbs(person.name),
@@ -488,6 +533,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
       inLanguage: "pt-BR",
       description: categorySummary(category),
       isPartOf: { "@id": ids.website },
+      dateModified: getLastModified(path),
       mainEntity: itemList(
         `${categoryLabel(category)} – produtos mais citados no ${PODCAST_NAME}`,
         categoryProducts.length,
