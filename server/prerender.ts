@@ -16,6 +16,7 @@ import {
   resolveParent,
 } from "../client/src/lib/data-utils";
 import { getAboutCopy, getThousandthMention, MAINTAINER, REPLIT_URL } from "../client/src/lib/about";
+import { categorySummary, episodeSummary, homeSummary, personSummary, productSummary } from "../client/src/lib/summaries";
 import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL, SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "../client/src/lib/seo";
 
 function esc(value: string): string {
@@ -64,7 +65,8 @@ function bodyContent(pathname: string): string {
   const meta = getPageMeta(pathname);
   const path = meta.canonicalPath;
   const [, section, rawId] = path.split("/");
-  const heading = (text: string) => `<h1>${esc(text)}</h1><p>${esc(meta.description)}</p>`;
+  // o resumo (frase com números) abre a página; sem ele, vale a description
+  const heading = (text: string, summary = "") => `<h1>${esc(text)}</h1><p>${esc(summary || meta.description)}</p>`;
 
   if (meta.noindex) {
     return `<h1>Página não encontrada</h1><p>${link("/", `Voltar para ${SITE_NAME}`)}</p>`;
@@ -73,6 +75,7 @@ function bodyContent(pathname: string): string {
   if (path === "/") {
     return (
       heading(`${SITE_NAME} – Produtos da Semana`) +
+      `<p>${esc(homeSummary())}</p>` +
       `<h2>Produtos mais citados</h2>` +
       list(getLeaderboardProducts().slice(0, 15).map((p) => productLink(p.id))) +
       `<h2>Episódios recentes</h2>` +
@@ -124,7 +127,7 @@ function bodyContent(pathname: string): string {
     const cast = getEpisodeCast(episode.id);
     const castLinks = [...cast.hosts, ...cast.cohosts].map((p) => link(`/pessoas/${encodeURIComponent(p.id)}`, p.name));
     return (
-      heading(episode.title) +
+      heading(episode.title, episodeSummary(episode.id)) +
       (castLinks.length ? `<p>Com ${castLinks.join(", ")}</p>` : "") +
       `<p>Publicado em ${esc(episode.date)}</p>` +
       list(external) +
@@ -138,7 +141,7 @@ function bodyContent(pathname: string): string {
     const canonical = getProduct(resolveParent(product.id)) ?? product;
     const eps = unique(getMentionsForProduct(canonical.id).map((m) => m.episodeId)).sort((a, b) => b - a);
     return (
-      heading(canonical.name) +
+      heading(canonical.name, productSummary(canonical.id)) +
       `<p>Categoria: ${link(categoryPath(canonical.category), categoryLabel(canonical.category))}</p>` +
       `<h2>Episódios em que foi citado</h2>` +
       list(eps.map(episodeLink))
@@ -149,7 +152,7 @@ function bodyContent(pathname: string): string {
     const person = getPerson(id)!;
     const mentions = getMentionsForPerson(person.id);
     return (
-      heading(person.name) +
+      heading(person.name, personSummary(person.id)) +
       `<h2>Produtos recomendados</h2>` +
       list(unique(mentions.map((m) => resolveParent(m.productId))).map(productLink)) +
       `<h2>Episódios</h2>` +
@@ -159,7 +162,7 @@ function bodyContent(pathname: string): string {
 
   // categorias: o endereço traz o slug em português, os dados usam o nome original
   const category = getCategoryBySlug(id)!;
-  return heading(categoryLabel(category)) + list(getProductsForCategory(category).map((p) => productLink(p.id)));
+  return heading(categoryLabel(category), categorySummary(category)) + list(getProductsForCategory(category).map((p) => productLink(p.id)));
 }
 
 function replaceMeta(html: string, attr: "name" | "property", key: string, content: string): string {

@@ -56,19 +56,22 @@ Na prática, as ~1.200 páginas de detalhe estão sem conteúdo para quem não e
 - [x] `checkPrerender()` em `script/check-data.ts` (roda no `npm run check:data` e no build): prerenderiza todas as páginas de detalhe e confere `<h1>`, `PodcastEpisode` e `name` em todos os breadcrumbs. Com o código antigo, acusa 2.484 problemas
 - [x] Conferido com `curl` no build de produção local
 - [x] Publicado e conferido em produção com `curl` `/episodios/136`, `/produtos/claude`, `/pessoas/arthur` e `/categorias/<slug>`
-- [ ] Revalidar no Schema Markup Validator e no Rich Results Test (breadcrumb com `name` em todas as posições)
+- [x] Revalidar no Schema Markup Validator e no Rich Results Test (breadcrumb com `name` em todas as posições)
 
 ## 2. Conteúdo citável no HTML do servidor
 
 Ideia: cada página abre com 1 ou 2 frases que respondem à pergunta principal sobre ela, com números, e depois vêm os detalhes. A IA cita essa frase.
 
-- [ ] **Produto**: "*X* (categoria) foi citado N vezes em M episódios do Papo na Arena, a primeira vez no Ep A (data) e a mais recente no Ep B. Quem mais recomendou: Fulano (k vezes), Beltrano…" + tabela de episódio → pessoa → contexto + link oficial do produto (`product.url`)
-- [ ] **Episódio**: "No Ep136 (data), com Arthur, Aíquis… foram citados N produtos da semana: X (por Fulano), Y (por Beltrano)…" (agrupar por pessoa e não só listar produtos)
-- [ ] **Pessoa**: "Fulano participou de N episódios e recomendou M produtos. Os mais frequentes são…" + lista produto → episódio
-- [ ] **Categoria**: "Os produtos de *Categoria* mais citados no Papo na Arena são X (n), Y (n) e Z (n)."
-- [ ] **Home**: bloco de "fatos-chave" em texto (total de episódios, menções, produto mais citado, pessoa que mais recomendou, último episódio com data)
+Frases geradas em `client/src/lib/summaries.ts` e usadas só no prerender (logo após o `<h1>`). Os números batem com os quadros de cada página. Testamos as frases visíveis no app, mas elas pesavam no design e repetiam em prosa os quadros e listas, então ficaram de fora.
+
+- [x] **Produto**: "Claude Code (Ferramentas de IA) foi citado 73 vezes no Papo na Arena, em 22 episódios. A primeira menção foi no Ep95 (…) e a mais recente no Ep131 (…). Quem mais recomendou: Aíquis (4), Carlos Bronze (4) e Alexandre Pereira (3), entre 58 pessoas." (quando todos citaram uma vez só: "Foi recomendado por N pessoas diferentes, como …")
+- [x] **Episódio**: "No Ep136 do Papo na Arena (30 de setembro de 2026), com Arthur, Aíquis, …, foram feitas 5 menções de produtos da semana: Codex da OpenAI (por …), Claude Opus 5.5 (por …) e Claude Fable (por Arthur)." (conta menções, porque variações como Claude Opus 5.5 entram no Claude no quadro "Produtos"; até 8 produtos, depois "mais N")
+- [x] **Pessoa**: "Arthur recomendou 85 produtos no Papo na Arena em 102 episódios, do Ep21 (…) ao Ep136 (…). Foi host em 103 episódios. Os que mais aparecem: Replit (7), ChatGPT (4) e Ray-Ban Meta (4)."
+- [x] **Categoria**: "A categoria Ferramentas de IA reúne 75 produtos e 521 menções no Papo na Arena. Os mais citados são Claude Code (73), Claude (63) e ChatGPT (56)."
+- [x] **Home**: "Até o Ep136 (…), foram registradas 1.476 menções de 642 produtos em 103 episódios do Papo na Arena, feitas por 409 pessoas. O produto mais citado é Claude Code (73 menções), seguido de … Quem mais recomendou produtos: Aíquis (113) e Arthur (108)."
+- [ ] Produto: tabela episódio → pessoa → contexto no prerender e link oficial (`product.url`)
 - [ ] Mostrar "Atualizado em <data do último episódio>" no HTML e usar `dateModified` no JSON-LD (as IAs dão peso a conteúdo recente)
-- [ ] Avaliar tirar o fallback do `left:-9999px` e servir o mesmo texto **visível** no React (as frases de resumo valem para quem lê também; conteúdo oculto pode ser visto como cloaking)
+- [x] ~~Mesmo texto visível no React~~: descartado por design. O risco de parecer cloaking é baixo, porque o fallback traz os mesmos fatos que a página mostra em quadros e listas
 
 ## 3. Páginas de resposta (perguntas que as pessoas fazem às IAs)
 
@@ -88,7 +91,7 @@ Ideia: cada página abre com 1 ou 2 frases que respondem à pergunta principal s
 - [x] Garantir que os dois não caiam no fallback do SPA (`server/static.ts`) e saiam como `text/plain; charset=utf-8`
 - [x] Linkar o `llms.txt` e o `llms-full.txt` no `robots.txt` como comentário
 - [x] Linkar o `llms.txt` e o `llms-full.txt` no rodapé da página `/sobre` (app e prerender)
-- [ ] Publicar e conferir `/llms.txt` e `/llms-full.txt` em produção
+- [x] Publicado e conferido em produção (`/llms.txt`, `/llms-full.txt`, `robots.txt` e links na `/sobre`)
 
 ## 5. Dados estruturados para entidades
 
