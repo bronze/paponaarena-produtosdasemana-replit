@@ -930,7 +930,7 @@ export const people: Person[] = [
   { id: "thais-nakahira", name: "Thais Nakahira" },
   { id: "karina-sato", name: "Karina Sato" },
   { id: "lucas", name: "Lucas" },
-  { id: "carlos-bronze", name: "Carlos Bronze" },
+  { id: "carlos-bronze", name: "Carlos Bronze", linkedinUrl: "https://www.linkedin.com/in/carlosbronze/" },
   { id: "isac", name: "Isac" },
   { id: "alexandre", name: "Alexandre" },
   { id: "alessandra", name: "Alessandra" },

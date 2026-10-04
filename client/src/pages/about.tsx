@@ -1,9 +1,18 @@
+import type { ReactNode } from "react";
 import { Link } from "wouter";
+import { ArrowRight, Globe } from "lucide-react";
 import { posthog } from "@/lib/analytics";
-import { SiSpotify, SiYoutube } from "react-icons/si";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAboutCopy, REPLIT_URL } from "@/lib/about";
+import { SiLinkedin, SiSpotify, SiYoutube } from "react-icons/si";
+import { cn } from "@/lib/utils";
+import { getAboutCopy, MAINTAINER, REPLIT_URL } from "@/lib/about";
 import { SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "@/lib/seo";
+import arthurImg from "@assets/arthur_1772132984125.webp";
+import aquisImg from "@assets/aiquis_1772132984122.webp";
+
+const hosts = [
+  { id: "arthur", name: "Arthur Castro", img: arthurImg },
+  { id: "aiquis", name: "Aíquis Rodrigues", img: aquisImg },
+];
 
 const explore = [
   { href: "/episodes", label: "Episódios", text: "todos os episódios, com os produtos citados em cada um" },
@@ -12,84 +21,140 @@ const explore = [
   { href: "/people", label: "Pessoas", text: "o que cada participante recomendou" },
 ];
 
+const pillBase =
+  "inline-flex h-12 items-center gap-2 rounded-full border px-5 text-base font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2";
+const pillLight = "bg-card hover:bg-highlight focus-visible:ring-ring";
+const pillDark = "border-sidebar-border hover:bg-sidebar-accent focus-visible:ring-sidebar-foreground focus-visible:ring-offset-sidebar";
+
+function ExternalPill({ href, onClick, dark, children }: { href: string; onClick: () => void; dark?: boolean; children: ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={cn(pillBase, dark ? pillDark : pillLight)} onClick={onClick}>
+      {children}
+    </a>
+  );
+}
+
+/** Faixa de ponta a ponta (anula o padding do <main>), no estilo das seções da Product Arena. */
+function Band({ className, children }: { className?: string; children: ReactNode }) {
+  return <section className={cn("-mx-4 px-4 py-14 md:-mx-8 md:px-8 md:py-20", className)}>{children}</section>;
+}
+
+function SectionTitle({ children }: { children: ReactNode }) {
+  return <h2 className="text-3xl font-extrabold leading-[1.05] tracking-[-0.035em] text-balance md:text-[2.75rem]">{children}</h2>;
+}
+
 export default function AboutPage() {
   const copy = getAboutCopy();
 
   return (
-    <div className="space-y-8 max-w-3xl">
-      <div>
-        <h1 className="page-title" data-testid="text-page-title">Sobre o Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
-        <p className="page-lead">O podcast, o site e quem faz parte dele</p>
+    <div className="-mb-4 text-lg leading-relaxed md:-mb-8">
+      <div className="pb-14 md:pb-20">
+        <h1 className="page-title" data-testid="text-page-title">Sobre o Radar<span className="text-primary" aria-hidden="true">.</span></h1>
+        <p className="page-lead max-w-2xl">Um radar feito por fã dos produtos da semana do Papo na Arena</p>
+        {/* Compromisso de marca: o aviso de fã é o destaque da página (coral como fundo, texto escuro) */}
+        <div className="mt-8 rounded-lg bg-primary px-6 py-6 text-primary-foreground md:px-8 md:py-7" data-testid="text-fan-notice">
+          <p className="text-2xl font-extrabold leading-tight tracking-[-0.03em] md:text-3xl">{copy.fanTitle}</p>
+          <p className="mt-2 text-lg leading-relaxed">{copy.fanBody}</p>
+        </div>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle className="text-lg">O podcast Papo na Arena</CardTitle></CardHeader>
-        <CardContent className="space-y-4 text-sm leading-relaxed">
-          <p>{copy.podcast}</p>
-          <p>
-            Hosts:{" "}
-            <Link href="/people/arthur" className="font-medium hover:underline">Arthur</Link> e{" "}
-            <Link href="/people/aiquis" className="font-medium hover:underline">Aíquis</Link>.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href={SPOTIFY_SHOW_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify", source: "about" })}
-            >
-              <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
-            </a>
-            <a
-              href={YOUTUBE_CHANNEL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube", source: "about" })}
-            >
-              <SiYoutube aria-hidden="true" className="h-4 w-4 text-brand-youtube" /> Assistir no YouTube
-            </a>
+      {/* O podcast: texto à esquerda, fotos grandes dos hosts à direita */}
+      <Band className="border-t">
+        <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16">
+          <div className="max-w-2xl space-y-5">
+            <SectionTitle>O podcast Papo na Arena<span className="text-primary" aria-hidden="true">.</span></SectionTitle>
+            <p>{copy.podcast}</p>
+            <div className="flex flex-wrap gap-3 pt-1">
+              <ExternalPill href={SPOTIFY_SHOW_URL} onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify", source: "about" })}>
+                <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
+              </ExternalPill>
+              <ExternalPill href={YOUTUBE_CHANNEL_URL} onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube", source: "about" })}>
+                <SiYoutube aria-hidden="true" className="h-4 w-4 text-brand-youtube" /> Assistir no YouTube
+              </ExternalPill>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><CardTitle className="text-lg">O que é este site</CardTitle></CardHeader>
-        <CardContent className="space-y-4 text-sm leading-relaxed">
-          <p>{copy.site}</p>
-          <ul className="space-y-1.5">
-            {explore.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="font-medium hover:underline">{item.label}</Link>
-                <span className="text-muted-foreground"> – {item.text}</span>
+          <ul className="grid grid-cols-2 gap-4 sm:max-w-md" aria-label="Hosts">
+            {hosts.map((host) => (
+              <li key={host.id}>
+                <Link href={`/people/${host.id}`} className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4">
+                  <img
+                    src={host.img}
+                    alt=""
+                    width={256}
+                    height={256}
+                    className="aspect-square w-full rounded-lg bg-highlight object-cover transition-opacity group-hover:opacity-90 lg:w-52"
+                  />
+                  <span className="mt-3 block text-base font-bold leading-tight group-hover:underline">{host.name}</span>
+                  <span className="block text-sm text-muted-foreground">Host</span>
+                </Link>
               </li>
             ))}
           </ul>
-          <p className="rounded-md border-l-4 border-primary bg-highlight px-4 py-3" data-testid="text-fan-notice">
-            {copy.fan}
-          </p>
-        </CardContent>
-      </Card>
+        </div>
+      </Band>
 
-      <Card>
-        <CardHeader><CardTitle className="text-lg">Feito com Replit</CardTitle></CardHeader>
-        <CardContent className="text-sm leading-relaxed">
-          <p>
-            {copy.replit}{" "}
-            <a
-              href={REPLIT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium hover:underline"
-              onClick={() => posthog.capture("replit_link_clicked", { source: "about" })}
-            >
-              Conheça o Replit
-            </a>
-            .
-          </p>
-        </CardContent>
-      </Card>
+      {/* O site: título à esquerda, atalhos em lista à direita, em faixa cinza */}
+      <Band className="bg-highlight">
+        <div className="grid gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
+          <div className="space-y-5">
+            <SectionTitle>O que é este site<span className="text-primary" aria-hidden="true">.</span></SectionTitle>
+            <p>{copy.site}</p>
+          </div>
+          <ul className="self-start border-t border-foreground/15">
+            {explore.map((item) => (
+              <li key={item.href} className="border-b border-foreground/15">
+                <Link
+                  href={item.href}
+                  className="group flex min-h-16 items-center justify-between gap-4 px-2 py-4 outline-none transition-colors hover:bg-background focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                >
+                  <span>
+                    <span className="block text-xl font-bold leading-tight tracking-[-0.02em]">{item.label}</span>
+                    <span className="block text-base text-muted-foreground">{item.text}</span>
+                  </span>
+                  <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Band>
+
+      {/* Quem faz: faixa escura no fim da página */}
+      <Band className="bg-sidebar text-sidebar-foreground">
+        <div className="grid gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
+          <SectionTitle>Quem faz<span className="text-primary" aria-hidden="true">.</span></SectionTitle>
+          <div className="max-w-2xl space-y-6">
+            <p>
+              Mantido por{" "}
+              <Link href={`/people/${MAINTAINER.personId}`} className="font-bold underline underline-offset-4 hover:no-underline">
+                {MAINTAINER.name}
+              </Link>
+              . As menções são adicionadas à mão depois que cada episódio vai ao ar.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <ExternalPill dark href={MAINTAINER.siteUrl} onClick={() => posthog.capture("maintainer_link_clicked", { platform: "site", source: "about" })}>
+                <Globe aria-hidden="true" className="h-4 w-4" /> carlosbronze.com.br
+              </ExternalPill>
+              <ExternalPill dark href={MAINTAINER.linkedinUrl} onClick={() => posthog.capture("maintainer_link_clicked", { platform: "linkedin", source: "about" })}>
+                <SiLinkedin aria-hidden="true" className="h-4 w-4" /> LinkedIn
+              </ExternalPill>
+            </div>
+            <p className="border-t border-sidebar-border pt-6 text-base text-sidebar-foreground/70">
+              {copy.replit}{" "}
+              <a
+                href={REPLIT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-sidebar-foreground underline-offset-4 hover:underline"
+                onClick={() => posthog.capture("replit_link_clicked", { source: "about" })}
+              >
+                Conheça o Replit
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+      </Band>
     </div>
   );
 }

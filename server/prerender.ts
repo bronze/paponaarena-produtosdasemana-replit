@@ -14,7 +14,7 @@ import {
   people,
   resolveParent,
 } from "../client/src/lib/data-utils";
-import { getAboutCopy, REPLIT_URL } from "../client/src/lib/about";
+import { getAboutCopy, MAINTAINER, REPLIT_URL } from "../client/src/lib/about";
 import { getJsonLd, getPageMeta, SITE_NAME, SITE_URL, SPOTIFY_SHOW_URL, YOUTUBE_CHANNEL_URL } from "../client/src/lib/seo";
 
 function esc(value: string): string {
@@ -84,11 +84,14 @@ function bodyContent(pathname: string): string {
         const copy = getAboutCopy();
         return (
           heading("Sobre o Papo na Arena Radar") +
+          `<p>${esc(copy.fan)}</p>` +
           `<h2>O podcast Papo na Arena</h2><p>${esc(copy.podcast)}</p>` +
           `<p>Hosts: ${link("/people/arthur", "Arthur")} e ${link("/people/aiquis", "Aíquis")}.</p>` +
           list([link(SPOTIFY_SHOW_URL, "Ouvir no Spotify"), link(YOUTUBE_CHANNEL_URL, "Assistir no YouTube")]) +
-          `<h2>O que é este site</h2><p>${esc(copy.site)}</p><p>${esc(copy.fan)}</p>` +
-          `<h2>Feito com Replit</h2><p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
+          `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
+          `<h2>Quem faz</h2><p>${esc(copy.maintainer)}</p>` +
+          list([link(MAINTAINER.siteUrl, "carlosbronze.com.br"), link(MAINTAINER.linkedinUrl, "LinkedIn")]) +
+          `<p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
         );
       }
       case "people":

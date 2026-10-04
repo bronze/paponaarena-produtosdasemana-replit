@@ -1,4 +1,5 @@
 import { categoryLabel } from "./categories";
+import { MAINTAINER } from "./about";
 import {
   episodes,
   getEpisode,
@@ -284,6 +285,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         description: meta.description,
         about: { "@id": `${SITE_URL}/#podcast` },
         isPartOf: { "@id": `${SITE_URL}/#website` },
+        author: { "@type": "Person", name: MAINTAINER.name, url: MAINTAINER.siteUrl, sameAs: [MAINTAINER.linkedinUrl] },
       },
       breadcrumbs([
         { name: SITE_NAME, path: "/" },
