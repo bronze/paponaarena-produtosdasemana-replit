@@ -69,7 +69,7 @@ Frases geradas em `client/src/lib/summaries.ts` e usadas só no prerender (logo 
 - [x] **Pessoa**: "Arthur recomendou 85 produtos no Papo na Arena em 102 episódios, do Ep21 (…) ao Ep136 (…). Foi host em 103 episódios. Os que mais aparecem: Replit (7), ChatGPT (4) e Ray-Ban Meta (4)."
 - [x] **Categoria**: "A categoria Ferramentas de IA reúne 75 produtos e 521 menções no Papo na Arena. Os mais citados são Claude Code (73), Claude (63) e ChatGPT (56)."
 - [x] **Home**: "Até o Ep136 (…), foram registradas 1.476 menções de 642 produtos em 103 episódios do Papo na Arena, feitas por 409 pessoas. O produto mais citado é Claude Code (73 menções), seguido de … Quem mais recomendou produtos: Aíquis (113) e Arthur (108)."
-- [ ] Produto: tabela episódio → pessoa → contexto no prerender e link oficial (`product.url`)
+- [x] Produto: tabela no prerender com uma linha por menção (episódio → quem recomendou → detalhes: variação usada e `context`) e "Site oficial" (`product.url`) quando houver
 - [x] "Atualizado em 30 set 2026" (data do último episódio) no rodapé da sidebar, com `<time datetime>`; no prerender, `<footer>` com a data e o link do último episódio
 - [x] `getLastModified()` por rota (episódio: data dele; produto, pessoa e categoria: menção mais recente; demais: último episódio), usado no `dateModified` do JSON-LD (`WebSite`, `AboutPage`, `WebPage` do produto, `ProfilePage`, `CollectionPage`) e no `<lastmod>` de todas as 1.198 URLs do sitemap (antes só episódios e listas tinham)
 - [x] ~~Mesmo texto visível no React~~: descartado por design. O risco de parecer cloaking é baixo, porque o fallback traz os mesmos fatos que a página mostra em quadros e listas

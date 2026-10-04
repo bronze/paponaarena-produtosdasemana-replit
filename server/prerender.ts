@@ -149,12 +149,28 @@ function bodyContent(pathname: string): string {
   if (section === "produtos") {
     const product = getProduct(id)!;
     const canonical = getProduct(resolveParent(product.id)) ?? product;
-    const eps = unique(getMentionsForProduct(canonical.id).map((m) => m.episodeId)).sort((a, b) => b - a);
+    // uma linha por menção: em qual episódio, quem recomendou e com que contexto
+    const rows = [...getMentionsForProduct(canonical.id)]
+      .sort((a, b) => b.episodeId - a.episodeId)
+      .map((m) => {
+        const person = getPerson(m.personId);
+        const cited = getProduct(m.productId);
+        // variação ou combo (ex.: "Claude Opus 5.5" na página do Claude) aparece com o nome usado
+        const details = [cited && cited.id !== canonical.id ? `como ${cited.name}` : "", m.context ?? ""]
+          .filter(Boolean)
+          .map(esc)
+          .join("; ");
+        const who = person ? link(`/pessoas/${encodeURIComponent(person.id)}`, person.name) : esc(m.personId);
+        return `<tr><td>${episodeLink(m.episodeId)}</td><td>${who}</td><td>${details}</td></tr>`;
+      });
     return (
       heading(canonical.name, productSummary(canonical.id)) +
       `<p>Categoria: ${link(categoryPath(canonical.category), categoryLabel(canonical.category))}</p>` +
-      `<h2>Episódios em que foi citado</h2>` +
-      list(eps.map(episodeLink))
+      (canonical.url ? `<p>Site oficial: ${link(canonical.url, canonical.url)}</p>` : "") +
+      `<h2>Menções no Papo na Arena</h2>` +
+      (rows.length
+        ? `<table><thead><tr><th>Episódio</th><th>Quem recomendou</th><th>Detalhes</th></tr></thead><tbody>${rows.join("")}</tbody></table>`
+        : "")
     );
   }
 
