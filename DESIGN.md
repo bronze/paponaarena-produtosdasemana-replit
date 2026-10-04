@@ -138,6 +138,19 @@ Prévia visual: seção "Destaque de episódio" do `design-system.html`.
 
 Série única (ex.: ranking de menções) usa só `chart-1`. `chart-6..8` só entram quando há mais de 5 séries (pizza de categorias). Rótulos de gráfico sempre em `foreground`, nunca na cor da fatia. Cores de empresas (Anthropic, OpenAI, Google…) no gráfico de empresas de IA são cores das marcas e ficam como estão.
 
+## Imagem OpenGraph
+
+A prévia de link (WhatsApp, LinkedIn, X, Slack) é gerada por `npm run og`: o template `script/og/og-image.html` é preenchido com dados de `data.ts` por `script/og-image.ts` e exportado para `client/public/og-image.jpg` (1200×630) com Chrome headless.
+
+- **Escura de propósito.** É a única peça em fundo `ink`, a exceção ao "light only": nos feeds, quase sempre claros, o card escuro se destaca. Segue as regras de cor sobre preto (coral como texto só sobre `ink`/`ink-2`).
+- **"Radar." é o herói.** "Papo na Arena" vem menor, em `on-dark-muted`, acima; o ponto final coral fica depois de "Radar". Assim o card não se passa pelo podcast.
+- **Aviso de fã sempre legível.** Texto simples em `on-dark-muted`, 28px, logo abaixo dos totais (sem pílula): "Projeto de fã, não oficial · feito por um ouvinte".
+- **Onda sonora = dados, como efeito de fundo.** Uma barra por episódio ocupando a imagem inteira, com altura proporcional às menções (a mais alta tem 90% da altura); acima de 150 episódios, vizinhos são agrupados pela média. Tem uma camada desfocada atrás para dar brilho, e um degradê escuro na esquerda garante a leitura do texto.
+- **Só tons de coral.** A onda usa um gradiente do vinho escuro ao coral claro (`#6B1A24` → `#B8323A` → `#FF5757` → `#FF9B9B`), sem outras cores, mantendo a regra de uma cor de marca só.
+- **Sem ranking.** A imagem fala do podcast, não de quais produtos lideram.
+- **Totais numa frase**, em 34px ("642 produtos · 1.476 menções · 103 episódios"), não como números gigantes de painel.
+- O script para com erro se a Plus Jakarta Sans não carregar, em vez de gerar a imagem com fonte substituta. Depois de publicar, peça um novo scrape no Post Inspector do LinkedIn e no Sharing Debugger do Facebook.
+
 ## Mapeamento para `client/src/index.css` (shadcn)
 
 Valores para o bloco `:root`. O bloco `.dark` deve ser removido.

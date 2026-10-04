@@ -9,6 +9,7 @@
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "check:data": "tsx script/check-data.ts",
+    "og": "tsx script/og-image.ts",
     "db:push": "drizzle-kit push"
   },
   "dependencies": {

@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Template da imagem OpenGraph (1200×630). Os {{marcadores}} são preenchidos por script/og-image.ts. -->
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --coral:#FF5757; --ink:#0E0E10; --on-dark:#F3F4F6; --on-dark-muted:#A1A1AA;
+    /* Gradiente da onda só em tons de coral: do vinho escuro ao coral claro, da esquerda para a direita */
+    --wave-gradient:linear-gradient(90deg, #6B1A24 0%, #B8323A 38%, #FF5757 66%, #FF9B9B 100%); }
+  * { box-sizing:border-box; margin:0; }
+  html { background:var(--ink); }
+  body { width:1200px; height:630px; overflow:hidden; position:relative;
+    background:var(--ink); color:var(--on-dark); font-family:"Plus Jakarta Sans",sans-serif; }
+
+  /* Onda sonora de fundo feita de dados: uma barra por episódio, altura = menções do episódio.
+     Duas camadas: o brilho desfocado atrás e as barras nítidas na frente. */
+  .wave { position:absolute; inset:0 -12px; display:flex; align-items:center; gap:{{waveGap}}px; }
+  .wave i { flex:1; min-height:6px; border-radius:99px; background:var(--wave-gradient) fixed; }
+  .wave.glow { filter:blur(28px) saturate(1.3); opacity:.55; }
+  .wave.bars { opacity:.85; }
+  /* Escurece a esquerda para o texto ler bem por cima da onda */
+  .shade { position:absolute; inset:0;
+    background:linear-gradient(90deg, rgba(14,14,16,.94) 0%, rgba(14,14,16,.84) 36%, rgba(14,14,16,.2) 58%, rgba(14,14,16,0) 75%); }
+
+  .content { position:relative; height:100%; padding:60px 72px 56px; display:flex; flex-direction:column; }
+  h1 { font-size:144px; font-weight:800; line-height:.92; letter-spacing:-.04em; }
+  h1 .pre { display:block; font-size:40px; font-weight:700; line-height:1.1; letter-spacing:-.015em; color:var(--on-dark-muted); margin-bottom:6px; }
+  h1 .dot { color:var(--coral); }
+  .sub { font-size:34px; font-weight:500; line-height:1.3; color:var(--on-dark-muted); margin-top:24px; max-width:620px; text-wrap:balance; }
+  .meta { margin-top:auto; display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+  .stats { font-size:34px; color:var(--on-dark-muted); text-wrap:balance; }
+  .stats b { color:var(--on-dark); font-weight:800; }
+  .fan { font-size:28px; color:var(--on-dark-muted); }
+</style></head><body>
+  <div class="wave glow" aria-hidden="true">{{wave}}</div>
+  <div class="wave bars" aria-hidden="true">{{wave}}</div>
+  <div class="shade"></div>
+  <div class="content">
+    <h1><span class="pre">Papo na Arena</span>Radar<span class="dot">.</span></h1>
+    <p class="sub">Tudo que Arthur, Aíquis e convidados indicaram no podcast.</p>
+    <div class="meta">
+      <p class="stats"><b>{{products}}</b> produtos · <b>{{mentions}}</b> menções · <b>{{episodes}}</b> episódios</p>
+      <span class="fan">Projeto de fã, não oficial · feito por um ouvinte</span>
+    </div>
+  </div>
+  <script>
+    // Marca se a Plus Jakarta Sans carregou de fato; script/og-image.ts recusa gerar a imagem com fonte substituta
+    document.fonts.ready.then(() => {
+      const loaded = [...document.fonts].some(
+        (f) => f.family.replace(/"/g, "") === "Plus Jakarta Sans" && f.weight === "800" && f.status === "loaded",
+      );
+      document.documentElement.dataset.font = loaded ? "ok" : "missing";
+    });
+  </script>
+</body></html>
