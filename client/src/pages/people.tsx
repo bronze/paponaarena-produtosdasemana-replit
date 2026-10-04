@@ -1,3 +1,4 @@
+import { categoryLabel } from "@/lib/categories";
 import {Link, useParams} from "wouter";
 import {ArrowLeft, Package, Mic, Search} from "lucide-react";
 import { posthog } from "@/lib/analytics";
@@ -412,7 +413,7 @@ function PersonDetail() {
                       <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
                         {product?.name || productId}
                       </Link>
-                      {product?.category && <span className="shrink-0 text-xs text-muted-foreground">{product.category}</span>}
+                      {product?.category && <span className="shrink-0 text-xs text-muted-foreground">{categoryLabel(product.category)}</span>}
                     </div>
                     {count > 1 && (
                       <span className="ml-2 shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{count}×</span>

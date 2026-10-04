@@ -1,3 +1,4 @@
+import { categoryLabel } from "@/lib/categories";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, Mic, Package, Search, Users } from "lucide-react";
@@ -370,7 +371,7 @@ function EpisodeDetail() {
                         {product?.name || productId}
                       </Link>
                       {product?.category && (
-                        <span className="text-xs text-muted-foreground shrink-0">{product.category}</span>
+                        <span className="text-xs text-muted-foreground shrink-0">{categoryLabel(product.category)}</span>
                       )}
                     </div>
                   </div>

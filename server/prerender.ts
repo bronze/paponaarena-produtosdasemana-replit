@@ -1,3 +1,4 @@
+import { categoryLabel } from "../client/src/lib/categories";
 import {
   episodes,
   getEpisode,
@@ -77,7 +78,7 @@ function bodyContent(pathname: string): string {
       case "categories":
         return (
           heading("Categorias") +
-          list(getUniqueCategories().map((c) => link(`/categories/${encodeURIComponent(c)}`, c)))
+          list(getUniqueCategories().map((c) => link(`/categories/${encodeURIComponent(c)}`, categoryLabel(c))))
         );
       case "sobre": {
         const copy = getAboutCopy();
@@ -122,7 +123,7 @@ function bodyContent(pathname: string): string {
     const eps = unique(getMentionsForProduct(canonical.id).map((m) => m.episodeId)).sort((a, b) => b - a);
     return (
       heading(canonical.name) +
-      `<p>Categoria: ${link(`/categories/${encodeURIComponent(canonical.category)}`, canonical.category)}</p>` +
+      `<p>Categoria: ${link(`/categories/${encodeURIComponent(canonical.category)}`, categoryLabel(canonical.category))}</p>` +
       `<h2>Episódios em que foi citado</h2>` +
       list(eps.map(episodeLink))
     );
@@ -141,7 +142,7 @@ function bodyContent(pathname: string): string {
   }
 
   // categories
-  return heading(id) + list(getProductsForCategory(id).map((p) => productLink(p.id)));
+  return heading(categoryLabel(id)) + list(getProductsForCategory(id).map((p) => productLink(p.id)));
 }
 
 function replaceMeta(html: string, attr: "name" | "property", key: string, content: string): string {

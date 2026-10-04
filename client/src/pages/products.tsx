@@ -1,3 +1,4 @@
+import { categoryLabel } from "@/lib/categories";
 import { Link, useParams, useLocation } from "wouter";
 import { ArrowLeft, ExternalLink, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { posthog } from "@/lib/analytics";
@@ -53,7 +54,7 @@ function ProductList() {
   const filtered = search
     ? productsWithEpisodes.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.category.toLowerCase().includes(search.toLowerCase())
+        categoryLabel(p.category).toLowerCase().includes(search.toLowerCase())
       )
     : productsWithEpisodes;
 
@@ -168,7 +169,7 @@ function ProductList() {
                   </Link>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
-                  <Badge variant="outline" className="text-xs">{product.category}</Badge>
+                  <Badge variant="outline" className="text-xs">{categoryLabel(product.category)}</Badge>
                 </TableCell>
                 <TableCell className="text-right font-semibold">{product.mentionCount}</TableCell>
                 <TableCell className="text-right text-muted-foreground">{product.episodeCount}</TableCell>
@@ -249,7 +250,7 @@ function ProductDetail() {
         <div>
           <h1 className="detail-title" data-testid="text-product-name">{product.name}</h1>
           <div className="flex items-center gap-2 mt-1.5">
-            <Badge variant="secondary">{product.category}</Badge>
+            <Badge variant="secondary">{categoryLabel(product.category)}</Badge>
             <span className="text-sm text-muted-foreground">{allMentions.length} menções</span>
             {product.url && (
               <Button asChild variant="outline" size="sm" data-testid="link-product-url">

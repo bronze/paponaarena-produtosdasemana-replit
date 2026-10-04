@@ -1,3 +1,4 @@
+import { categoryLabel } from "./categories";
 import {
   episodes,
   getEpisode,
@@ -63,7 +64,7 @@ const personNames = nameCount(people);
 
 /** Nome com desambiguação quando há outro produto com o mesmo nome (ex.: Zoom da loja x Zoom app). */
 function productLabel(product: { name: string; category: string }): string {
-  return (productNames.get(product.name) || 0) > 1 ? `${product.name} (${product.category})` : product.name;
+  return (productNames.get(product.name) || 0) > 1 ? `${product.name} (${categoryLabel(product.category)})` : product.name;
 }
 
 /** Idem para pessoas homônimas (ex.: dois "Eduardo" em episódios diferentes). */
@@ -167,7 +168,7 @@ export function getPageMeta(pathname: string): PageMeta {
       return {
         title: `${productLabel(canonical)} – menções no ${SITE_NAME}`,
         description: truncate(
-          `${canonical.name} (${canonical.category}) foi citado ${plural(mentions.length, "vez", "vezes")} em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja quem recomendou e em quais episódios.`,
+          `${canonical.name} (${categoryLabel(canonical.category)}) foi citado ${plural(mentions.length, "vez", "vezes")} em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja quem recomendou e em quais episódios.`,
         ),
         canonicalPath: `/products/${encodeURIComponent(canonical.id)}`,
       };
@@ -194,9 +195,9 @@ export function getPageMeta(pathname: string): PageMeta {
       const list = getProductsForCategory(id);
       const top = list.slice(0, 5).map((p) => p.name);
       return {
-        title: `${id} – produtos da semana do ${SITE_NAME}`,
+        title: `${categoryLabel(id)} – produtos da semana do ${SITE_NAME}`,
         description: truncate(
-          `${plural(list.length, "produto", "produtos")} da categoria ${id} citados no Papo na Arena${top.length ? `, como ${top.join(", ")}` : ""}.`,
+          `${plural(list.length, "produto", "produtos")} da categoria ${categoryLabel(id)} citados no Papo na Arena${top.length ? `, como ${top.join(", ")}` : ""}.`,
         ),
         canonicalPath: `/categories/${encodeURIComponent(id)}`,
       };
@@ -334,7 +335,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
   const names: Record<string, string | undefined> = {
     products: getProduct(id)?.name,
     people: getPerson(id)?.name,
-    categories: id,
+    categories: categoryLabel(id),
   };
   return [crumbs(names[section] ?? id)];
 }
