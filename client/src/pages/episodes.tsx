@@ -2,11 +2,13 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, Mic, Package, Search, Users } from "lucide-react";
 import { posthog } from "@/lib/analytics";
+import { formatLongDate, formatShortDate } from "@/lib/dates";
 import { SiYoutube, SiSpotify } from "react-icons/si";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { StatBand } from "@/components/stat-band";
 import {
   episodes,
   getEpisodeCast,
@@ -16,14 +18,7 @@ import {
   resolveParent,
 } from "@/lib/data-utils";
 
-const MONTHS = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 const MAX_LIST_PRODUCTS = 4;
-
-/** "2026-09-30" → "30 set 2026" */
-function formatShortDate(date: string) {
-  const [year, month, day] = date.split("-");
-  return `${Number(day)} ${MONTHS[Number(month) - 1]} ${year}`;
-}
 
 function joinNames(names: string[]) {
   if (names.length <= 1) return names.join("");
@@ -68,7 +63,7 @@ function buildEpisodeRows(): EpisodeRowData[] {
         castNames,
         products,
         mentionCount: mentions.length,
-        searchText: normalize([episode.title, episode.description, ...castNames, ...participantNames, ...products.map((p) => p.name)].join(" ")),
+        searchText: normalize([episode.title, ...castNames, ...participantNames, ...products.map((p) => p.name)].join(" ")),
       };
     });
 }
@@ -309,10 +304,9 @@ function EpisodeDetail() {
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Episódios
           </Button>
         </Link>
-        <div className="flex items-center gap-2 mb-1">
-          <Badge variant="secondary" className="text-sm px-2.5 py-0.5">#{episode.id}</Badge>
-          <span className="text-sm text-muted-foreground">{episode.date}</span>
-        </div>
+        <p className="mb-2 text-sm text-muted-foreground" data-testid="text-episode-date">
+          <span className="font-semibold text-foreground">#{episode.id}</span> · {formatLongDate(episode.date)}
+        </p>
         <h1 className="detail-title" data-testid="text-episode-title">
           {episode.title}
         </h1>
@@ -327,44 +321,44 @@ function EpisodeDetail() {
             ))}
           </p>
         )}
-        <p className="text-sm text-muted-foreground mt-2 max-w-2xl">{episode.description}</p>
+        {(episode.youtubeLink || episode.spotifyLink) && (
+          <div className="mt-5 flex flex-wrap gap-3">
+            {episode.youtubeLink && (
+              <a
+                href={episode.youtubeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 text-sm font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => posthog.capture("episode_external_link_clicked", { episode_id: episode.id, platform: "youtube" })}
+                data-testid="link-youtube"
+              >
+                <SiYoutube aria-hidden="true" className="h-4 w-4 text-brand-youtube" /> Assistir no YouTube
+              </a>
+            )}
+            {episode.spotifyLink && (
+              <a
+                href={episode.spotifyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 text-sm font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => posthog.capture("episode_external_link_clicked", { episode_id: episode.id, platform: "spotify" })}
+                data-testid="link-spotify"
+              >
+                <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Stats + Links */}
-      <div className="flex flex-wrap items-center gap-4">
-        <div className="flex gap-4">
-          <div className="text-center">
-            <p className="text-2xl font-bold">{epMentions.length}</p>
-            <p className="text-xs text-muted-foreground">menções</p>
-          </div>
-          <div className="w-px bg-border" />
-          <div className="text-center">
-            <p className="text-2xl font-bold">{sortedEpisodeProducts.length}</p>
-            <p className="text-xs text-muted-foreground">produtos</p>
-          </div>
-          <div className="w-px bg-border" />
-          <div className="text-center">
-            <p className="text-2xl font-bold">{participants.length}</p>
-            <p className="text-xs text-muted-foreground">pessoas</p>
-          </div>
-        </div>
-        <div className="flex gap-2 ml-auto">
-          {episode.youtubeLink && (
-            <a href={episode.youtubeLink} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("episode_external_link_clicked", { episode_id: episode.id, platform: "youtube" })}>
-              <Button variant="outline" size="sm" className="border-brand-youtube/40 text-brand-youtube hover:bg-brand-youtube/10" data-testid="link-youtube">
-                <SiYoutube aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" /> YouTube
-              </Button>
-            </a>
-          )}
-          {episode.spotifyLink && (
-            <a href={episode.spotifyLink} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("episode_external_link_clicked", { episode_id: episode.id, platform: "spotify" })}>
-              <Button variant="outline" size="sm" className="border-brand-spotify/40 text-brand-spotify hover:bg-brand-spotify/10" data-testid="link-spotify">
-                <SiSpotify aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" /> Spotify
-              </Button>
-            </a>
-          )}
-        </div>
-      </div>
+      <StatBand
+        className="grid-cols-3"
+        items={[
+          { label: "Menções", value: epMentions.length },
+          { label: "Produtos", value: sortedEpisodeProducts.length },
+          { label: "Pessoas", value: participants.length },
+        ]}
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Produtos */}

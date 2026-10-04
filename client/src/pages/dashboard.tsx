@@ -5,6 +5,7 @@ import { posthog } from "@/lib/analytics";
 import { BarChart3, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LatestEpisode } from "@/components/latest-episode";
+import { StatBand } from "@/components/stat-band";
 import {
   episodes,
   getTotalStats,
@@ -99,22 +100,13 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Faixa de números no estilo da Product Arena: números grandes, rótulos em caixa alta e divisórias finas */}
-      <div className="grid grid-cols-2 gap-px border-y bg-border lg:grid-cols-4">
-        {statCards.map((stat) => (
-          <Link
-            key={stat.label}
-            href={stat.href}
-            className="bg-background px-6 py-6 outline-none ring-inset ring-ring transition-colors hover:bg-highlight focus-visible:ring-2"
-            onClick={() => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href })}
-          >
-            <p className="text-4xl font-extrabold leading-none tracking-[-0.035em] md:text-5xl" data-testid={`stat-${stat.label.toLowerCase()}`}>
-              {stat.value.toLocaleString("pt-BR")}
-            </p>
-            <p className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{stat.label}</p>
-          </Link>
-        ))}
-      </div>
+      <StatBand
+        className="grid-cols-2 lg:grid-cols-4"
+        items={statCards.map((stat) => ({
+          ...stat,
+          onClick: () => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href }),
+        }))}
+      />
 
       {/* 1000th mention milestone banner */}
       {/* <Link href="/episodes/108" className="mt-2 block">

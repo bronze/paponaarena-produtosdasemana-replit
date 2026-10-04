@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { SiSpotify, SiYoutube } from "react-icons/si";
 import { posthog } from "@/lib/analytics";
 import type { Episode, Person, Product } from "@/lib/types";
+import { formatLongDate as formatDate } from "@/lib/dates";
 
 export type LatestEpisodeVariant = "cinza" | "escuro" | "editorial";
 
@@ -14,10 +15,6 @@ export type LatestEpisodeProps = {
 };
 
 const MAX_PRODUCTS = 5;
-
-function formatDate(date: string) {
-  return new Date(`${date}T00:00:00`).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" });
-}
 
 function joinNames(names: string[]) {
   if (names.length <= 1) return names.join("");
