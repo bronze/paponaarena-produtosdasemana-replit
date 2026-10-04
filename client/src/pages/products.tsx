@@ -1,4 +1,4 @@
-import { categoryLabel } from "@/lib/categories";
+import { categoryLabel, categoryPath } from "@/lib/categories";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ExternalLink, Search, Mic, Users } from "lucide-react";
 import { posthog } from "@/lib/analytics";
@@ -43,7 +43,7 @@ function buildProductRows() {
 
 function CategoryLink({ category, className = "font-semibold text-foreground" }: { category: string; className?: string }) {
   return (
-    <Link href={`/categories/${encodeURIComponent(category)}`} className={`underline-offset-2 hover:underline ${className}`}>
+    <Link href={categoryPath(category)} className={`underline-offset-2 hover:underline ${className}`}>
       {categoryLabel(category)}
     </Link>
   );
@@ -110,7 +110,7 @@ function ProductList() {
                 key={product.id}
                 rank={byEpisodes ? product.episodeRank : product.rank}
                 title={product.name}
-                href={`/products/${product.id}`}
+                href={`/produtos/${product.id}`}
                 onClick={() => posthog.capture("product_viewed", { product_id: product.id, product_name: product.name, source: "list" })}
                 count={byEpisodes ? product.episodeCount : product.mentionCount}
                 unit={byEpisodes ? ["episódio", "episódios"] : undefined}
@@ -149,7 +149,7 @@ function ProductDetail({ id }: { id: string }) {
       <div className="text-center py-12">
         <p className="text-muted-foreground">Produto não encontrado.</p>
         <Button asChild variant="ghost" className="mt-4">
-          <Link href="/products">
+          <Link href="/produtos">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Link>
         </Button>
@@ -187,7 +187,7 @@ function ProductDetail({ id }: { id: string }) {
     <div className="space-y-8">
       <div>
         <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
-          <Link href="/products">
+          <Link href="/produtos">
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Produtos
           </Link>
         </Button>
@@ -259,7 +259,7 @@ function ProductDetail({ id }: { id: string }) {
                 const episode = getEpisode(epId);
                 return (
                   <li key={epId} className="space-y-1 border-b border-border/40 py-3 first:pt-0 last:border-0">
-                    <Link href={`/episodes/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
+                    <Link href={`/episodios/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
                       <span className="font-bold tabular-nums">#{epId}</span>
                       {episode && <span className="text-muted-foreground"> · </span>}
                       {episode?.title}
@@ -271,7 +271,7 @@ function ProductDetail({ id }: { id: string }) {
                         return (
                           <span key={m.id}>
                             {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-                            <Link href={`/people/${m.personId}`} className="font-semibold underline-offset-2 hover:underline">
+                            <Link href={`/pessoas/${m.personId}`} className="font-semibold underline-offset-2 hover:underline">
                               {getPerson(m.personId)?.name || m.personId}
                             </Link>
                             {variant && <span className="text-muted-foreground"> ({variant})</span>}
@@ -303,7 +303,7 @@ function ProductDetail({ id }: { id: string }) {
                 <li key={personId} className="flex items-center justify-between gap-3 border-b border-border/40 py-2 last:border-0">
                   <div className="flex min-w-0 items-baseline gap-2.5">
                     <span className="w-5 shrink-0 text-right text-xs tabular-nums text-muted-foreground">{index + 1}</span>
-                    <Link href={`/people/${personId}`} className="text-sm font-medium hover:underline">
+                    <Link href={`/pessoas/${personId}`} className="text-sm font-medium hover:underline">
                       {getPerson(personId)?.name || personId}
                     </Link>
                   </div>

@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { episodes, products, people } from "../client/src/lib/data";
-import { getUniqueCategories } from "../client/src/lib/data-utils";
+import { getCategoryBySlug, getUniqueCategories } from "../client/src/lib/data-utils";
+import { categoryPath } from "../client/src/lib/categories";
 import { SITE_URL } from "../client/src/lib/seo";
 
 export { SITE_URL };
@@ -8,9 +9,8 @@ export { SITE_URL };
 const episodeIds = new Set(episodes.map((e) => String(e.id)));
 const productIds = new Set(products.map((p) => p.id));
 const personIds = new Set(people.map((p) => p.id));
-const categoryNames = new Set(getUniqueCategories());
 
-const listRoutes = ["/episodes", "/products", "/categories", "/people", "/sobre"];
+const listRoutes = ["/episodios", "/produtos", "/categorias", "/pessoas", "/sobre"];
 
 export function isKnownRoute(pathname: string): boolean {
   const path = pathname.replace(/\/+$/, "") || "/";
@@ -27,14 +27,14 @@ export function isKnownRoute(pathname: string): boolean {
   }
 
   switch (section) {
-    case "episodes":
+    case "episodios":
       return episodeIds.has(id);
-    case "products":
+    case "produtos":
       return productIds.has(id);
-    case "people":
+    case "pessoas":
       return personIds.has(id);
-    case "categories":
-      return categoryNames.has(id);
+    case "categorias":
+      return getCategoryBySlug(id) !== undefined;
     default:
       return false;
   }
@@ -58,14 +58,14 @@ function buildSitemap(): string {
   const urls: { path: string; lastmod?: string }[] = [
     { path: "/", lastmod: latestEpisodeDate },
     ...listRoutes.map((path) => ({ path, lastmod: latestEpisodeDate })),
-    ...episodes.map((e) => ({ path: `/episodes/${e.id}`, lastmod: e.date })),
+    ...episodes.map((e) => ({ path: `/episodios/${e.id}`, lastmod: e.date })),
     // produtos filhos (parentId) são variações; a página canônica é a do pai
     ...products
       .filter((p) => !p.parentId)
-      .map((p) => ({ path: `/products/${encodeURIComponent(p.id)}` })),
-    ...people.map((p) => ({ path: `/people/${encodeURIComponent(p.id)}` })),
+      .map((p) => ({ path: `/produtos/${encodeURIComponent(p.id)}` })),
+    ...people.map((p) => ({ path: `/pessoas/${encodeURIComponent(p.id)}` })),
     ...getUniqueCategories().map((c) => ({
-      path: `/categories/${encodeURIComponent(c)}`,
+      path: categoryPath(c),
     })),
   ];
 
@@ -79,7 +79,44 @@ function buildSitemap(): string {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
 }
 
+// Endereços antigos, em inglês, e os novos em português
+const legacySections: Record<string, string> = {
+  episodes: "/episodios",
+  products: "/produtos",
+  people: "/pessoas",
+  categories: "/categorias",
+};
+
+/** Endereço novo para um caminho antigo (/products/x → /produtos/x), ou null se o caminho não for antigo. */
+export function legacyRedirect(pathname: string): string | null {
+  const [, section, rawId, ...rest] = pathname.replace(/\/+$/, "").split("/");
+  const target = legacySections[section];
+  if (!target || rest.length > 0) return null;
+  if (!rawId) return target;
+
+  if (section === "categories") {
+    // categorias antigas usavam o nome em inglês: /categories/AI%20Tools
+    let name: string;
+    try {
+      name = decodeURIComponent(rawId);
+    } catch {
+      return target;
+    }
+    return getUniqueCategories().includes(name) ? categoryPath(name) : target;
+  }
+  return `${target}/${rawId}`;
+}
+
 export function registerSeoRoutes(app: Express) {
+  // 301 permanente: links antigos e páginas já indexadas passam para o endereço em português
+  app.use((req, res, next) => {
+    if (req.method !== "GET" && req.method !== "HEAD") return next();
+    const target = legacyRedirect(req.path);
+    if (!target) return next();
+    const query = req.originalUrl.slice(req.path.length);
+    res.redirect(301, `${target}${query}`);
+  });
+
   const sitemap = buildSitemap();
   app.get("/sitemap.xml", (_req, res) => {
     res.type("application/xml").send(sitemap);

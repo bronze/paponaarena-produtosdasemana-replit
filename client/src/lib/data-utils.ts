@@ -1,5 +1,6 @@
 import { episodes, products, people, mentions } from "./data";
 import type { Product, Mention, Person } from "./types";
+import { categorySlug } from "./categories";
 
 const productMap = new Map(products.map((p) => [p.id, p]));
 const episodeMap = new Map(episodes.map((e) => [e.id, e]));
@@ -178,6 +179,11 @@ export function getTopProductNames(topN = 5) {
   return getLeaderboardProducts()
     .slice(0, topN)
     .map((p) => p.name);
+}
+
+/** Nome original da categoria a partir do slug do endereço; undefined se não existir. */
+export function getCategoryBySlug(slug: string): string | undefined {
+  return getUniqueCategories().find((c) => categorySlug(c) === slug);
 }
 
 export function getUniqueCategories() {

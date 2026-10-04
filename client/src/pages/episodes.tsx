@@ -75,7 +75,7 @@ function EpisodeRow({ row }: { row: EpisodeRowData }) {
       <div className="min-w-0 space-y-1.5">
         <h3 className="text-lg font-bold leading-snug tracking-[-0.01em] text-balance">
           <Link
-            href={`/episodes/${episode.id}`}
+            href={`/episodios/${episode.id}`}
             className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
             onClick={() => posthog.capture("episode_viewed", { episode_id: episode.id, episode_date: episode.date })}
           >
@@ -91,7 +91,7 @@ function EpisodeRow({ row }: { row: EpisodeRowData }) {
             {shown.map((product, i) => (
               <span key={product.id}>
                 {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-                <Link href={`/products/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+                <Link href={`/produtos/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
                   {product.name}
                 </Link>
               </span>
@@ -196,7 +196,7 @@ function ParticipantRow({ person, products }: {
 }) {
   return (
     <div key={person.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-      <Link href={`/people/${person.id}`} className="text-sm font-medium hover:underline shrink-0" data-testid={`badge-person-${person.id}`}>
+      <Link href={`/pessoas/${person.id}`} className="text-sm font-medium hover:underline shrink-0" data-testid={`badge-person-${person.id}`}>
         {person.name}
       </Link>
       <div className="flex flex-wrap gap-1">
@@ -207,7 +207,7 @@ function ParticipantRow({ person, products }: {
               {product.alsoCredits.map((id, i) => (
                 <span key={id} className="flex items-center gap-0.5">
                   {i > 0 && <span className="text-xs text-muted-foreground">+</span>}
-                  <Link href={`/products/${resolveParent(id)}`}>
+                  <Link href={`/produtos/${resolveParent(id)}`}>
                     <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent border-dashed">
                       {getProduct(id)?.name || id}
                     </Badge>
@@ -218,7 +218,7 @@ function ParticipantRow({ person, products }: {
             </span>
           ) : (
             <span key={mention.id} className="flex items-center gap-1">
-              <Link href={`/products/${resolveParent(mention.productId)}`}>
+              <Link href={`/produtos/${resolveParent(mention.productId)}`}>
                 <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
                   {product?.name || mention.productId}
                 </Badge>
@@ -242,7 +242,7 @@ function EpisodeDetail() {
       <div className="text-center py-12">
         <p className="text-muted-foreground">Episódio não encontrado.</p>
         <Button asChild variant="ghost" className="mt-4">
-          <Link href="/episodes">
+          <Link href="/episodios">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Link>
         </Button>
@@ -291,7 +291,7 @@ function EpisodeDetail() {
       {/* Header */}
       <div>
         <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
-          <Link href="/episodes">
+          <Link href="/episodios">
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Episódios
           </Link>
         </Button>
@@ -307,7 +307,7 @@ function EpisodeDetail() {
             {castPeople.map((person, i) => (
               <span key={person.id}>
                 {i > 0 && <span className="text-muted-foreground">{i === castPeople.length - 1 ? " e " : ", "}</span>}
-                <Link href={`/people/${person.id}`} className="font-medium hover:underline">{person.name}</Link>
+                <Link href={`/pessoas/${person.id}`} className="font-medium hover:underline">{person.name}</Link>
               </span>
             ))}
           </p>
@@ -367,7 +367,7 @@ function EpisodeDetail() {
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span className="text-xs text-muted-foreground w-5 text-right shrink-0 tabular-nums">{index + 1}</span>
                     <div className="flex items-center gap-2 min-w-0">
-                      <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
+                      <Link href={`/produtos/${productId}`} className="text-sm font-medium hover:underline">
                         {product?.name || productId}
                       </Link>
                       {product?.category && (

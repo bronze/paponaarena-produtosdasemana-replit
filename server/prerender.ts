@@ -1,4 +1,4 @@
-import { categoryLabel } from "../client/src/lib/categories";
+import { categoryLabel, categoryPath } from "../client/src/lib/categories";
 import {
   episodes,
   getEpisode,
@@ -30,21 +30,21 @@ const list = (items: string[]) => (items.length ? `<ul>${items.map((i) => `<li>$
 const productLink = (id: string) => {
   const parentId = resolveParent(id);
   const product = getProduct(parentId);
-  return product ? link(`/products/${encodeURIComponent(parentId)}`, product.name) : "";
+  return product ? link(`/produtos/${encodeURIComponent(parentId)}`, product.name) : "";
 };
 const episodeLink = (id: number) => {
   const episode = getEpisode(id);
-  return episode ? link(`/episodes/${id}`, `Ep${id} – ${episode.title}`) : "";
+  return episode ? link(`/episodios/${id}`, `Ep${id} – ${episode.title}`) : "";
 };
 const sortedEpisodes = () => [...episodes].sort((a, b) => b.date.localeCompare(a.date));
 const unique = <T,>(items: T[]) => Array.from(new Set(items));
 
 const nav = `<nav>${[
   link("/", "Início"),
-  link("/episodes", "Episódios"),
-  link("/products", "Produtos"),
-  link("/categories", "Categorias"),
-  link("/people", "Pessoas"),
+  link("/episodios", "Episódios"),
+  link("/produtos", "Produtos"),
+  link("/categorias", "Categorias"),
+  link("/pessoas", "Pessoas"),
   link("/sobre", "Sobre"),
 ].join(" · ")}</nav>`;
 
@@ -53,8 +53,8 @@ function milestoneHtml(): string {
   if (!m) return "";
   return (
     `<h2>O produto nº 1.000</h2>` +
-    `<p>O milésimo produto da semana registrado no Radar foi ${link(`/products/${encodeURIComponent(m.product.id)}`, m.product.name)}, ` +
-    `citado por ${link(`/people/${encodeURIComponent(m.person.id)}`, m.person.name)} no episódio ${episodeLink(m.episode.id)}.</p>`
+    `<p>O milésimo produto da semana registrado no Radar foi ${link(`/produtos/${encodeURIComponent(m.product.id)}`, m.product.name)}, ` +
+    `citado por ${link(`/pessoas/${encodeURIComponent(m.person.id)}`, m.person.name)} no episódio ${episodeLink(m.episode.id)}.</p>`
   );
 }
 
@@ -81,14 +81,14 @@ function bodyContent(pathname: string): string {
 
   if (!rawId) {
     switch (section) {
-      case "episodes":
+      case "episodios":
         return heading("Episódios") + list(sortedEpisodes().map((e) => episodeLink(e.id)));
-      case "products":
+      case "produtos":
         return heading("Produtos") + list(getLeaderboardProducts().map((p) => productLink(p.id)));
-      case "categories":
+      case "categorias":
         return (
           heading("Categorias") +
-          list(getUniqueCategories().map((c) => link(`/categories/${encodeURIComponent(c)}`, categoryLabel(c))))
+          list(getUniqueCategories().map((c) => link(categoryPath(c), categoryLabel(c))))
         );
       case "sobre": {
         const copy = getAboutCopy();
@@ -96,7 +96,7 @@ function bodyContent(pathname: string): string {
           heading("Sobre o Papo na Arena Radar") +
           `<p>${esc(copy.fan)}</p>` +
           `<h2>O podcast Papo na Arena</h2><p>${esc(copy.podcast)}</p>` +
-          `<p>Hosts: ${link("/people/arthur", "Arthur")} e ${link("/people/aiquis", "Aíquis")}.</p>` +
+          `<p>Hosts: ${link("/pessoas/arthur", "Arthur")} e ${link("/pessoas/aiquis", "Aíquis")}.</p>` +
           list([link(SPOTIFY_SHOW_URL, "Ouvir no Spotify"), link(YOUTUBE_CHANNEL_URL, "Assistir no YouTube")]) +
           `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
           milestoneHtml() +
@@ -105,8 +105,8 @@ function bodyContent(pathname: string): string {
           `<p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
         );
       }
-      case "people":
-        return heading("Pessoas") + list(people.map((p) => link(`/people/${encodeURIComponent(p.id)}`, p.name)));
+      case "pessoas":
+        return heading("Pessoas") + list(people.map((p) => link(`/pessoas/${encodeURIComponent(p.id)}`, p.name)));
     }
   }
 
@@ -120,7 +120,7 @@ function bodyContent(pathname: string): string {
       episode.spotifyLink && link(episode.spotifyLink, "Ouvir no Spotify"),
     ].filter(Boolean) as string[];
     const cast = getEpisodeCast(episode.id);
-    const castLinks = [...cast.hosts, ...cast.cohosts].map((p) => link(`/people/${encodeURIComponent(p.id)}`, p.name));
+    const castLinks = [...cast.hosts, ...cast.cohosts].map((p) => link(`/pessoas/${encodeURIComponent(p.id)}`, p.name));
     return (
       heading(episode.title) +
       (castLinks.length ? `<p>Com ${castLinks.join(", ")}</p>` : "") +
@@ -137,7 +137,7 @@ function bodyContent(pathname: string): string {
     const eps = unique(getMentionsForProduct(canonical.id).map((m) => m.episodeId)).sort((a, b) => b - a);
     return (
       heading(canonical.name) +
-      `<p>Categoria: ${link(`/categories/${encodeURIComponent(canonical.category)}`, categoryLabel(canonical.category))}</p>` +
+      `<p>Categoria: ${link(categoryPath(canonical.category), categoryLabel(canonical.category))}</p>` +
       `<h2>Episódios em que foi citado</h2>` +
       list(eps.map(episodeLink))
     );

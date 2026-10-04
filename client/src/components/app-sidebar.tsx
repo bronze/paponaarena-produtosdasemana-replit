@@ -18,10 +18,10 @@ import { REPLIT_URL } from "@/lib/about";
 
 const navItems = [
   { title: "Dashboard", path: "/", icon: BarChart3 },
-  { title: "Episódios", path: "/episodes", icon: Mic },
-  { title: "Produtos", path: "/products", icon: Package },
-  { title: "Categorias", path: "/categories", icon: FolderOpen },
-  { title: "Pessoas", path: "/people", icon: Users },
+  { title: "Episódios", path: "/episodios", icon: Mic },
+  { title: "Produtos", path: "/produtos", icon: Package },
+  { title: "Categorias", path: "/categorias", icon: FolderOpen },
+  { title: "Pessoas", path: "/pessoas", icon: Users },
   { title: "Sobre", path: "/sobre", icon: Info },
 ];
 

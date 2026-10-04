@@ -34,7 +34,7 @@ function ProductLinks({ products, className }: { products: Product[]; className:
       {shown.map((product, i) => (
         <span key={product.id}>
           {i > 0 && <span aria-hidden="true"> · </span>}
-          <Link href={`/products/${product.id}`} className={className}>
+          <Link href={`/produtos/${product.id}`} className={className}>
             {product.name}
           </Link>
         </span>
@@ -79,7 +79,7 @@ function LatestEpisodeCinza({ episode, cast, mentionCount, products }: LatestEpi
     <section className="grid gap-6 rounded-lg bg-highlight p-6 md:grid-cols-[1fr_auto] md:items-end md:p-8" data-testid="card-latest-episode">
       <div className="min-w-0 space-y-3">
         <h2 className="text-2xl font-extrabold leading-tight tracking-[-0.03em] text-balance md:text-3xl" data-testid="text-latest-title">
-          <Link href={`/episodes/${episode.id}`} className="underline-offset-4 hover:underline" onClick={() => trackOpen(episode)}>
+          <Link href={`/episodios/${episode.id}`} className="underline-offset-4 hover:underline" onClick={() => trackOpen(episode)}>
             {episode.title}
           </Link>
         </h2>
@@ -95,7 +95,7 @@ function LatestEpisodeCinza({ episode, cast, mentionCount, products }: LatestEpi
         )}
       </div>
       <Link
-        href={`/episodes/${episode.id}`}
+        href={`/episodios/${episode.id}`}
         onClick={() => trackOpen(episode)}
         className="inline-flex h-12 w-fit items-center gap-2 rounded-full bg-primary px-6 font-semibold text-primary-foreground outline-none transition-[filter] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
@@ -117,7 +117,7 @@ function LatestEpisodeEscuro({ episode, cast, mentionCount, products }: LatestEp
       </p>
       <div className="relative space-y-4 p-6 pb-28 md:p-10 md:pb-10 md:pr-80">
         <h2 className="text-3xl font-extrabold leading-[1.05] tracking-[-0.035em] text-balance md:text-4xl" data-testid="text-latest-title">
-          <Link href={`/episodes/${episode.id}`} className="underline-offset-4 hover:underline" onClick={() => trackOpen(episode)}>
+          <Link href={`/episodios/${episode.id}`} className="underline-offset-4 hover:underline" onClick={() => trackOpen(episode)}>
             {episode.title}
           </Link>
         </h2>
@@ -133,7 +133,7 @@ function LatestEpisodeEscuro({ episode, cast, mentionCount, products }: LatestEp
         )}
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <Link
-            href={`/episodes/${episode.id}`}
+            href={`/episodios/${episode.id}`}
             onClick={() => trackOpen(episode)}
             className="inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 font-semibold text-primary-foreground outline-none transition-[filter] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-sidebar-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
           >
@@ -167,7 +167,7 @@ function LatestEpisodeEditorial({ episode, cast, mentionCount, products }: Lates
       <div className="min-w-0 space-y-3">
         <h2 className="text-2xl font-extrabold leading-tight tracking-[-0.03em] text-balance md:text-3xl" data-testid="text-latest-title">
           <Link
-            href={`/episodes/${episode.id}`}
+            href={`/episodios/${episode.id}`}
             className="group inline underline-offset-4 hover:underline"
             onClick={() => trackOpen(episode)}
           >

@@ -51,10 +51,10 @@ export default function Dashboard() {
   const latestCast = getEpisodeCast(latestEpisode.id);
 
   const statCards = [
-    {label: "Menções", value: stats.totalMentions, href: "/products"},
-    {label: "Episódios", value: stats.totalEpisodes, href: "/episodes"},
-    { label: "Produtos", value: stats.totalProducts, href: "/products" },
-    { label: "Pessoas", value: stats.totalPeople, href: "/people" },
+    {label: "Menções", value: stats.totalMentions, href: "/produtos"},
+    {label: "Episódios", value: stats.totalEpisodes, href: "/episodios"},
+    { label: "Produtos", value: stats.totalProducts, href: "/produtos" },
+    { label: "Pessoas", value: stats.totalPeople, href: "/pessoas" },
   ];
 
   return (
@@ -87,7 +87,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base">Top 10 Produtos</CardTitle>
-            <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
+            <Link href="/produtos" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
               Ver todos <ArrowRight className="h-3 w-3" />
             </Link>
           </CardHeader>

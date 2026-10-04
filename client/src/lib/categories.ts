@@ -1,6 +1,6 @@
 /**
- * Nomes das categorias em português. Os dados e os endereços (/categories/AI%20Tools)
- * continuam com o nome original em inglês, para não quebrar links já indexados.
+ * Nomes das categorias em português. Os dados continuam com o nome original em inglês;
+ * o endereço usa o nome em português sem acentos (/categorias/ferramentas-de-ia).
  */
 const CATEGORY_LABELS: Record<string, string> = {
   "AI Tools": "Ferramentas de IA",
@@ -35,4 +35,19 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export function categoryLabel(category: string): string {
   return CATEGORY_LABELS[category] ?? category;
+}
+
+/** Endereço da categoria: nome em português sem acentos, com hífens ("AI Tools" → "ferramentas-de-ia"). */
+export function categorySlug(category: string): string {
+  return categoryLabel(category)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** Caminho da página da categoria. */
+export function categoryPath(category: string): string {
+  return `/categorias/${categorySlug(category)}`;
 }

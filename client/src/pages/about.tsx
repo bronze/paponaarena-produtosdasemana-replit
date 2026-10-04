@@ -16,10 +16,10 @@ const hosts = [
 ];
 
 const explore = [
-  { href: "/episodes", label: "Episódios", text: "todos os episódios, com os produtos citados em cada um" },
-  { href: "/products", label: "Produtos", text: "o ranking dos produtos mais mencionados" },
-  { href: "/categories", label: "Categorias", text: "os produtos agrupados por tipo" },
-  { href: "/people", label: "Pessoas", text: "o que cada participante recomendou" },
+  { href: "/episodios", label: "Episódios", text: "todos os episódios, com os produtos citados em cada um" },
+  { href: "/produtos", label: "Produtos", text: "o ranking dos produtos mais mencionados" },
+  { href: "/categorias", label: "Categorias", text: "os produtos agrupados por tipo" },
+  { href: "/pessoas", label: "Pessoas", text: "o que cada participante recomendou" },
 ];
 
 const pillBase =
@@ -78,7 +78,7 @@ export default function AboutPage() {
           <ul className="grid grid-cols-2 gap-4 sm:max-w-md" aria-label="Hosts">
             {hosts.map((host) => (
               <li key={host.id}>
-                <Link href={`/people/${host.id}`} className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4">
+                <Link href={`/pessoas/${host.id}`} className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4">
                   <img
                     src={host.img}
                     alt=""
@@ -132,17 +132,17 @@ export default function AboutPage() {
               <SectionTitle>O produto nº 1.000<span className="text-primary" aria-hidden="true">.</span></SectionTitle>
               <p>
                 O milésimo produto da semana registrado no Radar foi{" "}
-                <Link href={`/products/${milestone.product.id}`} className="font-bold underline underline-offset-4 hover:no-underline">
+                <Link href={`/produtos/${milestone.product.id}`} className="font-bold underline underline-offset-4 hover:no-underline">
                   {milestone.product.name}
                 </Link>
                 , citado por{" "}
-                <Link href={`/people/${milestone.person.id}`} className="font-bold underline underline-offset-4 hover:no-underline">
+                <Link href={`/pessoas/${milestone.person.id}`} className="font-bold underline underline-offset-4 hover:no-underline">
                   {milestone.person.name}
                 </Link>{" "}
                 no episódio #{milestone.episode.id}, “{milestone.episode.title}”, de {formatLongDate(milestone.episode.date)}.
               </p>
               <Link
-                href={`/episodes/${milestone.episode.id}`}
+                href={`/episodios/${milestone.episode.id}`}
                 className={cn(pillBase, pillLight)}
                 onClick={() => posthog.capture("about_milestone_clicked", { episode_id: milestone.episode.id })}
               >
@@ -160,7 +160,7 @@ export default function AboutPage() {
           <div className="max-w-2xl space-y-6">
             <p>
               Mantido por{" "}
-              <Link href={`/people/${MAINTAINER.personId}`} className="font-bold underline underline-offset-4 hover:no-underline">
+              <Link href={`/pessoas/${MAINTAINER.personId}`} className="font-bold underline underline-offset-4 hover:no-underline">
                 {MAINTAINER.name}
               </Link>
               . As menções são adicionadas à mão depois que cada episódio vai ao ar.

@@ -18,14 +18,14 @@ function Router() {
     <Suspense fallback={null}>
       <Switch>
         <Route path="/" component={Dashboard} />
-        <Route path="/episodes" component={EpisodesPage} />
-        <Route path="/episodes/:id" component={EpisodesPage} />
-        <Route path="/products" component={ProductsPage} />
-        <Route path="/products/:id" component={ProductsPage} />
-        <Route path="/categories" component={CategoriesPage} />
-        <Route path="/categories/:name" component={CategoriesPage} />
-        <Route path="/people" component={PeoplePage} />
-        <Route path="/people/:id" component={PeoplePage} />
+        <Route path="/episodios" component={EpisodesPage} />
+        <Route path="/episodios/:id" component={EpisodesPage} />
+        <Route path="/produtos" component={ProductsPage} />
+        <Route path="/produtos/:id" component={ProductsPage} />
+        <Route path="/categorias" component={CategoriesPage} />
+        <Route path="/categorias/:name" component={CategoriesPage} />
+        <Route path="/pessoas" component={PeoplePage} />
+        <Route path="/pessoas/:id" component={PeoplePage} />
         <Route path="/sobre" component={AboutPage} />
         <Route component={NotFound} />
       </Switch>

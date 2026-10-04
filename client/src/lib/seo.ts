@@ -1,4 +1,4 @@
-import { categoryLabel } from "./categories";
+import { categoryLabel, categoryPath } from "./categories";
 import { MAINTAINER } from "./about";
 import {
   episodes,
@@ -15,6 +15,7 @@ import {
   people,
   products,
   resolveParent,
+  getCategoryBySlug,
 } from "./data-utils";
 
 export const SITE_URL = "https://paponaarena-produtosdasemana.replit.app";
@@ -92,23 +93,23 @@ export function getPageMeta(pathname: string): PageMeta {
 
   if (!rawId && rest.length === 0) {
     switch (section) {
-      case "episodes":
+      case "episodios":
         return {
           title: `Episódios do Papo na Arena – lista completa | ${SITE_NAME}`,
           description: `Todos os ${episodes.length} episódios do podcast Papo na Arena com os produtos da semana citados em cada um, por ano.`,
-          canonicalPath: "/episodes",
+          canonicalPath: "/episodios",
         };
-      case "products":
+      case "produtos":
         return {
           title: `Produtos citados no Papo na Arena – ranking completo | ${SITE_NAME}`,
           description: `Ranking dos ${getLeaderboardProducts().length} produtos citados nos episódios do Papo na Arena, com categoria, número de menções e episódios.`,
-          canonicalPath: "/products",
+          canonicalPath: "/produtos",
         };
-      case "categories":
+      case "categorias":
         return {
           title: `Categorias de produtos do Papo na Arena | ${SITE_NAME}`,
           description: `Os produtos da semana do Papo na Arena organizados em ${getUniqueCategories().length} categorias.`,
-          canonicalPath: "/categories",
+          canonicalPath: "/categorias",
         };
       case "sobre":
         return {
@@ -117,12 +118,12 @@ export function getPageMeta(pathname: string): PageMeta {
             "Conheça o podcast Papo na Arena, de Arthur e Aíquis, e o Radar que reúne todos os produtos da semana citados nos episódios. Site feito com Replit.",
           canonicalPath: "/sobre",
         };
-      case "people":
+      case "pessoas":
         return {
           title: `Quem fala no Papo na Arena – convidados e hosts | ${SITE_NAME}`,
           description:
             "Hosts e convidados do podcast Papo na Arena e os produtos que cada um recomendou ao longo dos episódios.",
-          canonicalPath: "/people",
+          canonicalPath: "/pessoas",
         };
     }
     return notFound(path);
@@ -132,7 +133,7 @@ export function getPageMeta(pathname: string): PageMeta {
   const id = safeDecode(rawId);
 
   switch (section) {
-    case "episodes": {
+    case "episodios": {
       const episode = getEpisode(Number(id));
       if (!episode) return notFound(path);
 
@@ -154,11 +155,11 @@ export function getPageMeta(pathname: string): PageMeta {
       return {
         title: `Ep${episode.id} – ${episode.title} | ${SITE_NAME}`,
         description: truncate(`${episode.description}${withCast}${products}`),
-        canonicalPath: `/episodes/${episode.id}`,
+        canonicalPath: `/episodios/${episode.id}`,
       };
     }
 
-    case "products": {
+    case "produtos": {
       const product = getProduct(id);
       if (!product) return notFound(path);
 
@@ -171,11 +172,11 @@ export function getPageMeta(pathname: string): PageMeta {
         description: truncate(
           `${canonical.name} (${categoryLabel(canonical.category)}) foi citado ${plural(mentions.length, "vez", "vezes")} em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja quem recomendou e em quais episódios.`,
         ),
-        canonicalPath: `/products/${encodeURIComponent(canonical.id)}`,
+        canonicalPath: `/produtos/${encodeURIComponent(canonical.id)}`,
       };
     }
 
-    case "people": {
+    case "pessoas": {
       const person = getPerson(id);
       if (!person) return notFound(path);
 
@@ -186,21 +187,22 @@ export function getPageMeta(pathname: string): PageMeta {
         description: truncate(
           `${personLabel(person)} fez ${plural(mentions.length, "menção", "menções")} de produtos em ${plural(episodeCount, "episódio", "episódios")} do Papo na Arena. Veja o que recomendou.`,
         ),
-        canonicalPath: `/people/${encodeURIComponent(person.id)}`,
+        canonicalPath: `/pessoas/${encodeURIComponent(person.id)}`,
       };
     }
 
-    case "categories": {
-      if (!getUniqueCategories().includes(id)) return notFound(path);
+    case "categorias": {
+      const category = getCategoryBySlug(id);
+      if (!category) return notFound(path);
 
-      const list = getProductsForCategory(id);
+      const list = getProductsForCategory(category);
       const top = list.slice(0, 5).map((p) => p.name);
       return {
-        title: `${categoryLabel(id)} – produtos da semana do ${SITE_NAME}`,
+        title: `${categoryLabel(category)} – produtos da semana do ${SITE_NAME}`,
         description: truncate(
-          `${plural(list.length, "produto", "produtos")} da categoria ${categoryLabel(id)} citados no Papo na Arena${top.length ? `, como ${top.join(", ")}` : ""}.`,
+          `${plural(list.length, "produto", "produtos")} da categoria ${categoryLabel(category)} citados no Papo na Arena${top.length ? `, como ${top.join(", ")}` : ""}.`,
         ),
-        canonicalPath: `/categories/${encodeURIComponent(id)}`,
+        canonicalPath: categoryPath(category),
       };
     }
   }

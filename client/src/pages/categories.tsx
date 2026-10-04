@@ -7,8 +7,8 @@ import { StatBand } from "@/components/stat-band";
 import { RankRow, SortButtons, plural } from "@/components/ranking";
 import { useState, useMemo } from "react";
 import { normalize } from "@/lib/text";
-import { categoryLabel } from "@/lib/categories";
-import { getCategoryStats, getProductsForCategory, getMentionsForProduct } from "@/lib/data-utils";
+import { categoryLabel, categoryPath } from "@/lib/categories";
+import { getCategoryBySlug, getCategoryStats, getProductsForCategory, getMentionsForProduct } from "@/lib/data-utils";
 
 const MAX_LIST_PRODUCTS = 3;
 
@@ -39,7 +39,7 @@ function CategoryRow({ row, max, query }: { row: CategoryRowData; max: number; q
     <RankRow
       rank={row.rank}
       title={categoryLabel(row.category)}
-      href={`/categories/${encodeURIComponent(row.category)}`}
+      href={categoryPath(row.category)}
       onClick={() => posthog.capture("category_viewed", { category: row.category, mention_count: row.count })}
       count={row.count}
       max={max}
@@ -50,7 +50,7 @@ function CategoryRow({ row, max, query }: { row: CategoryRowData; max: number; q
         {shown.map((product, i) => (
           <span key={product.id}>
             {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-            <Link href={`/products/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+            <Link href={`/produtos/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
               {product.name}
             </Link>
           </span>
@@ -124,7 +124,7 @@ type DetailSortMode = "mentions" | "episodes" | "alpha";
 
 function CategoryDetail() {
   const { name } = useParams<{ name: string }>();
-  const category = decodeURIComponent(name!);
+  const category = getCategoryBySlug(name!) ?? name!;
   const [sortMode, setSortMode] = useState<DetailSortMode>("mentions");
 
   const { products, episodeCount } = useMemo(() => {
@@ -148,7 +148,7 @@ function CategoryDetail() {
       <div className="text-center py-12">
         <p className="text-muted-foreground">Categoria não encontrada.</p>
         <Button asChild variant="ghost" className="mt-4">
-          <Link href="/categories">
+          <Link href="/categorias">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Link>
         </Button>
@@ -165,7 +165,7 @@ function CategoryDetail() {
     <div className="space-y-8">
       <div>
         <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
-          <Link href="/categories">
+          <Link href="/categorias">
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Categorias
           </Link>
         </Button>
@@ -193,7 +193,7 @@ function CategoryDetail() {
               key={product.id}
               rank={i + 1}
               title={product.name}
-              href={`/products/${product.id}`}
+              href={`/produtos/${product.id}`}
               count={byEpisodes ? product.episodeCount : product.mentionCount}
               unit={byEpisodes ? ["episódio", "episódios"] : undefined}
               max={max}

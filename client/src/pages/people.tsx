@@ -105,7 +105,7 @@ function PersonRow({ row, query, byEpisodes, max }: { row: PersonRowData; query:
       <div className="min-w-0 space-y-1">
         <h2 className="text-lg font-bold leading-snug tracking-[-0.01em]">
           <Link
-            href={`/people/${row.id}`}
+            href={`/pessoas/${row.id}`}
             className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
             onClick={() => posthog.capture("person_viewed", { person_id: row.id, source: "list" })}
           >
@@ -121,7 +121,7 @@ function PersonRow({ row, query, byEpisodes, max }: { row: PersonRowData; query:
             {shown.map((product, i) => (
               <span key={product.id}>
                 {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-                <Link href={`/products/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+                <Link href={`/produtos/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
                   {product.name}
                 </Link>
               </span>
@@ -229,7 +229,7 @@ function MentionedProduct({ mention }: { mention: Mention }) {
           {credits.map((creditId, idx) => (
             <span key={creditId}>
               {idx > 0 && <span className="text-muted-foreground"> + </span>}
-              <Link href={`/products/${creditId}`} className="font-semibold underline-offset-2 hover:underline">
+              <Link href={`/produtos/${creditId}`} className="font-semibold underline-offset-2 hover:underline">
                 {getProduct(creditId)?.name || creditId}
               </Link>
             </span>
@@ -237,7 +237,7 @@ function MentionedProduct({ mention }: { mention: Mention }) {
           <span className="text-muted-foreground"> (combo)</span>
         </>
       ) : (
-        <Link href={`/products/${mention.productId}`} className="font-semibold underline-offset-2 hover:underline">
+        <Link href={`/produtos/${mention.productId}`} className="font-semibold underline-offset-2 hover:underline">
           {product?.name || mention.productId}
         </Link>
       )}
@@ -260,7 +260,7 @@ function PersonDetail() {
       <div className="text-center py-12">
         <p className="text-muted-foreground">Pessoa não encontrada.</p>
         <Button asChild variant="ghost" className="mt-4">
-          <Link href="/people">
+          <Link href="/pessoas">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Link>
         </Button>
@@ -312,7 +312,7 @@ function PersonDetail() {
       {/* Header */}
       <div>
         <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
-          <Link href="/people">
+          <Link href="/pessoas">
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Pessoas
           </Link>
         </Button>
@@ -372,7 +372,7 @@ function PersonDetail() {
                   <li key={productId} className="flex items-center justify-between gap-3 border-b border-border/40 py-2 last:border-0">
                     <div className="flex min-w-0 items-baseline gap-2.5">
                       <span className="w-5 shrink-0 text-right text-xs tabular-nums text-muted-foreground">{index + 1}</span>
-                      <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
+                      <Link href={`/produtos/${productId}`} className="text-sm font-medium hover:underline">
                         {product?.name || productId}
                       </Link>
                       {product?.category && <span className="shrink-0 text-xs text-muted-foreground">{categoryLabel(product.category)}</span>}
@@ -405,7 +405,7 @@ function PersonDetail() {
                 const epMentions = personMentions.filter((m) => m.episodeId === epId);
                 return (
                   <li key={epId} className="space-y-1 border-b border-border/40 py-3 first:pt-0 last:border-0">
-                    <Link href={`/episodes/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
+                    <Link href={`/episodios/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
                       <span className="font-bold tabular-nums">#{epId}</span>
                       {episode && <span className="text-muted-foreground"> · </span>}
                       {episode?.title}
