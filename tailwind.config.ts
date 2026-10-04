@@ -6,9 +6,13 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        lg: ".5625rem", /* 9px */
-        md: ".375rem", /* 6px */
-        sm: ".1875rem", /* 3px */
+        lg: ".75rem", /* 12px */
+        md: ".5rem", /* 8px */
+        sm: ".25rem", /* 4px */
+      },
+      // text-sm em 15px, na faixa do texto dos cards da Product Arena (14,5–15,5px)
+      fontSize: {
+        sm: ["0.9375rem", { lineHeight: "1.375rem" }], // 15px
       },
       colors: {
         // Flat / base colors (regular buttons)
@@ -30,6 +34,7 @@ export default {
           youtube: "hsl(var(--brand-youtube) / <alpha-value>)",
           spotify: "hsl(var(--brand-spotify) / <alpha-value>)",
           linkedin: "hsl(var(--brand-linkedin) / <alpha-value>)",
+          tint: "hsl(var(--brand-tint) / <alpha-value>)",
         },
         primary: {
           DEFAULT: "hsl(var(--primary) / <alpha-value>)",
@@ -57,12 +62,16 @@ export default {
           border: "var(--destructive-border)",
         },
         ring: "hsl(var(--ring) / <alpha-value>)",
+        highlight: "hsl(var(--highlight) / <alpha-value>)",
         chart: {
           "1": "hsl(var(--chart-1) / <alpha-value>)",
           "2": "hsl(var(--chart-2) / <alpha-value>)",
           "3": "hsl(var(--chart-3) / <alpha-value>)",
           "4": "hsl(var(--chart-4) / <alpha-value>)",
           "5": "hsl(var(--chart-5) / <alpha-value>)",
+          "6": "hsl(var(--chart-6) / <alpha-value>)",
+          "7": "hsl(var(--chart-7) / <alpha-value>)",
+          "8": "hsl(var(--chart-8) / <alpha-value>)",
         },
         sidebar: {
           ring: "hsl(var(--sidebar-ring) / <alpha-value>)",

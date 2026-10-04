@@ -16,10 +16,10 @@ export default function AboutPage() {
   const copy = getAboutCopy();
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-8 max-w-3xl">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Sobre o Papo na Arena Radar</h1>
-        <p className="text-muted-foreground">O podcast, o site e quem faz parte dele</p>
+        <h1 className="page-title" data-testid="text-page-title">Sobre o Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
+        <p className="page-lead">O podcast, o site e quem faz parte dele</p>
       </div>
 
       <Card>
@@ -31,12 +31,12 @@ export default function AboutPage() {
             <Link href="/people/arthur" className="font-medium hover:underline">Arthur</Link> e{" "}
             <Link href="/people/aiquis" className="font-medium hover:underline">Aíquis</Link>.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3">
             <a
               href={SPOTIFY_SHOW_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium hover:underline"
+              className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => posthog.capture("podcast_link_clicked", { platform: "spotify", source: "about" })}
             >
               <SiSpotify aria-hidden="true" className="h-4 w-4 text-brand-spotify" /> Ouvir no Spotify
@@ -45,7 +45,7 @@ export default function AboutPage() {
               href={YOUTUBE_CHANNEL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium hover:underline"
+              className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => posthog.capture("podcast_link_clicked", { platform: "youtube", source: "about" })}
             >
               <SiYoutube aria-hidden="true" className="h-4 w-4 text-brand-youtube" /> Assistir no YouTube
@@ -66,6 +66,9 @@ export default function AboutPage() {
               </li>
             ))}
           </ul>
+          <p className="rounded-md border-l-4 border-primary bg-highlight px-4 py-3" data-testid="text-fan-notice">
+            {copy.fan}
+          </p>
         </CardContent>
       </Card>
 

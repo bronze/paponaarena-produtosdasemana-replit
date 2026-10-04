@@ -3,7 +3,6 @@ import { Switch, Route } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { ThemeProvider } from "@/components/theme-provider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { RouteSeo } from "@/components/route-seo";
 const Dashboard = lazy(() => import("@/pages/dashboard"));
@@ -36,23 +35,21 @@ function Router() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <TooltipProvider>
-        <Toaster />
-        <RouteSeo />
-        <SidebarProvider style={{ "--sidebar-width": "16rem" } as React.CSSProperties}>
-          <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-12 items-center border-b px-4 lg:hidden">
-              <SidebarTrigger />
-            </header>
-            <main className="flex-1 overflow-auto p-4 md:p-6">
-              <Router />
-            </main>
-          </SidebarInset>
-        </SidebarProvider>
-      </TooltipProvider>
-    </ThemeProvider>
+    <TooltipProvider>
+      <Toaster />
+      <RouteSeo />
+      <SidebarProvider style={{ "--sidebar-width": "16rem" } as React.CSSProperties}>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-14 items-center border-b px-2 lg:hidden">
+            <SidebarTrigger />
+          </header>
+          <main className="flex-1 overflow-auto p-4 md:p-8">
+            <Router />
+          </main>
+        </SidebarInset>
+      </SidebarProvider>
+    </TooltipProvider>
   );
 }
 

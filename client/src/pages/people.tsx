@@ -1,14 +1,18 @@
+import { categoryLabel } from "@/lib/categories";
 import {Link, useParams} from "wouter";
-import {ArrowLeft, User, Package, Mic, TrendingUp} from "lucide-react";
+import {ArrowLeft, Package, Mic, Search} from "lucide-react";
 import { posthog } from "@/lib/analytics";
 import {SiLinkedin} from "react-icons/si";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
+import { StatBand } from "@/components/stat-band";
+import { LoadMore, ShareBar, ShowAllButton, SortButtons, plural } from "@/components/ranking";
+import type { Mention } from "@/lib/types";
 import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
 import {useState, useMemo, useRef} from "react";
-import {people, episodes, getMentionsForPerson, getProduct, getEpisode, getPersonMentionCount, getPersonRoleCounts} from "@/lib/data-utils";
+import {people, getMentionsForPerson, getProduct, getEpisode, getPersonRoleCounts} from "@/lib/data-utils";
+import { normalize } from "@/lib/text";
 import arthurImg from "@assets/arthur_1772132984125.webp";
 import aquisImg from "@assets/aiquis_1772132984122.webp";
 import arthurAudio from "@assets/audio/audio-arthur.mp3";
@@ -20,144 +24,257 @@ const hostAvatars: Record<string, string> = {
   aiquis: aquisImg,
 };
 
-type PeopleSortMode = "mentions" | "alpha";
+type PeopleSortMode = "mentions" | "episodes" | "alpha";
+
+const MAX_LIST_PRODUCTS = 4;
+const INITIAL_COUNT = 30;
+const LOAD_MORE_COUNT = 100;
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+type PersonRowData = {
+  id: string;
+  name: string;
+  rank: number;
+  episodeRank: number;
+  isHost: boolean;
+  mentionCount: number;
+  episodeCount: number;
+  products: { id: string; name: string }[];
+  searchText: string;
+};
+
+function buildPersonRows(): PersonRowData[] {
+  const rows = people
+    .map((p) => {
+      const m = getMentionsForPerson(p.id);
+      const counts = new Map<string, number>();
+      for (const x of m) counts.set(x.productId, (counts.get(x.productId) || 0) + 1);
+      const products = Array.from(counts.entries())
+        .map(([id, count]) => ({ id, count, name: getProduct(id)?.name || id }))
+        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "pt-BR"))
+        .map(({ id, name }) => ({ id, name }));
+      return {
+        id: p.id,
+        name: p.name,
+        rank: 0,
+        episodeRank: 0,
+        isHost: getPersonRoleCounts(p.id).host > 0,
+        mentionCount: m.length,
+        episodeCount: new Set(m.map((x) => x.episodeId)).size,
+        products,
+        searchText: normalize([p.name, ...products.map((x) => x.name)].join(" ")),
+      };
+    })
+    .filter((p) => p.mentionCount > 0)
+    .sort((a, b) => b.mentionCount - a.mentionCount || a.name.localeCompare(b.name, "pt-BR"))
+    .map((p, i) => ({ ...p, rank: i + 1 }));
+  const byEpisodes = [...rows].sort((a, b) => b.episodeCount - a.episodeCount || a.rank - b.rank);
+  byEpisodes.forEach((p, i) => (p.episodeRank = i + 1));
+  return rows;
+}
+
+/** O número da direita (com a barra) é sempre o critério da ordenação; o outro vai no texto. */
+function PersonRow({ row, query, byEpisodes, max }: { row: PersonRowData; query: string; byEpisodes: boolean; max: number }) {
+  const mentions = plural(row.mentionCount, "menção", "menções");
+  const episodesLabel = plural(row.episodeCount, "episódio", "episódios");
+  const primary = byEpisodes ? episodesLabel : mentions;
+  // Na busca por produto, os produtos que batem aparecem primeiro
+  const ordered = query
+    ? [...row.products].sort((a, b) => Number(normalize(b.name).includes(query)) - Number(normalize(a.name).includes(query)))
+    : row.products;
+  const shown = ordered.slice(0, MAX_LIST_PRODUCTS);
+  const rest = row.products.length - shown.length;
+  return (
+    <li
+      className="relative grid grid-cols-[3.5rem_3rem_1fr] items-start gap-x-3 gap-y-1 border-b px-2 py-5 transition-colors hover:bg-highlight sm:grid-cols-[4.5rem_3rem_1fr_8rem] sm:gap-x-6 sm:px-4"
+      data-testid={`card-person-${row.id}`}
+    >
+      <p className="pt-1.5 text-2xl font-extrabold leading-tight tracking-[-0.035em] tabular-nums text-muted-foreground sm:pt-1 sm:text-3xl">{byEpisodes ? row.episodeRank : row.rank}</p>
+      <Avatar className="h-12 w-12">
+        {hostAvatars[row.id] ? <AvatarImage src={hostAvatars[row.id]} alt="" /> : null}
+        <AvatarFallback className="text-sm font-semibold">{initials(row.name)}</AvatarFallback>
+      </Avatar>
+      <div className="min-w-0 space-y-1">
+        <h2 className="text-lg font-bold leading-snug tracking-[-0.01em]">
+          <Link
+            href={`/people/${row.id}`}
+            className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
+            onClick={() => posthog.capture("person_viewed", { person_id: row.id, source: "list" })}
+          >
+            {row.name}
+          </Link>
+        </h2>
+        <p className="text-sm text-muted-foreground" data-testid={`text-episodes-${row.id}`}>
+          {row.isHost && <><span className="font-semibold text-foreground">Host</span> · </>}
+          {byEpisodes ? mentions : `em ${episodesLabel}`}
+        </p>
+        {shown.length > 0 && (
+          <p className="text-sm" data-testid={`text-products-${row.id}`}>
+            {shown.map((product, i) => (
+              <span key={product.id}>
+                {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
+                <Link href={`/products/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+                  {product.name}
+                </Link>
+              </span>
+            ))}
+            {rest > 0 && <span className="text-muted-foreground"> · +{rest}</span>}
+          </p>
+        )}
+        <p className="text-sm text-muted-foreground sm:hidden">{primary}</p>
+      </div>
+      <div className="hidden space-y-2 pt-1 sm:block">
+        <p className="text-right text-sm text-muted-foreground" data-testid={`text-mentions-${row.id}`}>{primary}</p>
+        <ShareBar value={byEpisodes ? row.episodeCount : row.mentionCount} max={max} />
+      </div>
+    </li>
+  );
+}
 
 function PeopleList() {
+  const rows = useMemo(buildPersonRows, []);
   const [search, setSearch] = useState("");
   const [sortMode, setSortMode] = useState<PeopleSortMode>("mentions");
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
 
-  const totalEpisodes = episodes.length;
-
-  const allPeople = useMemo(() => {
-    return [...people]
-      .map((p) => {
-        const m = getMentionsForPerson(p.id);
-        const uniqueProducts = new Set(m.map((x) => x.productId));
-        const uniqueEpisodes = new Set(m.map((x) => x.episodeId));
-        return {
-          ...p,
-          mentionCount: m.length,
-          productCount: uniqueProducts.size,
-          episodeCount: uniqueEpisodes.size,
-        };
-      })
-      .filter((p) => p.mentionCount > 0);
-  }, []);
-
+  const query = normalize(search.trim());
   const filtered = useMemo(() => {
-    let list = allPeople;
-    if (search) {
-      list = list.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
-    }
-    if (sortMode === "alpha") {
-      return [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-    }
-    return [...list].sort((a, b) => b.mentionCount - a.mentionCount || a.name.localeCompare(b.name, "pt-BR"));
-  }, [allPeople, search, sortMode]);
+    const list = query ? rows.filter((r) => r.searchText.includes(query)) : rows;
+    if (sortMode === "alpha") return [...list].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+    if (sortMode === "episodes") return [...list].sort((a, b) => a.episodeRank - b.episodeRank);
+    return list;
+  }, [rows, query, sortMode]);
+  const byEpisodes = sortMode === "episodes";
+  const max = Math.max(1, ...rows.map((r) => (byEpisodes ? r.episodeCount : r.mentionCount)));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">
-          Pessoas
+        <h1 className="page-title" data-testid="text-page-title">
+          Pessoas<span className="text-primary" aria-hidden="true">.</span>
         </h1>
-        <p className="text-muted-foreground">{allPeople.length} participantes do podcast</p>
+        <p className="page-lead">
+          {query ? `${filtered.length} de ${rows.length} pessoas` : `${rows.length} pessoas que já recomendaram produtos no podcast`}
+        </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-        <Input placeholder="Buscar pessoa..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-sm" data-testid="input-search" />
-        <div className="flex gap-1">
-          <Button variant={sortMode === "mentions" ? "default" : "outline"} size="sm" onClick={() => { setSortMode("mentions"); posthog.capture("people_sort_changed", { sort_mode: "mentions" }); }} data-testid="sort-mentions">
-            Mais menções
-          </Button>
-          <Button variant={sortMode === "alpha" ? "default" : "outline"} size="sm" onClick={() => { setSortMode("alpha"); posthog.capture("people_sort_changed", { sort_mode: "alpha" }); }} data-testid="sort-alpha">
-            Alfabética
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative sm:w-96">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+          <Input
+            type="search"
+            placeholder="Buscar por pessoa ou produto"
+            aria-label="Buscar pessoas"
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setVisibleCount(INITIAL_COUNT); if (e.target.value.length > 2) posthog.capture("person_searched", { query: e.target.value }); }}
+            className="h-12 pl-9"
+            data-testid="input-search"
+          />
+        </div>
+        <SortButtons
+          options={[["mentions", "Menções"], ["episodes", "Episódios"], ["alpha", "A–Z"]] as const}
+          value={sortMode}
+          onChange={(mode) => { setSortMode(mode); setVisibleCount(INITIAL_COUNT); posthog.capture("people_sort_changed", { sort_mode: mode }); }}
+        />
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="border-y py-12 text-center">
+          <p className="text-muted-foreground">Nenhuma pessoa encontrada para “{search.trim()}”.</p>
+          <Button variant="outline" className="mt-4" onClick={() => setSearch("")}>
+            Limpar busca
           </Button>
         </div>
-      </div>
-
-      <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((person, i) => (
-          <Link key={person.id} href={`/people/${person.id}`} onClick={() => posthog.capture("person_viewed", { person_id: person.id, source: "list" })}>
-            <div
-              className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card transition-colors hover:bg-accent/50 cursor-pointer"
-              data-testid={`card-person-${person.id}`}>
-              <span className="text-lg font-bold text-muted-foreground w-8 text-right shrink-0">{i + 1}</span>
-              <Avatar className="h-12 w-12 shrink-0">
-                {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
-                <AvatarFallback className="text-sm font-semibold">
-                  {person.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .slice(0, 2)
-                    .toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm truncate">{person.name}</span>
-                  {(person.id === "arthur" || person.id === "aiquis") && (
-                    <Badge variant="secondary" className="text-xs shrink-0">
-                      Host
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1" data-testid={`text-products-${person.id}`}>
-                    <Package className="h-3 w-3" /> {person.productCount} produtos
-                  </span>
-                  <span className="flex items-center gap-1" data-testid={`text-episodes-${person.id}`}>
-                    <Mic className="h-3 w-3" /> {person.episodeCount} / {totalEpisodes} eps
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col items-center shrink-0">
-                <span className="text-lg font-bold" data-testid={`text-mentions-${person.id}`}>
-                  {person.mentionCount}
-                </span>
-                <span className="text-xs text-muted-foreground leading-tight">menções</span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      {filtered.length === 0 && <p className="text-center text-muted-foreground py-8">Nenhuma pessoa encontrada.</p>}
+      ) : (
+        <div className="space-y-6">
+          <ul className="border-t">
+            {filtered.slice(0, visibleCount).map((row) => (
+              <PersonRow key={row.id} row={row} query={query} byEpisodes={byEpisodes} max={max} />
+            ))}
+          </ul>
+          <LoadMore
+            visible={visibleCount}
+            total={filtered.length}
+            step={LOAD_MORE_COUNT}
+            noun={{ all: "Mostrar todas", lastOne: "a última pessoa", lastMany: "as últimas" }}
+            onShow={(next, mode) => {
+              setVisibleCount(next);
+              posthog.capture("people_list_expanded", { mode, visible_count: next, total: filtered.length });
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
+
+const DETAIL_LIST_LIMIT = 20;
+
+/** Produto citado numa menção: nome com link, combos como "A + B (combo)" e o comentário, se houver. */
+function MentionedProduct({ mention }: { mention: Mention }) {
+  const product = getProduct(mention.productId);
+  const credits = product?.alsoCredits;
+  return (
+    <span>
+      {credits?.length ? (
+        <>
+          {credits.map((creditId, idx) => (
+            <span key={creditId}>
+              {idx > 0 && <span className="text-muted-foreground"> + </span>}
+              <Link href={`/products/${creditId}`} className="font-semibold underline-offset-2 hover:underline">
+                {getProduct(creditId)?.name || creditId}
+              </Link>
+            </span>
+          ))}
+          <span className="text-muted-foreground"> (combo)</span>
+        </>
+      ) : (
+        <Link href={`/products/${mention.productId}`} className="font-semibold underline-offset-2 hover:underline">
+          {product?.name || mention.productId}
+        </Link>
+      )}
+      {mention.context && <span className="italic text-muted-foreground"> — {mention.context}</span>}
+    </span>
+  );
+}
+
 
 function PersonDetail() {
   const {id} = useParams<{id: string}>();
   const person = people.find((p) => p.id === id);
 
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [showAllProducts, setShowAllProducts] = useState(false);
+  const [showAllEpisodes, setShowAllEpisodes] = useState(false);
+
   if (!person) {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Pessoa não encontrada.</p>
-        <Link href="/people">
-          <Button variant="ghost" className="mt-4">
+        <Button asChild variant="ghost" className="mt-4">
+          <Link href="/people">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }
 
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const aquisAudios = [aquisAudio, aquisCaraAudio];
-
-  const audioSrc = useMemo(() => {
-    if (person.id === "arthur") return arthurAudio;
-    if (person.id === "aiquis") return aquisAudio;
-    return null;
-  }, [person.id]);
+  const audioSrc = person.id === "arthur" ? arthurAudio : person.id === "aiquis" ? aquisAudio : null;
 
   const playSound = () => {
     const audio = audioRef.current;
     if (!audio || !audioSrc) return;
     if (person.id === "aiquis") {
+      const aquisAudios = [aquisAudio, aquisCaraAudio];
       audio.src = aquisAudios[Math.floor(Math.random() * aquisAudios.length)];
     }
     const wasEnded = audio.ended;
@@ -178,7 +295,7 @@ function PersonDetail() {
     return (getProduct(a[0])?.name || a[0]).localeCompare(getProduct(b[0])?.name || b[0], "pt-BR");
   });
 
-  const episodesParticipated = new Set(personMentions.map((m) => m.episodeId));
+  const episodeIds = Array.from(new Set(personMentions.map((m) => m.episodeId))).sort((a, b) => b - a);
 
   const roles = getPersonRoleCounts(person.id);
   const epLabel = (n: number) => `${n} ${n === 1 ? "episódio" : "episódios"}`;
@@ -187,181 +304,127 @@ function PersonDetail() {
     roles.cohost > 0 && `Cohost em ${epLabel(roles.cohost)}`,
   ].filter(Boolean).join(" · ");
 
-  const statCards = [
-    {label: "Total de Menções", value: personMentions.length, icon: TrendingUp, color: "text-purple-500"},
-    {label: "Produtos Únicos", value: topProducts.length, icon: Package, color: "text-green-500"},
-    {label: "Episódios", value: episodesParticipated.size, icon: Mic, color: "text-blue-500"},
-  ];
+  const shownProducts = showAllProducts ? topProducts : topProducts.slice(0, DETAIL_LIST_LIMIT);
+  const shownEpisodes = showAllEpisodes ? episodeIds : episodeIds.slice(0, DETAIL_LIST_LIMIT);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/people" aria-label="Voltar para Pessoas">
-          <Button variant="ghost" size="icon" aria-label="Voltar para Pessoas" data-testid="button-back">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <Avatar
-          className={`h-12 w-12 shrink-0 ${audioSrc ? "select-none active:scale-95 transition-transform cursor-pointer" : ""}`}
-          onPointerUp={audioSrc ? playSound : undefined}
-          style={{ touchAction: "manipulation" }}>
-          {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
-          <AvatarFallback className="text-sm font-semibold">
-            {person.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        {audioSrc && <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />}
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-person-name">
-            {person.name}
-          </h1>
-          <p className="text-sm text-muted-foreground">Análise do participante</p>
-          {roleLine && <p className="text-sm text-muted-foreground" data-testid="text-person-roles">{roleLine}</p>}
-          {person.linkedinUrl && (
-            <a href={person.linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <Badge
-                variant="outline"
-                className="mt-2 cursor-pointer text-sm px-3 py-1 border-brand-linkedin/40 text-brand-linkedin hover:bg-brand-linkedin/10"
-                data-testid="link-linkedin">
-                <SiLinkedin aria-hidden="true" className="mr-1.5 h-4 w-4" /> LinkedIn
-              </Badge>
-            </a>
-          )}
-        </div>
-      </div>
-
-      <div className="grid gap-4 grid-cols-3">
-        {statCards.map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className="text-2xl font-bold">{stat.value}</p>
-                </div>
-                <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-purple-500" /> Top Produtos Mencionados
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            {topProducts.slice(0, 8).map(([productId, count]) => {
-              const product = getProduct(productId);
-              return (
-                <Link key={productId} href={`/products/${productId}`}>
-                  <Badge variant="secondary" className="cursor-pointer hover:bg-accent text-sm px-3 py-1">
-                    {product?.name || productId}
-                    {count > 1 && <span className="ml-1.5 font-bold text-muted-foreground">{count}x</span>}
-                  </Badge>
-                </Link>
-              );
-            })}
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
+          <Link href="/people">
+            <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Pessoas
+          </Link>
+        </Button>
+        <div className="flex items-center gap-4">
+          <Avatar
+            className={`h-16 w-16 shrink-0 md:h-20 md:w-20 ${audioSrc ? "select-none active:scale-95 transition-transform cursor-pointer" : ""}`}
+            onPointerUp={audioSrc ? playSound : undefined}
+            style={{ touchAction: "manipulation" }}>
+            {hostAvatars[person.id] ? <AvatarImage src={hostAvatars[person.id]} alt={person.name} /> : null}
+            <AvatarFallback className="text-lg font-semibold">{initials(person.name)}</AvatarFallback>
+          </Avatar>
+          {audioSrc && <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />}
+          <div className="min-w-0">
+            <h1 className="detail-title" data-testid="text-person-name">
+              {person.name}
+            </h1>
+            {roleLine && <p className="mt-1 text-sm text-muted-foreground" data-testid="text-person-roles">{roleLine}</p>}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        {person.linkedinUrl && (
+          <a
+            href={person.linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 text-sm font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            onClick={() => posthog.capture("person_linkedin_clicked", { person_id: person.id })}
+            data-testid="link-linkedin"
+          >
+            <SiLinkedin aria-hidden="true" className="h-4 w-4 text-brand-linkedin" /> Ver no LinkedIn
+          </a>
+        )}
+      </div>
+
+      <StatBand
+        className="grid-cols-3"
+        items={[
+          { label: "Menções", value: personMentions.length },
+          { label: "Episódios", value: episodeIds.length },
+          { label: "Produtos", value: topProducts.length },
+        ]}
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Produtos */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Produtos mencionados ({topProducts.length})</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Package className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              Produtos recomendados
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {topProducts.map(([productId, count]) => {
+            <ol>
+              {shownProducts.map(([productId, count], index) => {
                 const product = getProduct(productId);
                 return (
-                  <div key={productId} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
-                    <Link href={`/products/${productId}`} className="text-sm hover:underline">
-                      {product?.name || productId}
-                    </Link>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {product && (
-                        <Badge variant="outline" className="text-xs">
-                          {product.category}
-                        </Badge>
-                      )}
-                      {count > 1 && <span className="text-xs font-semibold text-muted-foreground">{count}x</span>}
+                  <li key={productId} className="flex items-center justify-between gap-3 border-b border-border/40 py-2 last:border-0">
+                    <div className="flex min-w-0 items-baseline gap-2.5">
+                      <span className="w-5 shrink-0 text-right text-xs tabular-nums text-muted-foreground">{index + 1}</span>
+                      <Link href={`/products/${productId}`} className="text-sm font-medium hover:underline">
+                        {product?.name || productId}
+                      </Link>
+                      {product?.category && <span className="shrink-0 text-xs text-muted-foreground">{categoryLabel(product.category)}</span>}
                     </div>
-                  </div>
+                    {count > 1 && (
+                      <span className="ml-2 shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{count}×</span>
+                    )}
+                  </li>
                 );
               })}
-            </div>
+            </ol>
+            {!showAllProducts && topProducts.length > DETAIL_LIST_LIMIT && (
+              <ShowAllButton total={topProducts.length} onClick={() => setShowAllProducts(true)} />
+            )}
           </CardContent>
         </Card>
 
+        {/* Episódios */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Episódios ({episodesParticipated.size})</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Mic className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              Episódios
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {Array.from(episodesParticipated)
-                .sort((a, b) => b - a)
-                .map((epId) => {
-                  const epMentions = personMentions.filter((m) => m.episodeId === epId);
-                  return (
-                    <div key={epId} className="flex items-center gap-2 flex-wrap py-2 border-b border-border/50 last:border-0 -mx-2 px-2 rounded">
-                      <Link href={`/episodes/${epId}`}>
-                        <Badge variant="outline" className="text-xs shrink-0 cursor-pointer hover:bg-accent">
-                          #{epId}
-                        </Badge>
-                      </Link>
-                      {epMentions.map((m) => {
-                        const product = getProduct(m.productId);
-                        const isCombo = product?.alsoCredits && product.alsoCredits.length > 0;
-                        if (isCombo) {
-                          const credits = product!.alsoCredits!;
-                          return (
-                            <span key={m.id} className="inline-flex items-center gap-1.5">
-                              {credits.map((creditId, idx) => {
-                                const credited = getProduct(creditId);
-                                return (
-                                  <span key={creditId} className="inline-flex items-center gap-1.5">
-                                    {idx > 0 && <span className="text-xs text-muted-foreground">+</span>}
-                                    <Link href={`/products/${creditId}`}>
-                                      <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
-                                        {credited?.name || creditId}
-                                      </Badge>
-                                    </Link>
-                                  </span>
-                                );
-                              })}
-                              <Badge variant="outline" className="text-xs font-normal text-muted-foreground">
-                                combo
-                              </Badge>
-                              {m.context && <span className="text-xs text-muted-foreground italic">({m.context})</span>}
-                            </span>
-                          );
-                        }
-                        return (
-                          <span key={m.id} className="inline-flex items-center gap-1">
-                            <Link href={`/products/${m.productId}`}>
-                              <Badge variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-accent">
-                                {product?.name || m.productId}
-                              </Badge>
-                            </Link>
-                            {m.context && <span className="text-xs text-muted-foreground italic">({m.context})</span>}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-            </div>
+            <ul>
+              {shownEpisodes.map((epId) => {
+                const episode = getEpisode(epId);
+                const epMentions = personMentions.filter((m) => m.episodeId === epId);
+                return (
+                  <li key={epId} className="space-y-1 border-b border-border/40 py-3 first:pt-0 last:border-0">
+                    <Link href={`/episodes/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
+                      <span className="font-bold tabular-nums">#{epId}</span>
+                      {episode && <span className="text-muted-foreground"> · </span>}
+                      {episode?.title}
+                    </Link>
+                    <p className="text-sm">
+                      {epMentions.map((m, i) => (
+                        <span key={m.id}>
+                          {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
+                          <MentionedProduct mention={m} />
+                        </span>
+                      ))}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+            {!showAllEpisodes && episodeIds.length > DETAIL_LIST_LIMIT && (
+              <ShowAllButton total={episodeIds.length} onClick={() => setShowAllEpisodes(true)} />
+            )}
           </CardContent>
         </Card>
       </div>
@@ -371,6 +434,6 @@ function PersonDetail() {
 
 export default function PeoplePage() {
   const params = useParams<{id: string}>();
-  if (params.id) return <PersonDetail />;
+  if (params.id) return <PersonDetail key={params.id} />;
   return <PeopleList />;
 }

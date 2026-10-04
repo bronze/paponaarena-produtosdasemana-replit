@@ -17,7 +17,7 @@ Este site foi feito com [Replit](https://replit.com).
 - **Produtos:** ranking com busca e ordenação; a página do produto mostra quem citou e em quais episódios.
 - **Categorias:** produtos agrupados por tipo.
 - **Pessoas:** hosts, convidados e quem enviou produtos, com tudo o que cada um recomendou.
-- Tema claro e escuro.
+- Visual inspirado na Product Arena, só com tema claro (paleta, tipografia e regras em [`DESIGN.md`](DESIGN.md)).
 
 ## Stack
 

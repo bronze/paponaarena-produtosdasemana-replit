@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { BarChart3, Mic, Package, FolderOpen, Users, Info, Sun, Moon } from "lucide-react";
+import { BarChart3, Mic, Package, FolderOpen, Users, Info } from "lucide-react";
 import { posthog } from "@/lib/analytics";
 import {
   Sidebar,
@@ -12,9 +12,8 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { useTheme } from "./theme-provider";
-import { Button } from "@/components/ui/button";
 import { REPLIT_URL } from "@/lib/about";
 
 const navItems = [
@@ -28,20 +27,27 @@ const navItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
-  const { theme, toggleTheme } = useTheme();
+  const { setOpenMobile } = useSidebar();
+  // No mobile a sidebar é um painel sobreposto: fecha ao clicar em qualquer link interno
+  const closeMobile = () => setOpenMobile(false);
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+        <Link
+          href="/"
+          onClick={closeMobile}
+          className="flex items-center gap-2 rounded-md px-2 py-3 outline-none ring-sidebar-ring transition-colors hover:bg-sidebar-accent focus-visible:ring-2"
+          data-testid="link-sidebar-home"
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm" aria-hidden="true">
             PA
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-semibold" data-testid="sidebar-title">Papo na Arena</span>
-            <span className="text-xs text-muted-foreground">Radar</span>
+            <span className="text-xs text-sidebar-foreground/70">Radar</span>
           </div>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -52,9 +58,9 @@ export function AppSidebar() {
                 const isActive = item.path === "/" ? location === "/" : location.startsWith(item.path);
                 return (
                   <SidebarMenuItem key={item.path}>
-                    <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.path} data-testid={`nav-${item.title.toLowerCase()}`}>
-                        <item.icon className="h-4 w-4" />
+                    <SidebarMenuButton asChild isActive={isActive} className="h-12 px-3">
+                      <Link href={item.path} onClick={closeMobile} data-testid={`nav-${item.title.toLowerCase()}`}>
+                        <item.icon className={isActive ? "h-4 w-4 text-sidebar-primary" : "h-4 w-4"} />
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -66,19 +72,10 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-2 py-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleTheme}
-            className="w-full justify-start gap-2"
-            data-testid="button-theme-toggle"
-          >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            <span>{theme === "dark" ? "Modo Claro" : "Modo Escuro"}</span>
-          </Button>
-        </div>
-        <p className="px-4 pb-2 text-xs text-muted-foreground">
+        <p className="px-4 py-2 text-xs text-sidebar-foreground/70">
+          <Link href="/sobre" onClick={closeMobile} className="block py-1 underline-offset-2 hover:underline" data-testid="link-fan-notice">
+            Projeto de fã, não oficial
+          </Link>
           Feito com{" "}
           <a
             href={REPLIT_URL}

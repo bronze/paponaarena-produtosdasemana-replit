@@ -2,21 +2,19 @@ import { Link } from "wouter";
 import { lazy, Suspense, useMemo } from "react";
 import { motion } from "framer-motion";
 import { posthog } from "@/lib/analytics";
-import { BarChart3, Mic, Package, Users, TrendingUp, ArrowRight } from "lucide-react";
+import { BarChart3, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { LatestEpisode } from "@/components/latest-episode";
+import { StatBand } from "@/components/stat-band";
 import {
   episodes,
   getTotalStats,
   getLeaderboardProducts,
-  getCategoryStats,
   getMentionsPerEpisodeTrend,
   getParticipantsPerEpisodeTrend,
-  getRecentMentions,
   getProduct,
-  getPerson,
-  getEpisode,
   getMentionsForEpisode,
+  getEpisodeCast,
   resolveParent,
   getTopProductsAscension,
   getTopProductNames,
@@ -25,7 +23,6 @@ import {
 
 const TopProductsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TopProductsChart })));
 const AiCompanyChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AiCompanyChart })));
-const CategoryPieChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.CategoryPieChart })));
 const AscensionChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.AscensionChart })));
 const TrendChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.TrendChart })));
 const ParticipantsChart = lazy(() => import("./dashboard-charts").then((m) => ({ default: m.ParticipantsChart })));
@@ -65,10 +62,8 @@ function MilestoneConfetti() {
 export default function Dashboard() {
   const stats = getTotalStats();
   const topProducts = getLeaderboardProducts().slice(0, 10);
-  const categoryStats = getCategoryStats().slice(0, 8);
   const trend = getMentionsPerEpisodeTrend();
   const participantsTrend = getParticipantsPerEpisodeTrend();
-  const recentMentions = getRecentMentions(8);
 
   const ascensionData = getTopProductsAscension(6);
   const topProductNames = getTopProductNames(6);
@@ -76,7 +71,7 @@ export default function Dashboard() {
 
   const latestEpisode = [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
   const latestMentions = getMentionsForEpisode(latestEpisode.id);
-  const latestTop3 = Array.from(
+  const latestProducts = Array.from(
     latestMentions.reduce((acc, m) => {
       const id = resolveParent(m.productId);
       acc.set(id, (acc.get(id) || 0) + 1);
@@ -84,57 +79,47 @@ export default function Dashboard() {
     }, new Map<string, number>())
   )
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
     .map(([id]) => getProduct(id))
-    .filter(Boolean);
+    .filter((p) => p !== undefined);
+  const latestCast = getEpisodeCast(latestEpisode.id);
 
   const statCards = [
-    { label: "Episódios", value: stats.totalEpisodes, icon: Mic, color: "text-blue-500", href: "/episodes" },
-    { label: "Produtos", value: stats.totalProducts, icon: Package, color: "text-green-500", href: "/products" },
-    { label: "Pessoas", value: stats.totalPeople, icon: Users, color: "text-orange-500", href: "/people" },
-    { label: "Menções", value: stats.totalMentions, icon: TrendingUp, color: "text-purple-500", href: "/products" },
+    {label: "Menções", value: stats.totalMentions, href: "/products"},
+    {label: "Episódios", value: stats.totalEpisodes, href: "/episodes"},
+    { label: "Produtos", value: stats.totalProducts, href: "/products" },
+    { label: "Pessoas", value: stats.totalPeople, href: "/people" },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">Papo na Arena Radar</h1>
-        <p className="text-muted-foreground max-w-2xl">
-          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, de Arthur e Aíquis.{" "}
-          <Link href="/sobre" className="underline-offset-2 hover:underline">Saiba mais</Link>
+        <h1 className="page-title" data-testid="text-page-title">Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
+        <p className="page-lead">
+          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com Arthur Castro e Aíquis Rodrigues.
+          <Link href="/sobre" className="block w-fit underline-offset-2 hover:underline">Saiba mais</Link>
         </p>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-        {statCards.map((stat) => (
-          <Link key={stat.label} href={stat.href} onClick={() => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href })}>
-            <Card className="cursor-pointer transition-colors hover:bg-accent/50">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold" data-testid={`stat-${stat.label.toLowerCase()}`}>{stat.value}</p>
-                  </div>
-                  <stat.icon className={`h-8 w-8 ${stat.color} opacity-80`} />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      <StatBand
+        className="grid-cols-2 lg:grid-cols-4"
+        items={statCards.map((stat) => ({
+          ...stat,
+          onClick: () => posthog.capture("dashboard_stat_card_clicked", { label: stat.label, destination: stat.href }),
+        }))}
+      />
 
       {/* 1000th mention milestone banner */}
       {/* <Link href="/episodes/108" className="mt-2 block">
-        <Card className="relative border-amber-400 bg-amber-50 dark:bg-amber-950/20 cursor-pointer transition-opacity hover:opacity-90">
+        <Card className="relative border-amber-400 bg-amber-50 cursor-pointer transition-opacity hover:opacity-90">
           <MilestoneConfetti />
           <CardContent className="pt-5 pb-5 relative z-10">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <span className="text-3xl">🏆</span>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-amber-800 dark:text-amber-300 text-base leading-snug">
+                <p className="font-bold text-amber-800 text-base leading-snug">
                   Produto #1000 — Marco histórico!
                 </p>
-                <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+                <p className="text-sm text-amber-700 mt-0.5">
                   <Link href="/people/larissa-araujo" className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
                     Larissa Araújo
                   </Link>
@@ -145,93 +130,53 @@ export default function Dashboard() {
                   {" "}no Ep. 108
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 hidden sm:block" />
+              <ArrowRight className="h-4 w-4 text-amber-600 shrink-0 hidden sm:block" />
             </div>
           </CardContent>
         </Card>
       </Link> */}
 
+      <LatestEpisode
+        variant="escuro"
+        episode={latestEpisode}
+        cast={[...latestCast.hosts, ...latestCast.cohosts]}
+        mentionCount={latestMentions.length}
+        products={latestProducts}
+      />
+
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Top 10 Produtos</CardTitle>
-              <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
-                Ver todos <ArrowRight className="h-3 w-3" />
-              </Link>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div style={{ height: 300 }} />}>
-                <TopProductsChart data={topProducts} />
-              </Suspense>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-base">Top 10 Produtos</CardTitle>
+            <Link href="/products" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
+              Ver todos <ArrowRight className="h-3 w-3" />
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<div style={{ height: 300 }} />}>
+              <TopProductsChart data={topProducts} />
+            </Suspense>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div style={{ height: 192 }} />}>
-                <AiCompanyChart data={aiCompanyStats} />
-              </Suspense>
-              <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
-                <p><span className="company-legend" style={{ "--c": "#d97706" } as React.CSSProperties}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#10a37f" } as React.CSSProperties}>OpenAI:</span> ChatGPT, Codex e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#4285F4" } as React.CSSProperties}>Google:</span> Gemini, Google Flow e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#F26207" } as React.CSSProperties}>Replit:</span> Replit, Replit Canvas e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#8B5CF6" } as React.CSSProperties}>Cursor:</span> Cursor e variantes</p>
-                <p><span className="company-legend" style={{ "--c": "#64748B" } as React.CSSProperties}>xAI:</span> Grok, Grokbot e variantes</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Link href={`/episodes/${latestEpisode.id}`} onClick={() => posthog.capture("dashboard_latest_episode_clicked", { episode_id: latestEpisode.id, episode_title: latestEpisode.title })}>
-            <div className="rounded-lg bg-primary p-5 text-primary-foreground cursor-pointer transition-opacity hover:opacity-90" data-testid="card-latest-episode">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="bg-black/20 text-primary-foreground border-0">Último Episódio</Badge>
-                  <Badge variant="outline" className="border-primary-foreground/30 text-primary-foreground">#{latestEpisode.id}</Badge>
-                </div>
-                <h2 className="text-lg font-bold leading-tight" data-testid="text-latest-title">{latestEpisode.title}</h2>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-sm">
-                    <Package className="h-3.5 w-3.5" />
-                    <span data-testid="text-latest-products">{latestMentions.length} menções</span>
-                  </div>
-                  <span className="text-sm font-medium flex items-center gap-1">
-                    Ver Episódio <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-                {latestTop3.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {latestTop3.map((product) => (
-                      <Badge key={product!.id} className="bg-black/20 text-primary-foreground border-0 text-xs">
-                        {product!.name}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<div style={{ height: 192 }} />}>
+              <AiCompanyChart data={aiCompanyStats} />
+            </Suspense>
+            <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
+              <p><span className="company-legend" style={{ "--c": "#d97706" } as React.CSSProperties}>Anthropic:</span> Claude, Claude Code, Claude Design e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#10a37f" } as React.CSSProperties}>OpenAI:</span> ChatGPT, Codex e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#4285F4" } as React.CSSProperties}>Google:</span> Gemini, Google Flow e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#F26207" } as React.CSSProperties}>Replit:</span> Replit, Replit Canvas e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#8B5CF6" } as React.CSSProperties}>Cursor:</span> Cursor e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#64748B" } as React.CSSProperties}>xAI:</span> Grok, Grokbot e variantes</p>
             </div>
-          </Link>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Categorias</CardTitle>
-              <Link href="/categories" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-categories">
-                Ver todas <ArrowRight className="h-3 w-3" />
-              </Link>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div style={{ height: 300 }} />}>
-                <CategoryPieChart data={categoryStats} />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Card>
@@ -264,50 +209,6 @@ export default function Dashboard() {
           <Suspense fallback={<div style={{ height: 250 }} />}>
             <ParticipantsChart data={participantsTrend} />
           </Suspense>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Menções Recentes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {recentMentions.map(({ mention, episodeDate }) => {
-              const product = getProduct(mention.productId);
-              const person = getPerson(mention.personId);
-              const episode = getEpisode(mention.episodeId);
-              return (
-                <div
-                  key={mention.id}
-                  className="flex items-center justify-between gap-2 py-2 border-b border-border/50 last:border-0"
-                  data-testid={`mention-${mention.id}`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex flex-col min-w-0">
-                      <Link href={`/products/${mention.productId}`} className="text-sm font-medium truncate hover:underline py-0.5">
-                        {product?.name || mention.productId}
-                      </Link>
-                      <span className="text-sm text-muted-foreground">
-                        por{" "}
-                        <Link href={`/people/${mention.personId}`} className="hover:underline">
-                          {person?.name || mention.personId}
-                        </Link>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Badge variant="outline" className="text-xs">
-                      <Link href={`/episodes/${mention.episodeId}`}>
-                        #{mention.episodeId}
-                      </Link>
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">{episodeDate}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </CardContent>
       </Card>
     </div>

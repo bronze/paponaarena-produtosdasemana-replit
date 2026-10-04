@@ -1,3 +1,4 @@
+import { categoryLabel } from "../client/src/lib/categories";
 import {
   episodes,
   getEpisode,
@@ -77,7 +78,7 @@ function bodyContent(pathname: string): string {
       case "categories":
         return (
           heading("Categorias") +
-          list(getUniqueCategories().map((c) => link(`/categories/${encodeURIComponent(c)}`, c)))
+          list(getUniqueCategories().map((c) => link(`/categories/${encodeURIComponent(c)}`, categoryLabel(c))))
         );
       case "sobre": {
         const copy = getAboutCopy();
@@ -86,7 +87,7 @@ function bodyContent(pathname: string): string {
           `<h2>O podcast Papo na Arena</h2><p>${esc(copy.podcast)}</p>` +
           `<p>Hosts: ${link("/people/arthur", "Arthur")} e ${link("/people/aiquis", "Aíquis")}.</p>` +
           list([link(SPOTIFY_SHOW_URL, "Ouvir no Spotify"), link(YOUTUBE_CHANNEL_URL, "Assistir no YouTube")]) +
-          `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
+          `<h2>O que é este site</h2><p>${esc(copy.site)}</p><p>${esc(copy.fan)}</p>` +
           `<h2>Feito com Replit</h2><p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>`
         );
       }
@@ -122,7 +123,7 @@ function bodyContent(pathname: string): string {
     const eps = unique(getMentionsForProduct(canonical.id).map((m) => m.episodeId)).sort((a, b) => b - a);
     return (
       heading(canonical.name) +
-      `<p>Categoria: ${link(`/categories/${encodeURIComponent(canonical.category)}`, canonical.category)}</p>` +
+      `<p>Categoria: ${link(`/categories/${encodeURIComponent(canonical.category)}`, categoryLabel(canonical.category))}</p>` +
       `<h2>Episódios em que foi citado</h2>` +
       list(eps.map(episodeLink))
     );
@@ -141,7 +142,7 @@ function bodyContent(pathname: string): string {
   }
 
   // categories
-  return heading(id) + list(getProductsForCategory(id).map((p) => productLink(p.id)));
+  return heading(categoryLabel(id)) + list(getProductsForCategory(id).map((p) => productLink(p.id)));
 }
 
 function replaceMeta(html: string, attr: "name" | "property", key: string, content: string): string {

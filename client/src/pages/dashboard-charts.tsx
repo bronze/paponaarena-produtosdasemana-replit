@@ -8,8 +8,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  PieChart,
-  Pie,
   Cell,
 } from "recharts";
 
@@ -19,9 +17,9 @@ const COLORS = [
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
   "hsl(var(--chart-5))",
-  "#8b5cf6",
-  "#ec4899",
-  "#14b8a6",
+  "hsl(var(--chart-6))",
+  "hsl(var(--chart-7))",
+  "hsl(var(--chart-8))",
 ];
 
 export function TopProductsChart({ data }: { data: { name: string; mentionCount: number }[] }) {
@@ -33,6 +31,7 @@ export function TopProductsChart({ data }: { data: { name: string; mentionCount:
         type="category"
         dataKey="name"
         width={120}
+        interval={0}
         tick={{ fontSize: 11 }}
       />
       <Tooltip
@@ -81,40 +80,6 @@ export function AiCompanyChart({ data }: { data: { company: string; mentions: nu
         ))}
       </Bar>
     </BarChart>
-  </ResponsiveContainer>
-  );
-}
-
-export function CategoryPieChart({ data }: { data: { category: string; count: number }[] }) {
-  return (
-  <ResponsiveContainer width="100%" height={300}>
-    <PieChart>
-      <Pie
-        data={data}
-        dataKey="count"
-        nameKey="category"
-        cx="50%"
-        cy="50%"
-        outerRadius={100}
-        label={({ category, percent }) =>
-          `${category} (${(percent * 100).toFixed(0)}%)`
-        }
-        labelLine={false}
-      >
-        {data.map((_, index) => (
-          <Cell key={index} fill={COLORS[index % COLORS.length]} aria-label={`${data[index].category}: ${data[index].count}`} />
-        ))}
-      </Pie>
-      <Tooltip
-        contentStyle={{
-          backgroundColor: "hsl(var(--card))",
-          border: "1px solid hsl(var(--border))",
-          borderRadius: 8,
-          color: "hsl(var(--card-foreground))",
-        }}
-        itemStyle={{ color: "hsl(var(--card-foreground))" }}
-      />
-    </PieChart>
   </ResponsiveContainer>
   );
 }
