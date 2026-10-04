@@ -14,3 +14,5 @@ ds-bundle/
 .design-sync/node_modules
 .design-sync/pkg/dist/
 .impeccable
+# Metadados do Windows em arquivos baixados pelo WSL
+*:Zone.Identifier
