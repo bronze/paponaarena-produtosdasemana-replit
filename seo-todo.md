@@ -32,6 +32,7 @@ Objetivo: ser encontrado quando pesquisarem por "Papo na Arena".
 - [x] Prerenderizar rotas, já que os dados são estáticos em `data.ts` (HTML com title/meta/JSON-LD/conteúdo sem depender de JS). Feito no servidor (`server/prerender.ts`), sem Chrome no build
 - [x] Conferir com `curl` que o HTML de `/episodes/136` já traz título e conteúdo (1197 URLs do sitemap verificadas)
 - [ ] Checar prévia de links (WhatsApp, LinkedIn, X) por página
+
 ## 5. Conteúdo
 
 - [ ] Criar página `/sobre` explicando o que é o Papo na Arena (Arthur e Aíquis, tema, frequência), com o nome da marca em texto real
