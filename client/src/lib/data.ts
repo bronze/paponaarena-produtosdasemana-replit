@@ -1,5 +1,11 @@
 import type { Episode, Product, Person, Mention } from "./types";
 
+/**
+ * Data da última correção nos dados sem episódio novo (fusões, renomes, menções corrigidas).
+ * "Atualizado em" usa a mais recente entre esta data e a do último episódio.
+ */
+export const dataRevisedAt = "2026-10-04";
+
 export const episodes: Episode[] = [
   { id: 21, title: "As previsões que ninguém pediu sobre A.I. e Produto em 2024", date: "2024-01-10", description: "Discussão sobre previsões para inteligência artificial e produto em 2024.", youtubeLink: "https://www.youtube.com/watch?v=tT8ytrU2Dtw", spotifyLink: "https://open.spotify.com/episode/234RzKezAqJCQWscOt6itu", hosts: ["arthur", "aiquis"] },
   { id: 22, title: "Como a galera tá usando o ChatGPT no dia a dia?", date: "2024-01-17", description: "Discussão sobre os usos práticos do ChatGPT no cotidiano das pessoas.", youtubeLink: "https://www.youtube.com/watch?v=fWEQ6sWa-1k", spotifyLink: "https://open.spotify.com/episode/47ew2fmvqotNS7wEctCXo1", hosts: ["arthur", "aiquis"] },

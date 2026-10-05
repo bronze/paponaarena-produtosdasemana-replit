@@ -1,4 +1,4 @@
-import { episodes, products, people, mentions } from "./data";
+import { episodes, products, people, mentions, dataRevisedAt } from "./data";
 import type { Product, Mention, Person } from "./types";
 import { categorySlug } from "./categories";
 
@@ -250,6 +250,12 @@ export function getPersonRoleCounts(personId: string) {
 
 export function getLastEpisode() {
   return [...episodes].sort((a, b) => b.date.localeCompare(a.date))[0];
+}
+
+/** Data da última atualização do site (AAAA-MM-DD): último episódio ou última correção nos dados. */
+export function getLastUpdated() {
+  const episodeDate = getLastEpisode().date;
+  return dataRevisedAt > episodeDate ? dataRevisedAt : episodeDate;
 }
 
 export function getAICompanyMentionStats() {

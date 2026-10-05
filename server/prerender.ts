@@ -13,6 +13,7 @@ import {
   getProductsForCategory,
   getUniqueCategories,
   getLastEpisode,
+  getLastUpdated,
   people,
   resolveParent,
 } from "../client/src/lib/data-utils";
@@ -64,9 +65,10 @@ function milestoneHtml(): string {
 
 function footer(): string {
   const last = getLastEpisode();
+  const updated = getLastUpdated();
   return (
-    `<footer><p>Atualizado em <time datetime="${last.date}">${esc(formatLongDate(last.date))}</time>, ` +
-    `com o ${episodeLink(last.id)}.</p></footer>`
+    `<footer><p>Atualizado em <time datetime="${updated}">${esc(formatLongDate(updated))}</time>. ` +
+    `Último episódio: ${episodeLink(last.id)}.</p></footer>`
   );
 }
 

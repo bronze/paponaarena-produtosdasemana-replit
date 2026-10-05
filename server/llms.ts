@@ -3,6 +3,7 @@ import {
   episodes,
   getEpisodeCast,
   getLastEpisode,
+  getLastUpdated,
   getLeaderboardProducts,
   getMentionsForEpisode,
   getPerson,
@@ -36,7 +37,7 @@ function header(): string {
     "",
     `${copy.fan} ${copy.maintainer}`,
     "",
-    `Dados atualizados até o Ep${last.id} (${last.date}). Fonte: ${SITE_URL}/`,
+    `Dados atualizados em ${getLastUpdated()}, até o Ep${last.id} (${last.date}). Fonte: ${SITE_URL}/`,
   ].join("\n");
 }
 

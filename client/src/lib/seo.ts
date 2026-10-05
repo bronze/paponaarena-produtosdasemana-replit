@@ -16,7 +16,7 @@ import {
   products,
   resolveParent,
   getCategoryBySlug,
-  getLastEpisode,
+  getLastUpdated,
 } from "./data-utils";
 import { categorySummary, episodeSummary, personSummary, productSummary } from "./summaries";
 
@@ -249,7 +249,7 @@ const toDateTime = (date: string) => `${date}T00:00:00-03:00`;
 export function getLastModified(pathname: string): string {
   const meta = getPageMeta(pathname);
   const [, section, rawId] = meta.canonicalPath.split("/");
-  const fallback = getLastEpisode().date;
+  const fallback = getLastUpdated();
   if (meta.noindex || !rawId) return fallback;
 
   const id = safeDecode(rawId);
@@ -368,7 +368,6 @@ export function getJsonLd(pathname: string): JsonLd[] {
 
   const path = meta.canonicalPath;
   const [, section, rawId] = path.split("/");
-  const lastEpisode = getLastEpisode();
 
   if (path === "/") {
     const leaderboard = getLeaderboardProducts();
@@ -382,7 +381,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         description: DEFAULT_DESCRIPTION,
         about: { "@id": ids.podcast },
         author: maintainer(),
-        dateModified: toDateTime(lastEpisode.date),
+        dateModified: toDateTime(getLastUpdated()),
       },
       podcastSeries(),
       itemList(`Produtos mais citados no ${PODCAST_NAME}`, leaderboard.length, productItems(leaderboard.slice(0, 15))),
