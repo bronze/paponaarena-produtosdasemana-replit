@@ -69,8 +69,8 @@ Ideias futuras (não feitas; mexem em analytics ou arquitetura):
 - [x] ~~Domínio próprio~~ — decisão: **manter `paponaarena-produtosdasemana.replit.app`** (o site mostra que foi feito com Replit; Arthur é embaixador do Replit). Canonicals, sitemap e og:url usam essa URL.
 - [x] Reforçar a vinculação com o Replit no site: "Feito com Replit" no rodapé da sidebar e na página `/sobre`
 - [x] Google Search Console: propriedade verificada (arquivo `google6848d4bda8609a96.html`)
-- [ ] Sitemap enviado em 4/out/2026, mas o Search Console mostrou "Couldn't fetch" logo após o envio. Servidor conferido (200, `application/xml`, XML válido, 1198 URLs, robots ok); acompanhar se muda para "Success" em 1 a 2 dias, senão reenviar
-- [ ] Bing Webmaster Tools: cadastrar e enviar o sitemap (dá para importar do Search Console)
+- [x] Sitemap aceito no Search Console (4/out/2026; no primeiro envio tinha aparecido "Couldn't fetch"). Indexação ainda em processamento
+- [x] Bing Webmaster Tools: site verificado (`BingSiteAuth.xml`) e sitemap aceito (4/out/2026). Indexação ainda em processamento
 - [ ] Backlinks: descrição dos episódios no Spotify/YouTube, site oficial do podcast, LinkedIn, Instagram, bio dos hosts
 - [ ] Monitorar posição para "Papo na Arena" no Search Console
 

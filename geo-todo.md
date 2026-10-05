@@ -9,6 +9,17 @@ GEO (Generative Engine Optimization): ser **citado como fonte** quando alguém p
 
 Base já pronta (ver `seo-todo.md`): prerender no servidor, meta tags por rota, JSON-LD, sitemap, `robots.txt` liberado, página `/sobre` e links internos.
 
+## Links de teste
+
+| Página | Schema Markup Validator | Rich Results Test |
+|---|---|---|
+| Home (`/`) | [schema.org](https://validator.schema.org/#url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2F) | [Rich Results](https://search.google.com/test/rich-results?url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2F) |
+| Episódio (`/episodios/136`) | [schema.org](https://validator.schema.org/#url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fepisodios%2F136) | [Rich Results](https://search.google.com/test/rich-results?url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fepisodios%2F136) |
+| Produto (`/produtos/claude`) | [schema.org](https://validator.schema.org/#url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fprodutos%2Fclaude) | [Rich Results](https://search.google.com/test/rich-results?url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fprodutos%2Fclaude) |
+| Pessoa (`/pessoas/arthur`) | [schema.org](https://validator.schema.org/#url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fpessoas%2Farthur) | [Rich Results](https://search.google.com/test/rich-results?url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fpessoas%2Farthur) |
+| Categoria (`/categorias/ferramentas-de-ia`) | [schema.org](https://validator.schema.org/#url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fcategorias%2Fferramentas-de-ia) | [Rich Results](https://search.google.com/test/rich-results?url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fcategorias%2Fferramentas-de-ia) |
+| Sobre (`/sobre`) | [schema.org](https://validator.schema.org/#url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fsobre) | [Rich Results](https://search.google.com/test/rich-results?url=https%3A%2F%2Fpaponaarena-produtosdasemana.replit.app%2Fsobre) |
+
 ## Diagnóstico (4/out/2026)
 
 ### 🔴 Crítico: o prerender das páginas de detalhe quebrou com as URLs em português
@@ -105,7 +116,11 @@ Frases geradas em `client/src/lib/summaries.ts` e usadas só no prerender (logo 
 - [x] `PodcastEpisode.mentions` → produtos citados (variações resolvidas para o produto principal) e `abstract` com o resumo
 - [x] `@id` estáveis reutilizados em todo o grafo: `/#website`, `/#podcast`, `/pessoas/<id>#person`, `/produtos/<id>#product`, `/episodios/<id>#episode`
 - [x] `checkPrerender()` confere também `Thing`, `ProfilePage` e `CollectionPage`
-- [ ] Depois de publicar: Schema Markup Validator em `/`, `/episodios/136`, `/produtos/claude`, `/pessoas/arthur` e `/categorias/ferramentas-de-ia`; Rich Results Test (breadcrumbs, `ProfilePage`)
+- [x] Schema Markup Validator (4/out/2026) em `/`, `/episodios/136`, `/produtos/claude`, `/pessoas/arthur` e `/categorias/ferramentas-de-ia`: 0 erros e 0 avisos em todas
+- [x] Referências a site e podcast (`isPartOf`, `about`, `partOfSeries`) com `@type` e `name`: sem isso, o validador mostrava o `@id` solto como um item "CreativeWork" à parte
+- [x] Rich Results Test (4/out/2026): `/sobre`, `/episodios/136` e `/produtos/claude` com 1 item válido (Breadcrumbs; `AboutPage`, `PodcastEpisode` e `Thing` não são tipos de rich result). `/pessoas/arthur` com 2 itens válidos: Breadcrumbs e **Profile page**
+- [x] Profile page: o único aviso era "Invalid datetime value for dateModified". Agora todo `dateModified` do JSON-LD sai com hora e fuso (`2026-09-30T00:00:00-03:00`); o sitemap continua só com a data
+- [ ] Depois de publicar: rodar o Rich Results Test de `/pessoas/arthur` de novo (esperado: sem avisos)
 
 ## 6. Enriquecer os dados (`data.ts`)
 
@@ -119,9 +134,10 @@ Cada item melhora o texto gerado em todas as páginas.
 
 ## 7. Fora do código (as IAs usam índices de busca)
 
-- [ ] **Bing Webmaster Tools** (já está no `seo-todo.md`): o ChatGPT search e o Copilot usam o índice do Bing. Para GEO, essa é a prioridade fora do código
+- [x] **Bing Webmaster Tools**: site verificado e sitemap aceito (4/out/2026). O ChatGPT search e o Copilot usam o índice do Bing
 - [ ] IndexNow (Bing, Yandex): pingar as URLs novas a cada episódio adicionado
-- [ ] Conferir o sitemap no Search Console (pendente no `seo-todo.md`)
+- [x] Sitemap aceito no Search Console (4/out/2026)
+- [ ] Em 1 a 2 semanas: conferir as páginas indexadas no Search Console e no Bing (relatórios "Páginas" / "Index Explorer") e se houve erros de rastreamento
 - [ ] Menções em fontes que as IAs leem: link na descrição dos episódios no YouTube e no Spotify, post no LinkedIn, Reddit/comunidades de produto, bio dos hosts
 - [ ] Pedir aos hosts uma menção no podcast ou um link no site oficial (é o sinal de autoridade mais forte para a entidade "Papo na Arena")
 

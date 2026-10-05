@@ -239,6 +239,9 @@ const latest = (dates: (string | undefined)[]) =>
   dates.reduce<string>((max, d) => (d && d > max ? d : max), "");
 const mentionDates = (mentions: { episodeId: number }[]) => mentions.map((m) => getEpisode(m.episodeId)?.date);
 
+/** "2026-09-30" → "2026-09-30T00:00:00-03:00": o Google exige data e hora com fuso no dateModified. */
+const toDateTime = (date: string) => `${date}T00:00:00-03:00`;
+
 /**
  * Data da última mudança no conteúdo da rota (AAAA-MM-DD): o episódio mais recente que a afeta.
  * Usada no dateModified do JSON-LD e no lastmod do sitemap.
@@ -296,6 +299,11 @@ function episodeRef(id: number): JsonLd | undefined {
     url: absolute(`/episodios/${episode.id}`),
   };
 }
+
+// Referências com tipo e nome: em páginas onde o nó completo não está no grafo,
+// o validador mostraria um "@id" solto como um item genérico (CreativeWork/Thing)
+const websiteRef = () => ({ "@type": "WebSite", "@id": ids.website, name: SITE_NAME, url: absolute("/") });
+const podcastRef = () => ({ "@type": "PodcastSeries", "@id": ids.podcast, name: PODCAST_NAME, url: SPOTIFY_SHOW_URL });
 
 const defined = <T,>(items: (T | undefined)[]) => items.filter((i): i is T => i !== undefined);
 
@@ -374,7 +382,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         description: DEFAULT_DESCRIPTION,
         about: { "@id": ids.podcast },
         author: maintainer(),
-        dateModified: lastEpisode.date,
+        dateModified: toDateTime(lastEpisode.date),
       },
       podcastSeries(),
       itemList(`Produtos mais citados no ${PODCAST_NAME}`, leaderboard.length, productItems(leaderboard.slice(0, 15))),
@@ -389,10 +397,10 @@ export function getJsonLd(pathname: string): JsonLd[] {
         url: absolute(path),
         inLanguage: "pt-BR",
         description: meta.description,
-        about: [{ "@id": ids.podcast }, { "@id": ids.website }],
-        isPartOf: { "@id": ids.website },
+        about: [podcastRef(), websiteRef()],
+        isPartOf: websiteRef(),
         author: maintainer(),
-        dateModified: getLastModified(path),
+        dateModified: toDateTime(getLastModified(path)),
       },
       breadcrumbs([
         { name: SITE_NAME, path: "/" },
@@ -468,7 +476,7 @@ export function getJsonLd(pathname: string): JsonLd[] {
         datePublished: episode.date,
         episodeNumber: episode.id,
         inLanguage: "pt-BR",
-        partOfSeries: { "@id": ids.podcast, "@type": "PodcastSeries", name: PODCAST_NAME, url: SPOTIFY_SHOW_URL },
+        partOfSeries: podcastRef(),
         ...(actors.length ? { actor: actors } : {}),
         ...(mentioned.length ? { mentions: mentioned } : {}),
         ...(sameAs.length ? { sameAs } : {}),
@@ -489,9 +497,9 @@ export function getJsonLd(pathname: string): JsonLd[] {
         name: meta.title,
         url: absolute(path),
         inLanguage: "pt-BR",
-        isPartOf: { "@id": ids.website },
+        isPartOf: websiteRef(),
         mainEntity: { "@id": ids.product(product.id) },
-        dateModified: getLastModified(path),
+        dateModified: toDateTime(getLastModified(path)),
       },
       {
         "@type": "Thing",
@@ -514,8 +522,8 @@ export function getJsonLd(pathname: string): JsonLd[] {
         name: meta.title,
         url: absolute(path),
         inLanguage: "pt-BR",
-        isPartOf: { "@id": ids.website },
-        dateModified: getLastModified(path),
+        isPartOf: websiteRef(),
+        dateModified: toDateTime(getLastModified(path)),
         mainEntity: { ...personRef(person.id), description: personSummary(person.id) },
       },
       crumbs(person.name),
@@ -532,8 +540,8 @@ export function getJsonLd(pathname: string): JsonLd[] {
       url: absolute(path),
       inLanguage: "pt-BR",
       description: categorySummary(category),
-      isPartOf: { "@id": ids.website },
-      dateModified: getLastModified(path),
+      isPartOf: websiteRef(),
+      dateModified: toDateTime(getLastModified(path)),
       mainEntity: itemList(
         `${categoryLabel(category)} – produtos mais citados no ${PODCAST_NAME}`,
         categoryProducts.length,
