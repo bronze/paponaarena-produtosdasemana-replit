@@ -103,7 +103,7 @@ export default function Dashboard() {
             <CardTitle className="text-base">Menções por Empresa de AI</CardTitle>
           </CardHeader>
           <CardContent>
-            <Suspense fallback={<div style={{ height: 192 }} />}>
+            <Suspense fallback={<div style={{ height: 224 }} />}>
               <AiCompanyChart data={aiCompanyStats} />
             </Suspense>
             <div className="mt-2 space-y-0.5 text-xs text-muted-foreground">
@@ -112,6 +112,7 @@ export default function Dashboard() {
               <p><span className="company-legend" style={{ "--c": "#4285F4" } as React.CSSProperties}>Google:</span> Gemini, Google Flow e variantes</p>
               <p><span className="company-legend" style={{ "--c": "#F26207" } as React.CSSProperties}>Replit:</span> Replit, Replit Canvas e variantes</p>
               <p><span className="company-legend" style={{ "--c": "#8B5CF6" } as React.CSSProperties}>Cursor:</span> Cursor e variantes</p>
+              <p><span className="company-legend" style={{ "--c": "#0078D4" } as React.CSSProperties}>Microsoft:</span> Copilot, Copilot 365 e variantes</p>
               <p><span className="company-legend" style={{ "--c": "#64748B" } as React.CSSProperties}>xAI:</span> Grok, Grokbot e variantes</p>
             </div>
           </CardContent>

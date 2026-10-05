@@ -50,7 +50,7 @@ export function TopProductsChart({ data }: { data: { name: string; mentionCount:
 
 export function AiCompanyChart({ data }: { data: { company: string; mentions: number; color: string; breakdown: { name: string; mentions: number }[] }[] }) {
   return (
-  <ResponsiveContainer width="100%" height={192}>
+  <ResponsiveContainer width="100%" height={224}>
     <BarChart data={data} layout="vertical" margin={{ left: 0, right: 16 }}>
       <XAxis type="number" tick={{ fill: "hsl(var(--foreground))", fontSize: 11 }} />
       <YAxis type="category" dataKey="company" width={80} interval={0} tick={{ fontSize: 12, fill: "hsl(var(--foreground))" }} />
