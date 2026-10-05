@@ -120,7 +120,7 @@ Frases geradas em `client/src/lib/summaries.ts` e usadas só no prerender (logo 
 - [x] Referências a site e podcast (`isPartOf`, `about`, `partOfSeries`) com `@type` e `name`: sem isso, o validador mostrava o `@id` solto como um item "CreativeWork" à parte
 - [x] Rich Results Test (4/out/2026): `/sobre`, `/episodios/136` e `/produtos/claude` com 1 item válido (Breadcrumbs; `AboutPage`, `PodcastEpisode` e `Thing` não são tipos de rich result). `/pessoas/arthur` com 2 itens válidos: Breadcrumbs e **Profile page**
 - [x] Profile page: o único aviso era "Invalid datetime value for dateModified". Agora todo `dateModified` do JSON-LD sai com hora e fuso (`2026-09-30T00:00:00-03:00`); o sitemap continua só com a data
-- [ ] Depois de publicar: rodar o Rich Results Test de `/pessoas/arthur` de novo (esperado: sem avisos)
+- [x] Conferido após publicar (4/out/2026): Rich Results Test de `/pessoas/arthur` com Breadcrumbs e Profile page válidos e sem avisos; Schema Markup Validator de `/produtos/claude` com `WebPage` e `BreadcrumbList`, sem o "CreativeWork" solto
 
 ## 6. Enriquecer os dados (`data.ts`)
 
