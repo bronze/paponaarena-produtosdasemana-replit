@@ -1,5 +1,8 @@
 import type { Config } from "tailwindcss";
 
+const scale = (name: string, steps: number[]) =>
+  Object.fromEntries(steps.map((step) => [step, `hsl(var(--${name}-${step}) / <alpha-value>)`]));
+
 export default {
   darkMode: ["class"],
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
@@ -36,9 +39,14 @@ export default {
           linkedin: "hsl(var(--brand-linkedin) / <alpha-value>)",
           tint: "hsl(var(--brand-tint) / <alpha-value>)",
         },
+        // Escalas da paleta (design-system.html); substituem as do Tailwind com o mesmo nome
+        coral: scale("coral", [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]),
+        neutral: scale("neutral", [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]),
+        amber: scale("amber", [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]),
         primary: {
           DEFAULT: "hsl(var(--primary) / <alpha-value>)",
           foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
+          hover: "hsl(var(--primary-hover) / <alpha-value>)",
           border: "var(--primary-border)",
         },
         secondary: {

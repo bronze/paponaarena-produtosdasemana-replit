@@ -98,7 +98,11 @@ export function AscensionChart({ data, names }: { data: Record<string, string | 
           color: "hsl(var(--card-foreground))",
         }}
       />
-      <Legend wrapperStyle={{ fontSize: 11 }} />
+      {/* Só o marcador leva a cor da série; o nome fica em foreground (regra do design system) */}
+      <Legend
+        wrapperStyle={{ fontSize: 11 }}
+        formatter={(value) => <span style={{ color: "hsl(var(--foreground))" }}>{value}</span>}
+      />
       {names.map((name, i) => (
         <Line
           key={name}

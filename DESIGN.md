@@ -1,68 +1,92 @@
 # Design System — Papo na Arena
 
-Identidade visual do site, inspirada na [Product Arena](https://productarena.io/) e na [página do podcast](https://productarena.io/podcast) como **homenagem de fã**. Referência visual interativa: [`client/public/design-system.html`](client/public/design-system.html) (servido em `/design-system.html`).
+Identidade visual do site, inspirada na [Product Arena](https://productarena.io/) e na [página do podcast](https://productarena.io/podcast) como **homenagem de fã**. **Fonte da verdade:** [`client/public/design-system.html`](client/public/design-system.html) (servido em `/design-system.html`). Cor ou componente muda primeiro lá; este arquivo, o `index.css` e a imagem OG seguem.
 
 ## Princípios
 
 1. **Acento, não clone.** Usamos as cores deles (coral, preto, off-white), não o layout de landing page nem o logo.
-2. **Uma cor de marca só.** Coral `#FF5757`, sem variantes. Tudo passa no WCAG AA.
+2. **Uma cor de marca, em escala.** Coral `#FF5757` é a única cor de marca; os tons mais claros e mais escuros saem de uma escala fixa. Texto sempre no WCAG AA.
 3. **App de consulta, não landing page.** Títulos ganham peso e respiro; tabelas, listas e ranking mantêm a densidade.
 4. **Light only.** Não há dark mode.
 5. **Fan-made visível.** Sempre há um aviso "Projeto de fã, não oficial".
 
 ## Cores
 
-Hex extraídos dos prints de productarena.io.
+Paleta no método do *Refactoring UI*: em vez de cores soltas, **escalas fixas definidas de antemão**. Toda cor do site é um tom destas escalas (exceto as três cores exclusivas de gráfico e as cores de marca de terceiros, como YouTube e Anthropic). Nada de hex solto nem de clarear/escurecer com filtro (`brightness`).
 
-| Token | Hex | HSL | Uso |
-|---|---|---|---|
-| `coral` | `#FF5757` | `0 100% 67%` | Cor de marca: botões primários, faixa CTA, item ativo da sidebar, barras de gráfico |
-| `coral-tint` | `#FFE9E9` | `0 100% 96%` | Fundo suave de tags e caixas de ícone |
-| `ink` | `#0E0E10` | `240 7% 6%` | Texto principal; sidebar; texto sobre coral |
-| `ink-2` | `#19191B` | `240 4% 10%` | Hover/ativo e cards sobre superfície escura |
-| `ink-3` | `#27272A` | `240 4% 16%` | Bordas sobre superfície escura |
-| `page` | `#FBFBFC` | `240 14% 99%` | Fundo do app (off-white) |
-| `highlight` | `#F3F4F6` | `220 14% 96%` | **Só** seções/blocos de destaque, cabeçalho de tabela, trilho de barras |
-| `surface` | `#FFFFFF` | `0 0% 100%` | Cards e popovers |
-| `border` | `#E5E7EB` | `220 13% 91%` | Bordas no claro |
-| `muted` | `#4B5563` | `215 14% 34%` | Texto secundário no claro |
-| `on-dark` | `#F3F4F6` | `220 14% 96%` | Texto sobre `ink` |
-| `on-dark-muted` | `#A1A1AA` | `240 5% 65%` | Texto secundário sobre `ink` |
+### Escalas
+
+| Escala | Papel | Tons |
+|---|---|---|
+| **Coral** (primária) | Ações principais, marca, item ativo | `50 #FFF5F5` · `100 #FFE9E9` · `200 #FFD1D1` · `300 #FFA8A8` · `400 #FF8080` · `500 #FF5757` · `600 #EA3E3E` · `700 #C72329` · `800 #9A1922` · `900 #6B0F18` |
+| **Neutral** (cinzas a 240°) | Texto, fundos, bordas, superfícies escuras. Faz a maior parte do trabalho | `0 #FFFFFF` · `50 #FBFBFC` · `100 #F4F4F5` · `200 #E4E4E7` · `300 #D4D4D8` · `400 #A1A1AA` · `500 #71717A` · `600 #52525B` · `700 #3F3F46` · `800 #27272A` · `900 #19191B` · `950 #0E0E10` |
+| **Âmbar** (destaque) | Só comemorações, como o callout de marco | `50 #FFFBEB` · `100 #FEF3C7` · `200 #FDE68A` · `300 #FCD34D` · `400 #FBBF24` · `500 #F59E0B` · `600 #D97706` · `700 #B45309` · `800 #92400E` · `900 #78350F` |
+
+Os cinzas têm uma temperatura só (240°, neutro levemente frio, a mesma do preto da Product Arena). No Tailwind, as escalas viram classes `coral-*`, `neutral-*` e `amber-*` (substituem as do Tailwind com o mesmo nome).
+
+### Tokens de uso
+
+Cada token aponta para um tom da escala. Em código, prefira o token ao tom.
+
+| Token | Tom | Uso |
+|---|---|---|
+| `coral` | coral-500 | Cor de marca: botões primários, faixa CTA, item ativo da sidebar, barras de gráfico |
+| `coral-hover` | coral-600 | Hover do botão primário (`hover:bg-primary-hover`) |
+| `coral-text` | coral-700 | Texto e links coral sobre fundo claro |
+| `destructive` | coral-700 | Erro e ação destrutiva (texto branco por cima) |
+| `coral-tint` | coral-100 | Fundo suave de tags e caixas de ícone |
+| `ink` | neutral-950 | Texto principal; sidebar; texto sobre coral |
+| `ink-2` | neutral-900 | Hover e item ativo sobre superfície escura |
+| `ink-3` | neutral-800 | Bordas sobre superfície escura |
+| `page` | neutral-50 | Fundo do app (off-white) |
+| `highlight` | neutral-100 | **Só** seções/blocos de destaque, cabeçalho de tabela, trilho de barras |
+| `surface` | neutral-0 | Cards e popovers |
+| `border` | neutral-200 | Bordas no claro |
+| `input` | neutral-300 | Borda de campos |
+| `muted` | neutral-600 | Texto secundário no claro |
+| `on-dark` | neutral-100 | Texto sobre `ink` |
+| `on-dark-muted` | neutral-400 | Texto secundário sobre `ink` |
 
 ### Onde o cinza entra
 
-No site deles o fundo é claro e o cinza `#F3F4F6` aparece só em algumas seções ("Agenda da Arena", "Você aprende com quem lidera", "A Arena para cada momento"). Aqui é igual: o fundo é `page` (off-white) e o `highlight` marca blocos pontuais, como o destaque do último episódio no dashboard.
+No site deles o fundo é claro e o cinza de destaque aparece só em algumas seções ("Agenda da Arena", "Você aprende com quem lidera", "A Arena para cada momento"). Aqui é igual: o fundo é `page` (off-white) e o `highlight` marca blocos pontuais, como o destaque do último episódio no dashboard.
 
 ### Contraste (WCAG AA)
 
-Texto normal exige 4,5:1; texto grande (≥ 24px, ou ≥ 19px em negrito) e ícones exigem 3:1.
+Texto normal exige 4,5:1; texto grande (≥ 24px, ou ≥ 19px em negrito) exige 3:1.
 
 | Par | Razão | Resultado |
 |---|---|---|
-| `ink` sobre `coral` | 6,2:1 | ✅ tudo |
-| `coral` sobre `ink` | 6,2:1 | ✅ tudo |
-| `coral` sobre `ink-2` | 5,6:1 | ✅ tudo |
-| `ink` sobre `page` | 18,6:1 | ✅ tudo |
-| `muted` sobre `page` | 7,3:1 | ✅ tudo |
-| `muted` sobre `highlight` | 6,9:1 | ✅ tudo |
+| `ink` sobre coral-500 | 6,2:1 | ✅ tudo |
+| `ink` sobre coral-600 (hover) | 4,8:1 | ✅ tudo |
+| coral-500 sobre `ink` | 6,2:1 | ✅ tudo |
+| coral-500 sobre `ink-2` (ícone ativo da sidebar) | 5,6:1 | ✅ tudo |
+| coral-700 sobre `surface` | 5,7:1 | ✅ tudo |
+| coral-700 sobre `highlight` | 5,2:1 | ✅ tudo |
+| `ink` sobre `page` | 18,7:1 | ✅ tudo |
+| `muted` sobre `page` | 7,5:1 | ✅ tudo |
+| `muted` sobre `highlight` | 7,0:1 | ✅ tudo |
 | `on-dark-muted` sobre `ink` | 7,5:1 | ✅ tudo |
-| `coral` sobre `surface` | 3,1:1 | ⚠️ só título grande e ícone |
-| `coral` sobre `page` | 3,0:1 | ⚠️ só título grande e ícone |
-| `coral` sobre `highlight` | 2,8:1 | ❌ não usar como texto/ícone |
-| branco sobre `coral` | 3,1:1 | ❌ não usar (o site deles usa; nós não) |
+| amber-800 sobre amber-50 | 6,8:1 | ✅ tudo |
+| coral-500 sobre `surface` | 3,1:1 | ⚠️ só título grande e ícone |
+| coral-500 sobre `highlight` | 2,8:1 | ❌ não usar como texto/ícone |
+| branco sobre coral-500 | 3,1:1 | ❌ não usar (o site deles usa; nós não) |
+
+**Elementos não textuais** (barras, fatias, ícones, bordas que identificam um controle) exigem 3:1 contra o fundo (WCAG 1.4.11). As oito cores de gráfico passam sobre branco (de 3,1:1 a 19,3:1). Duas bordas ficam abaixo, de propósito: `input` sobre branco (1,5:1), então o campo precisa de outro sinal, como fundo ou rótulo; e `ink-3` sobre `ink` (1,3:1), decorativa, porque o texto já identifica o botão.
 
 ## Regras de uso da cor
 
 **Fazer**
 - Coral como **fundo** (botão primário, faixa CTA, marca) com **texto preto**.
-- Coral como texto ou ícone **só sobre preto** (sidebar, painéis escuros).
-- Ponto final coral em títulos grandes: "Produtos da semana**.**"
+- coral-500 como texto ou ícone **só sobre preto** (sidebar, painéis escuros); no claro, texto coral é coral-700.
+- Ponto final coral em títulos grandes: "Papo na Arena Radar**.**"
 - Links e rótulos pequenos em `ink` ou `muted`.
+- Cor nova sempre como um tom das escalas, nunca hex solto ou filtro de brilho.
 
 **Evitar**
-- Texto branco sobre coral.
-- Texto pequeno coral em fundo claro; qualquer coral (texto ou ícone) sobre `highlight`.
-- Usar o vermelho de erro parecido com o coral — `destructive` é um vermelho mais fechado (`#B91C1C`).
+- Texto branco sobre coral-500.
+- coral-500 em texto pequeno no claro; coral-500 sobre `highlight`.
+- Usar a cor como único sinal: sempre junto com texto, ícone ou valor.
 
 ## Tipografia
 
@@ -91,10 +115,10 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 
 ## Componentes
 
-- **Botão primário:** fundo `coral`, texto `ink`, pílula, 15px/600.
+- **Botão primário:** fundo `coral`, hover `coral-hover`, texto `ink`, pílula, 15px/600.
 - **Botão secundário:** fundo `surface`, borda `border`, texto `ink`; hover em `highlight`.
 - **Botão escuro:** fundo `ink`, texto `on-dark`.
-- **Tag:** pílula 24px, 11px/700 caixa alta; `coral-tint` + `ink` no claro; borda coral translúcida + texto `coral` no escuro; variante outline com `border` + `muted`.
+- **Tag:** pílula 24px, 11px/700 caixa alta; `coral-tint` + `ink` no claro; borda coral-800 + texto `coral` no escuro; variante outline com `border` + `muted`.
 - **Caixa de ícone:** 40px, fundo `coral-tint`, ícone em `ink`.
 - **Card:** `surface`, borda `border`, raio 12px, padding 24px.
 - **Bloco de destaque:** fundo `highlight`, sem borda.
@@ -121,22 +145,22 @@ Prévia visual: seção "Destaque de episódio" do `design-system.html`.
 ### Marcos
 
 - **Marco na página Sobre (em uso):** seção "O produto nº 1.000." com "#1000." gigante (96→144px, peso 800, ponto coral) à esquerda e a história à direita, com links para produto, pessoa e episódio. O marco é achado pela anotação "#1000" no comentário da menção (`getThousandthMention` em `client/src/lib/about.ts`), não pela contagem.
-- **Callout de marco (arquivado):** card âmbar com troféu e confete caindo, que ficou na home quando o marco aconteceu. Guardado só no `design-system.html` (seção "Callout de marco") para reaproveitar num próximo marco. Âmbar fica fora da paleta de propósito, por ser uma comemoração pontual; o confete respeita `prefers-reduced-motion`.
+- **Callout de marco (arquivado):** card âmbar com troféu e confete caindo, que ficou na home quando o marco aconteceu. Guardado só no `design-system.html` (seção "Callout de marco") para reaproveitar num próximo marco. Usa a escala âmbar, a cor de destaque da paleta, reservada para comemorações pontuais; o confete respeita `prefers-reduced-motion`.
 
 ## Gráficos
 
-| Token | Hex | HSL |
+| Token | Tom | Hex |
 |---|---|---|
-| `chart-1` | `#FF5757` | `0 100% 67%` |
-| `chart-2` | `#0E0E10` | `240 7% 6%` |
-| `chart-3` | `#F2A65A` | `30 85% 65%` |
-| `chart-4` | `#5B7DB1` | `216 36% 53%` |
-| `chart-5` | `#A1A1AA` | `240 5% 65%` |
-| `chart-6` | `#3E9C8F` | `172 43% 43%` |
-| `chart-7` | `#9B5DA5` | `292 29% 51%` |
-| `chart-8` | `#8C2F39` | `354 50% 37%` |
+| `chart-1` | coral-500 | `#FF5757` |
+| `chart-2` | neutral-950 | `#0E0E10` |
+| `chart-3` | amber-600 | `#D97706` |
+| `chart-4` | azul (só gráfico) | `#5B7DB1` |
+| `chart-5` | neutral-500 | `#71717A` |
+| `chart-6` | verde-azulado (só gráfico) | `#3E9C8F` |
+| `chart-7` | roxo (só gráfico) | `#9B5DA5` |
+| `chart-8` | coral-800 | `#9A1922` |
 
-Série única (ex.: ranking de menções) usa só `chart-1`. `chart-6..8` só entram quando há mais de 5 séries (pizza de categorias). Rótulos de gráfico sempre em `foreground`, nunca na cor da fatia. Cores de empresas (Anthropic, OpenAI, Google…) no gráfico de empresas de IA são cores das marcas e ficam como estão.
+Todas com pelo menos 3:1 sobre branco. Série única (ex.: ranking de menções) usa só `chart-1`. `chart-6..8` só entram quando há mais de 5 séries (pizza de categorias). Rótulos de gráfico sempre em `foreground`, nunca na cor da fatia. Cores de empresas (Anthropic, OpenAI, Google…) no gráfico de empresas de IA são cores das marcas e ficam como estão.
 
 ## Imagem OpenGraph
 
@@ -146,57 +170,58 @@ A prévia de link (WhatsApp, LinkedIn, X, Slack) é gerada por `npm run og`: o t
 - **"Radar." é o herói.** "Papo na Arena" vem menor, em `on-dark-muted`, acima; o ponto final coral fica depois de "Radar". Assim o card não se passa pelo podcast.
 - **Aviso de fã sempre legível.** Texto simples em `on-dark-muted`, 28px, logo abaixo dos totais (sem pílula): "Projeto de fã, não oficial".
 - **Onda sonora = dados, como efeito de fundo.** Uma barra por episódio ocupando a imagem inteira, com altura proporcional às menções (a mais alta tem 90% da altura); acima de 150 episódios, vizinhos são agrupados pela média. Tem uma camada desfocada atrás para dar brilho, e um degradê escuro na esquerda garante a leitura do texto.
-- **Só tons de coral.** A onda usa um gradiente do vinho escuro ao coral claro (`#6B1A24` → `#B8323A` → `#FF5757` → `#FF9B9B`), sem outras cores, mantendo a regra de uma cor de marca só.
+- **Só tons de coral.** A onda usa um gradiente da escala coral, do 900 ao 300 (`#6B0F18` → `#C72329` → `#FF5757` → `#FFA8A8`), sem outras cores, mantendo a regra de uma cor de marca só.
 - **Sem ranking.** A imagem fala do podcast, não de quais produtos lideram.
-- **Totais numa frase**, em 34px ("642 produtos · 1.476 menções · 103 episódios"), não como números gigantes de painel.
+- **Totais numa frase**, em 34px ("629 produtos · 1.476 menções · 103 episódios"), não como números gigantes de painel.
 - O script para com erro se a Plus Jakarta Sans não carregar, em vez de gerar a imagem com fonte substituta. Depois de publicar, peça um novo scrape no Post Inspector do LinkedIn e no Sharing Debugger do Facebook.
 
 ## Mapeamento para `client/src/index.css` (shadcn)
 
-Valores para o bloco `:root`. O bloco `.dark` deve ser removido.
+O bloco `:root` declara as três escalas (`--coral-*`, `--neutral-*`, `--amber-*`, em HSL com uma casa decimal para bater com o hex exato) e os tokens do shadcn só apontam para elas. O bloco `.dark` não existe.
 
 ```css
---background: 240 14% 99%;
---foreground: 240 7% 6%;
---border: 220 13% 91%;
---card: 0 0% 100%;
---card-foreground: 240 7% 6%;
---card-border: 220 13% 91%;
---popover: 0 0% 100%;
---popover-foreground: 240 7% 6%;
---popover-border: 220 13% 91%;
---primary: 0 100% 67%;
---primary-foreground: 240 7% 6%;
---secondary: 220 14% 96%;
---secondary-foreground: 240 7% 6%;
---muted: 220 14% 96%;
---muted-foreground: 215 14% 34%;
---accent: 220 14% 96%;
---accent-foreground: 240 7% 6%;
---destructive: 0 74% 42%;
---destructive-foreground: 0 0% 100%;
---input: 220 13% 83%;
---ring: 240 7% 6%;
+--background: var(--neutral-50);
+--foreground: var(--neutral-950);
+--border: var(--neutral-200);
+--card: var(--neutral-0);
+--card-foreground: var(--neutral-950);
+--card-border: var(--neutral-200);
+--popover: var(--neutral-0);
+--popover-foreground: var(--neutral-950);
+--popover-border: var(--neutral-200);
+--primary: var(--coral-500);
+--primary-foreground: var(--neutral-950);
+--primary-hover: var(--coral-600);
+--secondary: var(--neutral-100);
+--secondary-foreground: var(--neutral-950);
+--muted: var(--neutral-100);
+--muted-foreground: var(--neutral-600);
+--accent: var(--neutral-100);
+--accent-foreground: var(--neutral-950);
+--destructive: var(--coral-700);
+--destructive-foreground: var(--neutral-0);
+--input: var(--neutral-300);
+--ring: var(--neutral-950);
 
---sidebar: 240 7% 6%;
---sidebar-foreground: 220 14% 96%;
---sidebar-border: 240 4% 16%;
---sidebar-primary: 0 100% 67%;
---sidebar-primary-foreground: 240 7% 6%;
---sidebar-accent: 240 4% 10%;
---sidebar-accent-foreground: 220 14% 96%;
---sidebar-ring: 0 100% 67%;
+--sidebar: var(--neutral-950);
+--sidebar-foreground: var(--neutral-100);
+--sidebar-border: var(--neutral-800);
+--sidebar-primary: var(--coral-500);
+--sidebar-primary-foreground: var(--neutral-950);
+--sidebar-accent: var(--neutral-900);
+--sidebar-accent-foreground: var(--neutral-100);
+--sidebar-ring: var(--coral-500);
 
---chart-1: 0 100% 67%;
---chart-2: 240 7% 6%;
---chart-3: 30 85% 65%;
---chart-4: 216 36% 53%;
---chart-5: 240 5% 65%;
---chart-6: 172 43% 43%;
---chart-7: 292 29% 51%;
---chart-8: 354 50% 37%;
+--chart-1: var(--coral-500);
+--chart-2: var(--neutral-950);
+--chart-3: var(--amber-600);
+--chart-4: 216.3 35.5% 52.5%;
+--chart-5: var(--neutral-500);
+--chart-6: 171.7 43.1% 42.7%;
+--chart-7: 291.7 28.6% 50.6%;
+--chart-8: var(--coral-800);
 
 --radius: .75rem;
 ```
 
-Tokens extras (fora do padrão shadcn): `--brand-tint: 0 100% 96%` (coral-tint) e `--highlight: 220 14% 96%`.
+Tokens extras (fora do padrão shadcn): `--brand-tint: var(--coral-100)` (coral-tint) e `--highlight: var(--neutral-100)`.
