@@ -160,6 +160,14 @@ function ProductDetail({ id }: { id: string }) {
   const allMentions = getMentionsForProduct(product.id);
   const children = getChildProducts(product.id);
 
+  // Site do produto e, quando diferentes, os sites dos produtos filhos
+  const sites = [
+    ...(product.url ? [{ id: product.id, name: product.name, url: product.url, label: "Visitar site" }] : []),
+    ...children
+      .filter((c) => c.url && c.url !== product.url)
+      .map((c) => ({ id: c.id, name: c.name, url: c.url!, label: c.name })),
+  ];
+
   // Episódios com menção, do mais recente para o mais antigo
   const mentionsByEpisode = new Map<number, typeof allMentions>();
   for (const m of [...allMentions].sort((a, b) => b.episodeId - a.episodeId)) {
@@ -196,17 +204,22 @@ function ProductDetail({ id }: { id: string }) {
           <CategoryLink category={product.category} />
           {children.length > 0 && <> · inclui também {joinNames(children.map((c) => c.name))}</>}
         </p>
-        {product.url && (
-          <a
-            href={product.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 text-sm font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            onClick={() => posthog.capture("product_url_clicked", { product_id: product.id, product_name: product.name })}
-            data-testid="link-product-url"
-          >
-            <ExternalLink className="h-4 w-4" aria-hidden="true" /> Visitar site
-          </a>
+        {sites.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-3">
+            {sites.map((site) => (
+              <a
+                key={site.id}
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center gap-2 rounded-full border bg-card px-5 text-sm font-semibold outline-none transition-colors hover:bg-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => posthog.capture("product_url_clicked", { product_id: site.id, product_name: site.name })}
+                data-testid={site.id === product.id ? "link-product-url" : `link-product-url-${site.id}`}
+              >
+                <ExternalLink className="h-4 w-4" aria-hidden="true" /> {site.label}
+              </a>
+            ))}
+          </div>
         )}
       </div>
 

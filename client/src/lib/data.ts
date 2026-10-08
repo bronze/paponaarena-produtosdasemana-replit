@@ -4,7 +4,7 @@ import type { Episode, Product, Person, Mention } from "./types";
  * Data da última correção nos dados sem episódio novo (fusões, renomes, menções corrigidas).
  * "Atualizado em" usa a mais recente entre esta data e a do último episódio.
  */
-export const dataRevisedAt = "2026-10-04";
+export const dataRevisedAt = "2026-10-08";
 
 export const episodes: Episode[] = [
   { id: 21, title: "As previsões que ninguém pediu sobre A.I. e Produto em 2024", date: "2024-01-10", description: "Discussão sobre previsões para inteligência artificial e produto em 2024.", youtubeLink: "https://www.youtube.com/watch?v=tT8ytrU2Dtw", spotifyLink: "https://open.spotify.com/episode/234RzKezAqJCQWscOt6itu", hosts: ["arthur", "aiquis"] },
@@ -110,6 +110,7 @@ export const episodes: Episode[] = [
   { id: 131, title: "Grok Bot - um novo momento Claude Code?", date: "2026-08-26", description: "Discussão sobre o Grok Bot e se ele representa um novo momento para ferramentas como o Claude Code, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=Qks68_HIt1o", spotifyLink: "https://open.spotify.com/episode/7h9YmFTb8k6n7klgdRS7uz", hosts: ["arthur", "aiquis"] },
   { id: 135, title: "Como foi o Lenny & Friends Summit?", date: "2026-09-23", description: "Como foi o Lenny & Friends Summit? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=5UADu7bzoHc", spotifyLink: "https://open.spotify.com/episode/0thI6loRiUXAuHbMNHCmEL", hosts: ["arthur", "aiquis"] },
   { id: 136, title: "O Vale faz algo diferente em produto e IA?", date: "2026-09-30", description: "Discussão sobre se o Vale do Silício faz algo diferente em produto e IA, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=PR_Z6fPAI6w", spotifyLink: "https://open.spotify.com/episode/5YqA5txsuWegGGHA5XT460", hosts: ["arthur", "aiquis"], cohosts: ["gabriel-hamu", "bruno-nunes"] },
+  { id: 137, title: "Agentes de IA como usuário: o que muda para Produto", date: "2026-10-08", description: "Discussão sobre agentes de IA como usuários e o que isso muda para Produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=kd2smQvbPkg", spotifyLink: "https://open.spotify.com/episode/0LqEuKlwmfGmL7cJP7HlDe", hosts: ["arthur", "aiquis"] },
 ];
 
 export const products: Product[] = [
@@ -829,6 +830,19 @@ export const products: Product[] = [
   { id: "eleicoes-ai", name: "eleicoes.AI", category: "Apps", url: "https://eleicoes.ai/" },
   { id: "claude-opus-55", name: "Claude Opus 5.5", category: "AI Tools", url: "https://claude.ai", parentId: "claude" },
   { id: "claude-fable", name: "Claude Fable", category: "AI Tools", url: "https://claude.ai", parentId: "claude" },
+  { id: "priston-tale", name: "Priston Tale", category: "Entertainment" },
+  { id: "priston-tale-eu", name: "Priston Tale EU", category: "Entertainment", url: "https://pristontale.eu/", parentId: "priston-tale" },
+  { id: "cloudflare", name: "Cloudflare", category: "Development", url: "https://cloudflare.com" },
+  { id: "jev", name: "Jev", category: "AI Tools", url: "https://typesafe.ai/" },
+  { id: "combo-obsidian-codex-jev", name: "Obsidian + Codex + Jev", category: "Productivity", alsoCredits: ["obsidian", "codex-openai", "jev"] },
+  { id: "instinct", name: "Instinct", category: "Apps" },
+  { id: "combo-wisprflow-claude-code", name: "Wispr Flow + Claude Code", category: "AI Tools", alsoCredits: ["wisprflow", "claude-code"] },
+  { id: "mcp-snowflake", name: "MCP do Snowflake", category: "Development", parentId: "snowflake" },
+  { id: "chatgpt-voice", name: "ChatGPT Voice", category: "AI Tools", parentId: "chatgpt" },
+  { id: "urna-eletronica", name: "Urna eletrônica", category: "Tech" },
+  { id: "margot-disney", name: "Margot (desenho Disney)", category: "Entertainment" },
+  { id: "combo-chatgpt-notion", name: "GPT + Notion", category: "Productivity", alsoCredits: ["chatgpt", "notion"] },
+  { id: "trello", name: "Trello", category: "Productivity", url: "https://trello.com" },
 ];
 
 export const people: Person[] = [
@@ -902,7 +916,7 @@ export const people: Person[] = [
   { id: "danilera", name: "Danilera" },
   { id: "mat", name: "Mat" },
   { id: "paulo", name: "Paulo" },
-  { id: "nina", name: "Nina" },
+  { id: "nina", name: "Nina “Mozão”" },
   { id: "camila-ruas", name: "Camila Ruas" },
   { id: "arthur-magalhaes", name: "Arthur Magalhães" },
   { id: "bob", name: "Bob" },
@@ -1241,6 +1255,10 @@ export const people: Person[] = [
   { id: "aline-capelatto", name: "Aline Capelatto" },
   { id: "luiza-tomanik", name: "Luiza Tomanik" },
   { id: "bruno-nunes", name: "Bruno Nunes" },
+  { id: "rani-al-anjos", name: "Rani Al Anjos" },
+  { id: "renal-tobassi", name: "Renal Tobassi" },
+  { id: "bruno-romaioli", name: "Bruno Romaioli" },
+  { id: "tiago-martins", name: "Tiago Martins" },
 ];
 
 export const mentions: Mention[] = [
@@ -2720,4 +2738,29 @@ export const mentions: Mention[] = [
   { id: "m136-3", episodeId: 136, personId: "aiquis", productId: "claude-opus-55" },
   { id: "m136-4", episodeId: 136, personId: "arthur", productId: "claude-fable" },
   { id: "m136-5", episodeId: 136, personId: "arthur", productId: "claude-opus-55" },
+  { id: "m137-1", episodeId: 137, personId: "arthur", productId: "grokbot" },
+  { id: "m137-2", episodeId: 137, personId: "aiquis", productId: "priston-tale-eu" },
+  { id: "m137-3", episodeId: 137, personId: "tairo", productId: "cloudflare" },
+  { id: "m137-4", episodeId: 137, personId: "neto", productId: "replit" },
+  { id: "m137-5", episodeId: 137, personId: "adriano-queiroz", productId: "chatgpt-work" },
+  { id: "m137-6", episodeId: 137, personId: "amanda-couto", productId: "combo-obsidian-codex-jev" },
+  { id: "m137-7", episodeId: 137, personId: "carlos-bronze", productId: "claude-code" },
+  { id: "m137-8", episodeId: 137, personId: "diego-espinilo", productId: "instinct" },
+  { id: "m137-9", episodeId: 137, personId: "ronald-falcao", productId: "antigravity" },
+  { id: "m137-10", episodeId: 137, personId: "neider-narde", productId: "grokbot" },
+  { id: "m137-11", episodeId: 137, personId: "rani-al-anjos", productId: "combo-wisprflow-claude-code" },
+  { id: "m137-12", episodeId: 137, personId: "glauco", productId: "mcp-snowflake" },
+  { id: "m137-13", episodeId: 137, personId: "alexandre-magno", productId: "wisprflow" },
+  { id: "m137-14", episodeId: 137, personId: "renal-tobassi", productId: "chatgpt-voice" },
+  { id: "m137-15", episodeId: 137, personId: "peixoto", productId: "claude-code" },
+  { id: "m137-16", episodeId: 137, personId: "clovis", productId: "urna-eletronica" },
+  { id: "m137-17", episodeId: 137, personId: "bruno-romaioli", productId: "elevenlabs" },
+  { id: "m137-18", episodeId: 137, personId: "mari-salmazo", productId: "gemini" },
+  { id: "m137-19", episodeId: 137, personId: "valeria-romano", productId: "e-titulo" },
+  { id: "m137-20", episodeId: 137, personId: "matt-lopes", productId: "e-titulo" },
+  { id: "m137-21", episodeId: 137, personId: "matias", productId: "twitter" },
+  { id: "m137-22", episodeId: 137, personId: "andrezinho", productId: "turbi" },
+  { id: "m137-23", episodeId: 137, personId: "nina", productId: "margot-disney" },
+  { id: "m137-24", episodeId: 137, personId: "tiago-martins", productId: "combo-chatgpt-notion" },
+  { id: "m137-25", episodeId: 137, personId: "silvinha", productId: "trello" },
 ];
