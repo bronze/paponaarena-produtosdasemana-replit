@@ -111,6 +111,7 @@ export const episodes: Episode[] = [
   { id: 135, title: "Como foi o Lenny & Friends Summit?", date: "2026-09-23", description: "Como foi o Lenny & Friends Summit? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=5UADu7bzoHc", spotifyLink: "https://open.spotify.com/episode/0thI6loRiUXAuHbMNHCmEL", hosts: ["arthur", "aiquis"] },
   { id: 136, title: "O Vale faz algo diferente em produto e IA?", date: "2026-09-30", description: "Discussão sobre se o Vale do Silício faz algo diferente em produto e IA, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=PR_Z6fPAI6w", spotifyLink: "https://open.spotify.com/episode/5YqA5txsuWegGGHA5XT460", hosts: ["arthur", "aiquis"], cohosts: ["gabriel-hamu", "bruno-nunes"] },
   { id: 137, title: "Agentes de IA como usuário: o que muda para Produto", date: "2026-10-08", description: "Discussão sobre agentes de IA como usuários e o que isso muda para Produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=kd2smQvbPkg", spotifyLink: "https://open.spotify.com/episode/0LqEuKlwmfGmL7cJP7HlDe", hosts: ["arthur", "aiquis"] },
+  { id: 139, title: "Storytelling e comunicação são as habilidades mais importantes para PMs?", date: "2026-10-21", description: "Discussão sobre se storytelling e comunicação são as habilidades mais importantes para PMs, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=EE2GEzKL-4A", spotifyLink: "https://open.spotify.com/episode/6EccJknRQyl7qAcNq6M9xq", hosts: ["arthur", "aiquis"] },
 ];
 
 export const products: Product[] = [
@@ -835,7 +836,7 @@ export const products: Product[] = [
   { id: "cloudflare", name: "Cloudflare", category: "Development", url: "https://cloudflare.com" },
   { id: "jev", name: "Jev", category: "AI Tools", url: "https://typesafe.ai/" },
   { id: "combo-obsidian-codex-jev", name: "Obsidian + Codex + Jev", category: "Productivity", alsoCredits: ["obsidian", "codex-openai", "jev"] },
-  { id: "instinct", name: "Instinct", category: "Apps" },
+  { id: "instinct", name: "Instinct", category: "AI Tools", url: "https://instinct.com/" },
   { id: "combo-wisprflow-claude-code", name: "Wispr Flow + Claude Code", category: "AI Tools", alsoCredits: ["wisprflow", "claude-code"] },
   { id: "mcp-snowflake", name: "MCP do Snowflake", category: "Development", parentId: "snowflake" },
   { id: "chatgpt-voice", name: "ChatGPT Voice", category: "AI Tools", parentId: "chatgpt" },
@@ -843,6 +844,14 @@ export const products: Product[] = [
   { id: "margot-disney", name: "Margot (desenho Disney)", category: "Entertainment" },
   { id: "combo-chatgpt-notion", name: "GPT + Notion", category: "Productivity", alsoCredits: ["chatgpt", "notion"] },
   { id: "trello", name: "Trello", category: "Productivity", url: "https://trello.com" },
+  { id: "droid-deck", name: "Droid Deck", category: "Entertainment", url: "https://droiddeck.app/" },
+  { id: "luminaria-medusa", name: "Luminária medusa", category: "Hardware", url: "https://meli.la/1dM1ZQw" },
+  { id: "lixeira-sensor-movimento", name: "Lixeira com sensor de movimento", category: "Hardware", url: "https://meli.la/2J4krMF" },
+  { id: "saboneteira-sensor", name: "Saboneteira com sensor", category: "Hardware", url: "https://meli.la/2kDmq8H" },
+  { id: "muse", name: "Muse", category: "AI Tools", url: "https://muse.ai/" },
+  { id: "aptamil-premium", name: "Aptamil Premium", category: "Health" },
+  { id: "airtable", name: "Airtable", category: "Productivity", url: "https://airtable.com" },
+  { id: "revos", name: "revOS", category: "Business", url: "https://www.revos.ai/" },
 ];
 
 export const people: Person[] = [
@@ -874,7 +883,7 @@ export const people: Person[] = [
   { id: "mateus-carvalho", name: "Mateus Carvalho" },
   { id: "raiana-santos", name: "Raiana Santos" },
   { id: "marcella-paiva", name: "Marcella Paiva" },
-  { id: "huxley", name: "Huxley" },
+  { id: "huxley", name: "Huxley Dias" },
   { id: "carlos-henrique", name: "Carlos Henrique" },
   { id: "joca", name: "Joca" },
   { id: "marcos-lavin", name: "Marcos Lavin", linkedinUrl: "https://www.linkedin.com/in/marcoslavin/" },
@@ -1259,6 +1268,11 @@ export const people: Person[] = [
   { id: "renal-tobassi", name: "Renal Tobassi" },
   { id: "bruno-romaioli", name: "Bruno Romaioli" },
   { id: "tiago-martins", name: "Tiago Martins" },
+  { id: "ricardo-motta", name: "Ricardo Motta" },
+  { id: "yruana", name: "Yruana" },
+  { id: "bruno-cavalcante", name: "Bruno Cavalcante" },
+  { id: "paula", name: "Paula" },
+  { id: "luciana-sousa", name: "Luciana Sousa" },
 ];
 
 export const mentions: Mention[] = [
@@ -2763,4 +2777,26 @@ export const mentions: Mention[] = [
   { id: "m137-23", episodeId: 137, personId: "nina", productId: "margot-disney" },
   { id: "m137-24", episodeId: 137, personId: "tiago-martins", productId: "combo-chatgpt-notion" },
   { id: "m137-25", episodeId: 137, personId: "silvinha", productId: "trello" },
+  { id: "m139-1", episodeId: 139, personId: "aiquis", productId: "droid-deck" },
+  { id: "m139-2", episodeId: 139, personId: "arthur", productId: "luminaria-medusa" },
+  { id: "m139-3", episodeId: 139, personId: "arthur", productId: "lixeira-sensor-movimento" },
+  { id: "m139-4", episodeId: 139, personId: "arthur", productId: "saboneteira-sensor" },
+  { id: "m139-5", episodeId: 139, personId: "jessica-luz", productId: "instinct" },
+  { id: "m139-6", episodeId: 139, personId: "huxley", productId: "cursor" },
+  { id: "m139-7", episodeId: 139, personId: "mariana-curi", productId: "muse" },
+  { id: "m139-8", episodeId: 139, personId: "agatha-martins", productId: "antigravity" },
+  { id: "m139-9", episodeId: 139, personId: "lucas-mattos", productId: "reddit" },
+  { id: "m139-10", episodeId: 139, personId: "rodrigo-frumento", productId: "claude-code" },
+  { id: "m139-11", episodeId: 139, personId: "rodrigo-frumento", productId: "aptamil-premium" },
+  { id: "m139-12", episodeId: 139, personId: "beatriz-morales", productId: "mcp-snowflake" },
+  { id: "m139-13", episodeId: 139, personId: "karina-sato", productId: "google-maps" },
+  { id: "m139-14", episodeId: 139, personId: "julia-patrocinio", productId: "claude-code" },
+  { id: "m139-15", episodeId: 139, personId: "ricardo-motta", productId: "airtable" },
+  { id: "m139-16", episodeId: 139, personId: "fabio-beico", productId: "instagram" },
+  { id: "m139-17", episodeId: 139, personId: "yruana", productId: "whoop" },
+  { id: "m139-18", episodeId: 139, personId: "arion-pinheiro", productId: "replit" },
+  { id: "m139-19", episodeId: 139, personId: "bruno-cavalcante", productId: "revos" },
+  { id: "m139-20", episodeId: 139, personId: "fernando", productId: "grokbot" },
+  { id: "m139-21", episodeId: 139, personId: "paula", productId: "replit" },
+  { id: "m139-22", episodeId: 139, personId: "luciana-sousa", productId: "google-maps" },
 ];
