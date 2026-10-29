@@ -859,7 +859,7 @@ export const products: Product[] = [
   { id: "seuimposto", name: "seuimposto.com", category: "Finance", url: "https://seuimposto.com" },
   { id: "antigravity-gemini", name: "Antigravity no app do Gemini", category: "AI Tools", parentId: "antigravity" },
   { id: "final-fantasy-resonance", name: "Final Fantasy Resonance", category: "Entertainment" },
-  { id: "plataforma-product-arena", name: "Plataforma da Product Arena", category: "Education" },
+  { id: "plataforma-product-arena", name: "Plataforma da Product Arena", category: "Education", url: "https://productarena.io/" },
 ];
 
 export const people: Person[] = [
