@@ -117,7 +117,7 @@ function bodyContent(pathname: string): string {
           `<h2>O que é este site</h2><p>${esc(copy.site)}</p>` +
           milestoneHtml() +
           `<h2>Quem faz</h2><p>${esc(copy.maintainer)}</p>` +
-          list([link(MAINTAINER.siteUrl, "carlosbronze.com.br"), link(MAINTAINER.linkedinUrl, "LinkedIn")]) +
+          list([link(MAINTAINER.siteUrl, "carlosbronze.com"), link(MAINTAINER.linkedinUrl, "LinkedIn")]) +
           `<p>${esc(copy.replit)} ${link(REPLIT_URL, "Conheça o Replit")}.</p>` +
           `<p>Para IAs e agentes: ${link("/llms.txt", "llms.txt")} · ${link("/llms-full.txt", "acervo completo (llms-full.txt)")}</p>`
         );

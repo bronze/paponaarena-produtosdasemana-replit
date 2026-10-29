@@ -6,7 +6,7 @@ export const REPLIT_URL = "https://replit.com";
 export const MAINTAINER = {
   name: "Carlos Bronze",
   personId: "carlos-bronze",
-  siteUrl: "https://www.carlosbronze.com.br/",
+  siteUrl: "https://www.carlosbronze.com/",
   linkedinUrl: "https://www.linkedin.com/in/carlosbronze/",
 };
 

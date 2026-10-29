@@ -174,7 +174,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap gap-3">
               <ExternalPill dark href={MAINTAINER.siteUrl} onClick={() => posthog.capture("maintainer_link_clicked", { platform: "site", source: "about" })}>
-                <Globe aria-hidden="true" className="h-4 w-4" /> carlosbronze.com.br
+                <Globe aria-hidden="true" className="h-4 w-4" /> carlosbronze.com
               </ExternalPill>
               <ExternalPill dark href={MAINTAINER.linkedinUrl} onClick={() => posthog.capture("maintainer_link_clicked", { platform: "linkedin", source: "about" })}>
                 <SiLinkedin aria-hidden="true" className="h-4 w-4" /> LinkedIn
