@@ -1279,7 +1279,6 @@ export const people: Person[] = [
   { id: "bruno-cavalcante", name: "Bruno Cavalcante" },
   { id: "paula", name: "Paula" },
   { id: "luciana-sousa", name: "Luciana Sousa" },
-  { id: "lukao", name: "Lukão" },
   { id: "vitor-borba", name: "Vitor Borba" },
   { id: "brunno-matias", name: "Brunno Matias" },
 ];
@@ -2814,7 +2813,7 @@ export const mentions: Mention[] = [
   { id: "m140-4", episodeId: 140, personId: "rafael-mathias", productId: "cursor" },
   { id: "m140-5", episodeId: 140, personId: "cloves", productId: "seuimposto" },
   { id: "m140-6", episodeId: 140, personId: "fabio-beico", productId: "e-titulo" },
-  { id: "m140-7", episodeId: 140, personId: "lukao", productId: "antigravity-gemini" },
+  { id: "m140-7", episodeId: 140, personId: "lucao", productId: "antigravity-gemini" },
   { id: "m140-8", episodeId: 140, personId: "andre-menezes", productId: "final-fantasy-resonance" },
   { id: "m140-9", episodeId: 140, personId: "gabriel", productId: "claude-opus-55", context: "Pra motion e decupagem" },
   { id: "m140-10", episodeId: 140, personId: "vitor-borba", productId: "google-slides" },
