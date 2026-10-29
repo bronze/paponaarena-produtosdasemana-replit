@@ -4,7 +4,7 @@ import type { Episode, Product, Person, Mention } from "./types";
  * Data da última correção nos dados sem episódio novo (fusões, renomes, menções corrigidas).
  * "Atualizado em" usa a mais recente entre esta data e a do último episódio.
  */
-export const dataRevisedAt = "2026-10-08";
+export const dataRevisedAt = "2026-10-29";
 
 export const episodes: Episode[] = [
   { id: 21, title: "As previsões que ninguém pediu sobre A.I. e Produto em 2024", date: "2024-01-10", description: "Discussão sobre previsões para inteligência artificial e produto em 2024.", youtubeLink: "https://www.youtube.com/watch?v=tT8ytrU2Dtw", spotifyLink: "https://open.spotify.com/episode/234RzKezAqJCQWscOt6itu", hosts: ["arthur", "aiquis"] },
@@ -112,6 +112,7 @@ export const episodes: Episode[] = [
   { id: 136, title: "O Vale faz algo diferente em produto e IA?", date: "2026-09-30", description: "Discussão sobre se o Vale do Silício faz algo diferente em produto e IA, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=PR_Z6fPAI6w", spotifyLink: "https://open.spotify.com/episode/5YqA5txsuWegGGHA5XT460", hosts: ["arthur", "aiquis"], cohosts: ["gabriel-hamu", "bruno-nunes"] },
   { id: 137, title: "Agentes de IA como usuário: o que muda para Produto", date: "2026-10-08", description: "Discussão sobre agentes de IA como usuários e o que isso muda para Produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=kd2smQvbPkg", spotifyLink: "https://open.spotify.com/episode/0LqEuKlwmfGmL7cJP7HlDe", hosts: ["arthur", "aiquis"] },
   { id: 139, title: "Storytelling e comunicação são as habilidades mais importantes para PMs?", date: "2026-10-21", description: "Discussão sobre se storytelling e comunicação são as habilidades mais importantes para PMs, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=EE2GEzKL-4A", spotifyLink: "https://open.spotify.com/episode/6EccJknRQyl7qAcNq6M9xq", hosts: ["arthur", "aiquis"] },
+  { id: 140, title: "Como escolher o modelo de IA certo pro trabalho de produto", date: "2026-10-29", description: "Discussão sobre como escolher o modelo de IA certo pro trabalho de produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YkHYZ-IMTJE", spotifyLink: "https://open.spotify.com/episode/6LhCzWzmnPCFcZLty9IBl3", hosts: ["arthur", "aiquis"] },
 ];
 
 export const products: Product[] = [
@@ -852,6 +853,13 @@ export const products: Product[] = [
   { id: "aptamil-premium", name: "Aptamil Premium", category: "Health" },
   { id: "airtable", name: "Airtable", category: "Productivity", url: "https://airtable.com" },
   { id: "revos", name: "revOS", category: "Business", url: "https://www.revos.ai/" },
+  { id: "suporte-uv-escova-dente", name: "Suporte UV pra escova de dente com dispenser de pasta", category: "Hardware", url: "https://s.shopee.com.br/3qOEzJwJn3" },
+  { id: "chatgpt-sites", name: "ChatGPT Sites", category: "AI Tools", parentId: "chatgpt" },
+  { id: "wap-barbecue", name: "WAP Barbecue", category: "Hardware" },
+  { id: "seuimposto", name: "seuimposto.com", category: "Finance", url: "https://seuimposto.com" },
+  { id: "antigravity-gemini", name: "Antigravity no app do Gemini", category: "AI Tools", parentId: "antigravity" },
+  { id: "final-fantasy-resonance", name: "Final Fantasy Resonance", category: "Entertainment" },
+  { id: "plataforma-product-arena", name: "Plataforma da Product Arena", category: "Education" },
 ];
 
 export const people: Person[] = [
@@ -953,7 +961,7 @@ export const people: Person[] = [
   { id: "hiago-lobato", name: "Hiago Lobato" },
   { id: "carol-pilon", name: "Carol Pilon", linkedinUrl: "https://www.linkedin.com/in/caroline-pilon-perfil/" },
   { id: "marina", name: "Marina" },
-  { id: "cloves", name: "Cloves" },
+  { id: "cloves", name: "Clóves Cardoso" },
   { id: "thais-nakahira", name: "Thais Nakahira" },
   { id: "karina-sato", name: "Karina Sato" },
   { id: "lucas", name: "Lucas" },
@@ -1014,7 +1022,6 @@ export const people: Person[] = [
   { id: "thiago", name: "Thiago" },
   { id: "andrezinho", name: "Andrézinho" },
   { id: "mila", name: "Mila" },
-  { id: "clovis", name: "Clovis" },
   { id: "alice", name: "Alice" },
   { id: "dezao", name: "Dezão" },
   { id: "murilo", name: "Murilo" },
@@ -1267,12 +1274,14 @@ export const people: Person[] = [
   { id: "rani-al-anjos", name: "Rani Al Anjos" },
   { id: "renal-tobassi", name: "Renal Tobassi" },
   { id: "bruno-romaioli", name: "Bruno Romaioli" },
-  { id: "tiago-martins", name: "Tiago Martins" },
   { id: "ricardo-motta", name: "Ricardo Motta" },
   { id: "yruana", name: "Yruana" },
   { id: "bruno-cavalcante", name: "Bruno Cavalcante" },
   { id: "paula", name: "Paula" },
   { id: "luciana-sousa", name: "Luciana Sousa" },
+  { id: "lukao", name: "Lukão" },
+  { id: "vitor-borba", name: "Vitor Borba" },
+  { id: "brunno-matias", name: "Brunno Matias" },
 ];
 
 export const mentions: Mention[] = [
@@ -1682,7 +1691,7 @@ export const mentions: Mention[] = [
   { id: "m64-13", episodeId: 64, personId: "fabio-beico", productId: "lindt" },
   { id: "m64-14", episodeId: 64, personId: "bruna", productId: "gymrats" },
   { id: "m64-15", episodeId: 64, personId: "marcos-lavin", productId: "teams" },
-  { id: "m64-16", episodeId: 64, personId: "clovis", productId: "magie" },
+  { id: "m64-16", episodeId: 64, personId: "cloves", productId: "magie" },
   { id: "m64-17", episodeId: 64, personId: "alice", productId: "dualsense" },
   { id: "m65-1", episodeId: 65, personId: "aiquis", productId: "beerpass" },
   { id: "m65-2", episodeId: 65, personId: "arthur", productId: "copo-stanley" },
@@ -2767,7 +2776,7 @@ export const mentions: Mention[] = [
   { id: "m137-13", episodeId: 137, personId: "alexandre-magno", productId: "wisprflow" },
   { id: "m137-14", episodeId: 137, personId: "renal-tobassi", productId: "chatgpt-voice" },
   { id: "m137-15", episodeId: 137, personId: "peixoto", productId: "claude-code" },
-  { id: "m137-16", episodeId: 137, personId: "clovis", productId: "urna-eletronica" },
+  { id: "m137-16", episodeId: 137, personId: "cloves", productId: "urna-eletronica" },
   { id: "m137-17", episodeId: 137, personId: "bruno-romaioli", productId: "elevenlabs" },
   { id: "m137-18", episodeId: 137, personId: "mari-salmazo", productId: "gemini" },
   { id: "m137-19", episodeId: 137, personId: "valeria-romano", productId: "e-titulo" },
@@ -2775,7 +2784,7 @@ export const mentions: Mention[] = [
   { id: "m137-21", episodeId: 137, personId: "matias", productId: "twitter" },
   { id: "m137-22", episodeId: 137, personId: "andrezinho", productId: "turbi" },
   { id: "m137-23", episodeId: 137, personId: "nina", productId: "margot-disney" },
-  { id: "m137-24", episodeId: 137, personId: "tiago-martins", productId: "combo-chatgpt-notion" },
+  { id: "m137-24", episodeId: 137, personId: "thiago-martins", productId: "combo-chatgpt-notion" },
   { id: "m137-25", episodeId: 137, personId: "silvinha", productId: "trello" },
   { id: "m139-1", episodeId: 139, personId: "aiquis", productId: "droid-deck" },
   { id: "m139-2", episodeId: 139, personId: "arthur", productId: "luminaria-medusa" },
@@ -2799,4 +2808,17 @@ export const mentions: Mention[] = [
   { id: "m139-20", episodeId: 139, personId: "fernando", productId: "grokbot" },
   { id: "m139-21", episodeId: 139, personId: "paula", productId: "replit" },
   { id: "m139-22", episodeId: 139, personId: "luciana-sousa", productId: "google-maps" },
+  { id: "m140-1", episodeId: 140, personId: "arthur", productId: "suporte-uv-escova-dente" },
+  { id: "m140-2", episodeId: 140, personId: "aiquis", productId: "chatgpt-sites" },
+  { id: "m140-3", episodeId: 140, personId: "danilera", productId: "wap-barbecue" },
+  { id: "m140-4", episodeId: 140, personId: "rafael-mathias", productId: "cursor" },
+  { id: "m140-5", episodeId: 140, personId: "cloves", productId: "seuimposto" },
+  { id: "m140-6", episodeId: 140, personId: "fabio-beico", productId: "e-titulo" },
+  { id: "m140-7", episodeId: 140, personId: "lukao", productId: "antigravity-gemini" },
+  { id: "m140-8", episodeId: 140, personId: "andre-menezes", productId: "final-fantasy-resonance" },
+  { id: "m140-9", episodeId: 140, personId: "gabriel", productId: "claude-opus-55", context: "Pra motion e decupagem" },
+  { id: "m140-10", episodeId: 140, personId: "vitor-borba", productId: "google-slides" },
+  { id: "m140-11", episodeId: 140, personId: "brunno-matias", productId: "claude-design" },
+  { id: "m140-12", episodeId: 140, personId: "thiago-martins", productId: "plataforma-product-arena" },
+  { id: "m140-13", episodeId: 140, personId: "beatriz-morales", productId: "jev" },
 ];
