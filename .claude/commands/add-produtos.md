@@ -64,6 +64,8 @@ Se não informar URL ou categoria, use bom senso para inferir a categoria com ba
 
 4. **Verifique tipos e dados com** `npx tsc --noEmit` e `npm run check:data` ao final e corrija erros se houver.
 
+5. **Regere a imagem OG com** `npm run og`. Ela mostra os totais de produtos, menções e episódios e a onda sonora de menções por episódio, num arquivo fixo (`client/public/og-image.jpg`) que não se atualiza sozinho. Abra a imagem gerada para conferir os números e inclua o arquivo no mesmo commit do episódio.
+
 ## Entradas
 
 $ARGUMENTS
