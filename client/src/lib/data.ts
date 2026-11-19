@@ -113,6 +113,7 @@ export const episodes: Episode[] = [
   { id: 137, title: "Agentes de IA como usuário: o que muda para Produto", date: "2026-10-08", description: "Discussão sobre agentes de IA como usuários e o que isso muda para Produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=kd2smQvbPkg", spotifyLink: "https://open.spotify.com/episode/0LqEuKlwmfGmL7cJP7HlDe", hosts: ["arthur", "aiquis"] },
   { id: 139, title: "Storytelling e comunicação são as habilidades mais importantes para PMs?", date: "2026-10-21", description: "Discussão sobre se storytelling e comunicação são as habilidades mais importantes para PMs, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=EE2GEzKL-4A", spotifyLink: "https://open.spotify.com/episode/6EccJknRQyl7qAcNq6M9xq", hosts: ["arthur", "aiquis"] },
   { id: 140, title: "Como escolher o modelo de IA certo pro trabalho de produto", date: "2026-10-29", description: "Discussão sobre como escolher o modelo de IA certo pro trabalho de produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YkHYZ-IMTJE", spotifyLink: "https://open.spotify.com/episode/6LhCzWzmnPCFcZLty9IBl3", hosts: ["arthur", "aiquis"] },
+  { id: 143, title: "Como foi o Product Leader Summit 2026?", date: "2026-11-19", description: "Como foi o Product Leader Summit 2026? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=S6j-DbuXBwE", spotifyLink: "https://open.spotify.com/episode/4Y23u1ENzeIgpwof5sgsCn", hosts: ["arthur", "aiquis"] },
 ];
 
 export const products: Product[] = [
@@ -689,7 +690,7 @@ export const products: Product[] = [
   { id: "monica-ai", name: "Mônica AI", category: "AI Tools" },
   { id: "copilot-edge", name: "Copilot no Microsoft Edge", category: "AI Tools", parentId: "microsoft-edge" },
   { id: "google-stitch", name: "Google Stitch", category: "AI Tools" },
-  { id: "paper-design", name: "Paper Design", category: "Productivity" },
+  { id: "paper-design", name: "Paper Design", category: "Productivity", url: "https://paper.design/" },
   { id: "browser-strawberry", name: "Browser Strawberry", category: "Tech" },
   { id: "useleia", name: "Useleia.com", category: "Business", url: "https://useleia.com/" },
   { id: "tenis-adidas-x-lego", name: "Tênis Adidas x Lego", category: "Lifestyle" },
@@ -860,6 +861,17 @@ export const products: Product[] = [
   { id: "antigravity-gemini", name: "Antigravity no app do Gemini", category: "AI Tools", parentId: "antigravity" },
   { id: "final-fantasy-resonance", name: "Final Fantasy Resonance", category: "Entertainment" },
   { id: "plataforma-product-arena", name: "Plataforma da Product Arena", category: "Education", url: "https://productarena.io/" },
+  { id: "ficar-offline", name: "Ficar offline (largar o celular)", category: "Lifestyle" },
+  { id: "snapmaker-u1", name: "Snapmaker U1", category: "Hardware", url: "https://www.snapmaker.com/" },
+  { id: "radio-garden", name: "Radio Garden", category: "Entertainment", url: "https://radio.garden/" },
+  { id: "mindmaster", name: "MindMaster", category: "Productivity", url: "https://www.edrawsoft.com/mindmaster/" },
+  { id: "kimi", name: "Kimi", category: "AI Tools", url: "https://kimi.com/" },
+  { id: "combo-deepseek-kimi", name: "DeepSeek + Kimi", category: "AI Tools", alsoCredits: ["deepseek", "kimi"] },
+  { id: "combo-claude-lovable", name: "Claude + Lovable", category: "AI Tools", alsoCredits: ["claude", "lovable"] },
+  { id: "combo-claude-code-google-flow", name: "Claude Code + Google Flow", category: "AI Tools", alsoCredits: ["claude-code", "google-flow"] },
+  { id: "ductus", name: "Ductus", category: "Productivity", url: "https://ductus.sorenblank.com/" },
+  { id: "graveyard-keeper", name: "Graveyard Keeper", category: "Entertainment", url: "https://store.steampowered.com/app/599140/Graveyard_Keeper/" },
+  { id: "lego-dragon-ball-z", name: "Lego do Dragon Ball Z", category: "Lifestyle" },
 ];
 
 export const people: Person[] = [
@@ -1281,6 +1293,8 @@ export const people: Person[] = [
   { id: "luciana-sousa", name: "Luciana Sousa" },
   { id: "vitor-borba", name: "Vitor Borba" },
   { id: "brunno-matias", name: "Brunno Matias" },
+  { id: "juliana-assuncao", name: "Juliana Assunção" },
+  { id: "luana-rodrigues", name: "Luana Rodrigues" },
 ];
 
 export const mentions: Mention[] = [
@@ -2820,4 +2834,25 @@ export const mentions: Mention[] = [
   { id: "m140-11", episodeId: 140, personId: "brunno-matias", productId: "claude-design" },
   { id: "m140-12", episodeId: 140, personId: "thiago-martins", productId: "plataforma-product-arena" },
   { id: "m140-13", episodeId: 140, personId: "beatriz-morales", productId: "jev" },
+  { id: "m143-1", episodeId: 143, personId: "aiquis", productId: "ficar-offline" },
+  { id: "m143-2", episodeId: 143, personId: "arthur", productId: "snapmaker-u1" },
+  { id: "m143-3", episodeId: 143, personId: "ronald-falcao", productId: "radio-garden" },
+  { id: "m143-4", episodeId: 143, personId: "thays-bueno", productId: "claude" },
+  { id: "m143-5", episodeId: 143, personId: "rafael-ferreira", productId: "audible", context: "Pra tornar o trânsito de São Paulo mais tolerável" },
+  { id: "m143-6", episodeId: 143, personId: "juliana-assuncao", productId: "claude" },
+  { id: "m143-7", episodeId: 143, personId: "juliana-assuncao", productId: "mindmaster" },
+  { id: "m143-8", episodeId: 143, personId: "juliana-assuncao", productId: "obsidian" },
+  { id: "m143-9", episodeId: 143, personId: "amanda-couto", productId: "combo-deepseek-kimi" },
+  { id: "m143-10", episodeId: 143, personId: "agatha-martins", productId: "combo-claude-lovable" },
+  { id: "m143-11", episodeId: 143, personId: "luana-rodrigues", productId: "cursor" },
+  { id: "m143-12", episodeId: 143, personId: "carlos-bronze", productId: "granola", context: "Agora com voice typing" },
+  { id: "m143-13", episodeId: 143, personId: "arion-pinheiro", productId: "combo-claude-code-google-flow" },
+  { id: "m143-14", episodeId: 143, personId: "novellino", productId: "instinct", context: "Planejando uma viagem 100% com ele" },
+  { id: "m143-15", episodeId: 143, personId: "andrezinho", productId: "claude" },
+  { id: "m143-16", episodeId: 143, personId: "valeria-romano", productId: "ductus", context: "Site pra criar a sua própria fonte" },
+  { id: "m143-17", episodeId: 143, personId: "lucas-mattos", productId: "paper-design", context: "Um “Figma gratuito”" },
+  { id: "m143-18", episodeId: 143, personId: "danilera", productId: "balatro", context: "Mistura de pôquer e paciência" },
+  { id: "m143-19", episodeId: 143, personId: "lucao", productId: "antigravity", context: "Com Gemini Hydrogen" },
+  { id: "m143-20", episodeId: 143, personId: "lucao", productId: "graveyard-keeper" },
+  { id: "m143-21", episodeId: 143, personId: "matt-lopes", productId: "lego-dragon-ball-z" },
 ];
