@@ -1,7 +1,9 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
-import { rm, readFile, readdir } from "fs/promises";
+import { rm, readFile, readdir, writeFile } from "fs/promises";
 import path from "path";
+import zlib from "zlib";
+import { COMPRESSIBLE } from "../server/static";
 import { checkData, checkPrerender } from "./check-data";
 import { mentions } from "../client/src/lib/data";
 
@@ -52,6 +54,7 @@ async function buildAll() {
   await viteBuild();
 
   await checkClientData();
+  await compressDist("dist/public");
 
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
@@ -99,6 +102,31 @@ async function checkClientData() {
       throw new Error(`dados vazaram para o JavaScript do site (${file} contém ${sentinel})`);
     }
   }
+}
+
+/**
+ * Gera versões .br (brotli) e .gz (gzip) dos arquivos de texto, na compressão máxima,
+ * para o servidor entregar sem comprimir a cada requisição (ver server/static.ts).
+ */
+async function compressDist(dir: string) {
+  let original = 0;
+  let brotli = 0;
+  for (const entry of await readdir(dir, { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile() || !COMPRESSIBLE.test(entry.name)) continue;
+    // parentPath só existe a partir do Node 20.12; antes disso, o mesmo valor vem em path
+    const parent = entry.parentPath ?? (entry as unknown as { path: string }).path;
+    const file = path.join(parent, entry.name);
+    const content = await readFile(file);
+    if (content.length < 1024) continue;
+    const br = zlib.brotliCompressSync(content, {
+      params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 11 },
+    });
+    await writeFile(`${file}.br`, br);
+    await writeFile(`${file}.gz`, zlib.gzipSync(content, { level: 9 }));
+    original += content.length;
+    brotli += br.length;
+  }
+  console.log(`compressed: ${Math.round(original / 1024)} KB -> ${Math.round(brotli / 1024)} KB (brotli)`);
 }
 
 buildAll().catch((err) => {
