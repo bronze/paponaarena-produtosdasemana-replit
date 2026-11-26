@@ -1,11 +1,15 @@
 import "../client/src/lib/data-static";
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 
 const app = express();
 const httpServer = createServer(app);
+
+// Comprime as respostas (HTML, JS, CSS, JSON) com gzip: o Replit não comprime sozinho
+app.use(compression());
 
 declare module "http" {
   interface IncomingMessage {
