@@ -194,15 +194,16 @@ function ParticipantRow({ person, products }: {
   person: { id: string; name: string };
   products: { mention: { id: string; context?: string; productId: string }; product: ReturnType<typeof getProduct> }[];
 }) {
+  // Nome e produtos sempre lado a lado: quem quebra linha são os produtos, na coluna deles
   return (
-    <div key={person.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+    <div key={person.id} className="flex items-baseline gap-x-2">
       <Link href={`/pessoas/${person.id}`} className="link-inline text-sm shrink-0" data-testid={`badge-person-${person.id}`}>
         {person.name}
       </Link>
-      <div className="flex flex-wrap gap-1">
+      <div className="flex min-w-0 flex-1 flex-wrap gap-1">
         {products.map(({ mention, product }) =>
           product?.alsoCredits?.length ? (
-            <span key={mention.id} className="flex items-center gap-0.5">
+            <span key={mention.id} className="flex min-w-0 items-center gap-0.5">
               <span className="text-xs text-muted-foreground italic mr-0.5">combo</span>
               {product.alsoCredits.map((id, i) => (
                 <span key={id} className="flex items-center gap-0.5">
@@ -214,16 +215,16 @@ function ParticipantRow({ person, products }: {
                   </Link>
                 </span>
               ))}
-              {mention.context && <span className="text-xs text-muted-foreground italic ml-0.5">({mention.context})</span>}
+              {mention.context && <span className="min-w-0 text-xs text-muted-foreground italic ml-0.5">({mention.context})</span>}
             </span>
           ) : (
-            <span key={mention.id} className="flex items-center gap-1">
+            <span key={mention.id} className="flex min-w-0 items-center gap-1">
               <Link href={`/produtos/${resolveParent(mention.productId)}`}>
                 <Badge variant="outline" className="text-xs cursor-pointer hover:bg-accent">
                   {product?.name || mention.productId}
                 </Badge>
               </Link>
-              {mention.context && <span className="text-xs text-muted-foreground italic">({mention.context})</span>}
+              {mention.context && <span className="min-w-0 text-xs text-muted-foreground italic">({mention.context})</span>}
             </span>
           )
         )}
