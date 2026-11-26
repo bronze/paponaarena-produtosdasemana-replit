@@ -147,9 +147,9 @@ function CategoryDetail() {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Categoria não encontrada.</p>
-        <Button asChild variant="ghost" className="mt-4">
+        <Button asChild variant="ghost" className="group mt-4">
           <Link href="/categorias">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" aria-hidden="true" /> Voltar
           </Link>
         </Button>
       </div>
@@ -164,9 +164,9 @@ function CategoryDetail() {
   return (
     <div className="space-y-8">
       <div>
-        <Button asChild variant="ghost" size="sm" className="mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
+        <Button asChild variant="ghost" size="sm" className="group mb-3 -ml-2 text-muted-foreground" data-testid="button-back">
           <Link href="/categorias">
-            <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Categorias
+            <ArrowLeft className="mr-1.5 h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" /> Categorias
           </Link>
         </Button>
         <h1 className="detail-title" data-testid="text-category-name">{categoryLabel(category)}</h1>

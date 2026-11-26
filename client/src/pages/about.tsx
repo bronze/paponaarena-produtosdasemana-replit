@@ -153,10 +153,10 @@ export default function AboutPage() {
               </p>
               <Link
                 href={`/episodios/${milestone.episode.id}`}
-                className={cn(pillBase, pillLight)}
+                className={cn(pillBase, pillLight, "group")}
                 onClick={() => posthog.capture("about_milestone_clicked", { episode_id: milestone.episode.id })}
               >
-                Ver o episódio #{milestone.episode.id} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                Ver o episódio #{milestone.episode.id} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </div>
           </div>

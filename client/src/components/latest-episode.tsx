@@ -97,9 +97,9 @@ function LatestEpisodeCinza({ episode, cast, mentionCount, products }: LatestEpi
       <Link
         href={`/episodios/${episode.id}`}
         onClick={() => trackOpen(episode)}
-        className="inline-flex h-12 w-fit items-center gap-2 rounded-full bg-primary px-6 font-semibold text-primary-foreground outline-none transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group inline-flex h-12 w-fit items-center gap-2 rounded-full bg-primary px-6 font-semibold text-primary-foreground outline-none transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
-        Ver episódio <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        Ver episódio <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
       </Link>
     </section>
   );
@@ -135,9 +135,9 @@ function LatestEpisodeEscuro({ episode, cast, mentionCount, products }: LatestEp
           <Link
             href={`/episodios/${episode.id}`}
             onClick={() => trackOpen(episode)}
-            className="inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 font-semibold text-primary-foreground outline-none transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-sidebar-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
+            className="group inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 font-semibold text-primary-foreground outline-none transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-sidebar-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
           >
-            Ver episódio <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Ver episódio <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
           <PodcastLinks
             episode={episode}
