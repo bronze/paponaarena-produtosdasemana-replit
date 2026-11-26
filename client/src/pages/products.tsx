@@ -41,9 +41,9 @@ function buildProductRows() {
   return rows;
 }
 
-function CategoryLink({ category, className = "font-semibold text-foreground" }: { category: string; className?: string }) {
+function CategoryLink({ category, className = "text-foreground" }: { category: string; className?: string }) {
   return (
-    <Link href={categoryPath(category)} className={`underline-offset-2 hover:underline ${className}`}>
+    <Link href={categoryPath(category)} className={`link-inline ${className}`}>
       {categoryLabel(category)}
     </Link>
   );
@@ -272,7 +272,7 @@ function ProductDetail({ id }: { id: string }) {
                 const episode = getEpisode(epId);
                 return (
                   <li key={epId} className="space-y-1 border-b border-border/40 py-3 first:pt-0 last:border-0">
-                    <Link href={`/episodios/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
+                    <Link href={`/episodios/${epId}`} className="link-inline block text-sm leading-snug">
                       <span className="font-bold tabular-nums">#{epId}</span>
                       {episode && <span className="text-muted-foreground"> · </span>}
                       {episode?.title}
@@ -284,7 +284,7 @@ function ProductDetail({ id }: { id: string }) {
                         return (
                           <span key={m.id}>
                             {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-                            <Link href={`/pessoas/${m.personId}`} className="font-semibold underline-offset-2 hover:underline">
+                            <Link href={`/pessoas/${m.personId}`} className="link-inline">
                               {getPerson(m.personId)?.name || m.personId}
                             </Link>
                             {variant && <span className="text-muted-foreground"> ({variant})</span>}
@@ -316,7 +316,7 @@ function ProductDetail({ id }: { id: string }) {
                 <li key={personId} className="flex items-center justify-between gap-3 border-b border-border/40 py-2 last:border-0">
                   <div className="flex min-w-0 items-baseline gap-2.5">
                     <span className="w-5 shrink-0 text-right text-xs tabular-nums text-muted-foreground">{index + 1}</span>
-                    <Link href={`/pessoas/${personId}`} className="text-sm font-medium hover:underline">
+                    <Link href={`/pessoas/${personId}`} className="link-inline text-sm">
                       {getPerson(personId)?.name || personId}
                     </Link>
                   </div>

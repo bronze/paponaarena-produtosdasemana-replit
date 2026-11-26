@@ -62,8 +62,8 @@ export default function Dashboard() {
       <div>
         <h1 className="page-title" data-testid="text-page-title">Papo na Arena Radar<span className="text-primary" aria-hidden="true">.</span></h1>
         <p className="page-lead">
-          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com <strong className="font-semibold text-foreground">Arthur Castro</strong> e <strong className="font-semibold text-foreground">Aíquis Rodrigues</strong>.
-          <Link href="/sobre" className="block w-fit underline-offset-2 hover:underline">Saiba mais</Link>
+          Radar dos produtos e serviços citados no podcast <strong className="font-semibold text-foreground">Papo na Arena</strong>, com <Link href="/pessoas/arthur" className="link-inline text-foreground">Arthur Castro</Link> e <Link href="/pessoas/aiquis" className="link-inline text-foreground">Aíquis Rodrigues</Link>.
+          <Link href="/sobre" className="link-cta mt-2 flex text-base">Saiba mais <ArrowRight aria-hidden="true" /></Link>
         </p>
       </div>
 
@@ -87,8 +87,8 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base">Top 10 Produtos</CardTitle>
-            <Link href="/produtos" className="text-sm text-muted-foreground flex items-center gap-1" data-testid="link-all-products">
-              Ver todos <ArrowRight className="h-3 w-3" />
+            <Link href="/produtos" className="link-cta text-sm" data-testid="link-all-products">
+              Ver todos <ArrowRight aria-hidden="true" />
             </Link>
           </CardHeader>
           <CardContent>

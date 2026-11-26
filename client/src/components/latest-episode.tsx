@@ -90,7 +90,7 @@ function LatestEpisodeCinza({ episode, cast, mentionCount, products }: LatestEpi
         {products.length > 0 && (
           <p className="text-sm" data-testid="text-latest-products">
             <span className="text-muted-foreground">{mentionCount} menções: </span>
-            <ProductLinks products={products} className="font-semibold underline-offset-2 hover:underline" />
+            <ProductLinks products={products} className="link-inline" />
           </p>
         )}
       </div>
@@ -108,7 +108,7 @@ function LatestEpisodeCinza({ episode, cast, mentionCount, products }: LatestEpi
 /** B: card escuro, no espírito do card "Papo na Arena" de productarena.io/podcast. */
 function LatestEpisodeEscuro({ episode, cast, mentionCount, products }: LatestEpisodeProps) {
   return (
-    <section className="relative overflow-hidden rounded-lg bg-sidebar text-sidebar-foreground" data-testid="card-latest-episode">
+    <section className="relative overflow-hidden rounded-lg bg-sidebar text-sidebar-foreground [--link-underline:var(--neutral-600)]" data-testid="card-latest-episode">
       <p
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-4 right-4 select-none text-[6rem] font-extrabold leading-none tracking-[-0.04em] text-primary md:-bottom-6 md:right-8 md:text-[9rem]"
@@ -128,7 +128,7 @@ function LatestEpisodeEscuro({ episode, cast, mentionCount, products }: LatestEp
         {products.length > 0 && (
           <p className="text-sm text-sidebar-foreground/70" data-testid="text-latest-products">
             {mentionCount} menções:{" "}
-            <ProductLinks products={products} className="font-semibold text-sidebar-foreground underline-offset-2 hover:underline" />
+            <ProductLinks products={products} className="link-inline text-sidebar-foreground" />
           </p>
         )}
         <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -179,7 +179,7 @@ function LatestEpisodeEditorial({ episode, cast, mentionCount, products }: Lates
         {products.length > 0 && (
           <p className="text-sm" data-testid="text-latest-products">
             <span className="text-muted-foreground">{mentionCount} menções: </span>
-            <ProductLinks products={products} className="font-semibold underline-offset-2 hover:underline" />
+            <ProductLinks products={products} className="link-inline" />
           </p>
         )}
       </div>

@@ -87,6 +87,7 @@
   /* extras do DESIGN.md */
   --brand-tint: var(--coral-100);
   --highlight: var(--neutral-100);
+  --link-underline: var(--neutral-300);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
@@ -143,6 +144,28 @@
 
 /* Títulos no estilo do DESIGN.md: pesados e com tracking negativo */
 @layer components {
+  /* Link em frase (nomes de pessoas, produtos, episódios): semibold com sublinhado fino e claro
+     sempre visível, que escurece no hover. Visível também no celular, onde não há hover.
+     Em fundo escuro, o container define --link-underline: var(--neutral-600). */
+  .link-inline {
+    @apply font-semibold underline decoration-1 underline-offset-[3px] transition-colors;
+    text-decoration-color: hsl(var(--link-underline));
+  }
+  .link-inline:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Chamada para outra página: texto semibold + seta, que anda no hover */
+  .link-cta {
+    @apply inline-flex w-fit items-center gap-1.5 font-semibold text-foreground decoration-1 underline-offset-[3px] hover:underline;
+  }
+  .link-cta svg {
+    @apply h-4 w-4 shrink-0 transition-transform;
+  }
+  .link-cta:hover svg {
+    transform: translateX(3px);
+  }
+
   .page-title {
     @apply mb-3 text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.035em] md:text-[3.5rem];
   }

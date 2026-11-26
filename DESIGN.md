@@ -80,7 +80,7 @@ Texto normal exige 4,5:1; texto grande (≥ 24px, ou ≥ 19px em negrito) exige 
 - Coral como **fundo** (botão primário, faixa CTA, marca) com **texto preto**.
 - coral-500 como texto ou ícone **só sobre preto** (sidebar, painéis escuros); no claro, texto coral é coral-700.
 - Ponto final coral em títulos grandes: "Papo na Arena Radar**.**"
-- Links e rótulos pequenos em `ink` ou `muted`.
+- Links e rótulos pequenos em `ink` ou `muted` (tratamento dos links na seção "Links").
 - Cor nova sempre como um tom das escalas, nunca hex solto ou filtro de brilho.
 
 **Evitar**
@@ -112,6 +112,21 @@ Fonte: **Plus Jakarta Sans** (400, 500, 600, 700, 800).
 - **Espaçamento:** seções com 64px vertical; gap de 16px entre cards; padding interno de card 24px; página do app com 32px (20px/16px no mobile).
 - **Alvos de toque:** todo botão e controle tem no mínimo **48×48px** (recomendação do Google/Material; cobre o 44px da Apple e o AAA do WCAG). Vale para o componente `Button` em todos os tamanhos, botões de voltar, botão do menu no mobile, cabeçalhos ordenáveis de tabela, pílulas de links externos e itens da sidebar. Links dentro de texto corrido (nomes de produto numa frase) ficam de fora, como prevê o WCAG.
 - **Foco:** contorno de 2px em `ink` com offset de 3px (em `on-dark` sobre superfícies escuras).
+
+## Links
+
+Regra decidida em 2026-11-26. A comparação entre o tratamento anterior e este está em `mockups/links-radar.html`.
+
+| Tipo | Como fica | Classe |
+|---|---|---|
+| **Nome em frase** (pessoa, produto, episódio, categoria em texto ou lista) | Semibold, sublinhado de 1px em `neutral-300` sempre visível (offset 3px), que vai para a cor do texto no hover. Em fundo escuro, o sublinhado é `neutral-600` | `link-inline`; no container escuro, `[--link-underline:var(--neutral-600)]` |
+| **Chamada para outra página** ("Ver todos", "Saiba mais") | Texto semibold em `ink` + seta de 16px, que anda 3px no hover | `link-cta` |
+| **Linha inteira clicável** (rankings, listas de episódios) | Fundo `highlight` no hover | sem mudança |
+| **Botões e pílulas** ("Ver episódio", YouTube, Spotify) | Formato de botão | sem mudança |
+| **Título grande como link** (título do card do último episódio) | Sublinhado só no hover: o tamanho já indica que é clicável | sem mudança |
+
+- O sublinhado fica sempre visível porque no celular não existe hover: só negrito não indica link.
+- **Negrito em texto corrido é sinal de link.** Ênfase sem link usa só a cor do texto principal, sem negrito. Exceção: "Papo na Arena" no cabeçalho da página inicial, que fica em negrito sem link.
 
 ## Componentes
 

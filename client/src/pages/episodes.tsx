@@ -91,7 +91,7 @@ function EpisodeRow({ row }: { row: EpisodeRowData }) {
             {shown.map((product, i) => (
               <span key={product.id}>
                 {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-                <Link href={`/produtos/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+                <Link href={`/produtos/${product.id}`} className="link-inline relative z-10">
                   {product.name}
                 </Link>
               </span>
@@ -196,7 +196,7 @@ function ParticipantRow({ person, products }: {
 }) {
   return (
     <div key={person.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-      <Link href={`/pessoas/${person.id}`} className="text-sm font-medium hover:underline shrink-0" data-testid={`badge-person-${person.id}`}>
+      <Link href={`/pessoas/${person.id}`} className="link-inline text-sm shrink-0" data-testid={`badge-person-${person.id}`}>
         {person.name}
       </Link>
       <div className="flex flex-wrap gap-1">
@@ -307,7 +307,7 @@ function EpisodeDetail() {
             {castPeople.map((person, i) => (
               <span key={person.id}>
                 {i > 0 && <span className="text-muted-foreground">{i === castPeople.length - 1 ? " e " : ", "}</span>}
-                <Link href={`/pessoas/${person.id}`} className="font-medium hover:underline">{person.name}</Link>
+                <Link href={`/pessoas/${person.id}`} className="link-inline">{person.name}</Link>
               </span>
             ))}
           </p>
@@ -367,7 +367,7 @@ function EpisodeDetail() {
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span className="text-xs text-muted-foreground w-5 text-right shrink-0 tabular-nums">{index + 1}</span>
                     <div className="flex items-center gap-2 min-w-0">
-                      <Link href={`/produtos/${productId}`} className="text-sm font-medium hover:underline">
+                      <Link href={`/produtos/${productId}`} className="link-inline text-sm">
                         {product?.name || productId}
                       </Link>
                       {product?.category && (

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Links do Radar</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: uma seção por lugar do site, cada uma com "Hoje" e "Proposta" lado a lado (empilha no celular).
+   Tokens copiados de client/src/index.css. O site é só tema claro, então a página também é. */
+:root {
+  --bg: hsl(240 14.3% 98.6%);        /* neutral-50, fundo do site */
+  --card: hsl(0 0% 100%);
+  --ink: hsl(240 6.7% 5.9%);         /* neutral-950 */
+  --muted: hsl(240 5.2% 33.9%);      /* neutral-600, texto secundário */
+  --border: hsl(240 5.9% 90%);       /* neutral-200 */
+  --highlight: hsl(240 4.8% 95.9%);  /* neutral-100 */
+  --coral: hsl(0 100% 67.1%);        /* coral-500 */
+  --dark: hsl(240 6.7% 5.9%);        /* fundo do card escuro (sidebar) */
+  --dark-fg: hsl(240 4.8% 95.9%);
+  --dark-muted: hsl(240 5% 64.9%);
+  --underline-soft: hsl(240 4.9% 83.9%);   /* neutral-300: sublinhado suave da proposta */
+  --underline-soft-dark: hsl(240 5.2% 33.9%);
+  --font: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 56px; }
+
+/* Cabeçalho da página de comparação */
+.intro { display: grid; gap: 12px; max-width: 70ch; }
+.intro h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; text-wrap: balance; }
+.intro h1 span { color: var(--coral); }
+.intro p { margin: 0; color: var(--muted); font-size: 1.0625rem; }
+.toggle { display: inline-flex; align-items: center; gap: 10px; width: fit-content; min-height: 48px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); font-weight: 600; font-size: 0.9375rem; cursor: pointer; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--ink); }
+
+/* Seções */
+section.cmp { display: grid; gap: 16px; }
+.cmp-head { display: grid; gap: 4px; }
+.cmp-head h2 { margin: 0; font-size: 1.375rem; font-weight: 800; letter-spacing: -0.02em; }
+.cmp-head p { margin: 0; color: var(--muted); font-size: 0.9375rem; max-width: 75ch; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 860px) { .pair { grid-template-columns: 1fr; } }
+.panel { min-width: 0; display: grid; gap: 14px; align-content: start; }
+.tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.tag.new { color: var(--ink); }
+.tag.new::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--coral); margin-right: 8px; vertical-align: 1px; }
+.stage { min-width: 0; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+.notes { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.875rem; display: grid; gap: 4px; }
+.notes b { color: var(--ink); font-weight: 600; }
+
+/* ---------- Reprodução do site ---------- */
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+
+.page-title { margin: 0 0 12px; font-size: clamp(2rem, 4.2vw, 2.75rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; }
+.page-title span { color: var(--coral); }
+.page-lead { margin: 0; font-size: 1.125rem; line-height: 1.625; color: var(--muted); }
+.strong { font-weight: 600; color: var(--ink); }
+.plain-ink { color: var(--ink); }
+
+/* HOJE: sublinhado só no hover */
+.l-now { text-underline-offset: 2px; }
+.l-now:hover, .show-hover .l-now { text-decoration: underline; }
+.l-now.semi { font-weight: 600; color: var(--ink); }
+.block { display: block; width: fit-content; }
+
+/* PROPOSTA: link em frase com sublinhado fino e claro sempre visível, escurece no hover */
+.l-new {
+  font-weight: 600; color: var(--ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+  text-decoration-color: var(--underline-soft);
+  transition: text-decoration-color .15s;
+}
+.l-new:hover, .show-hover .l-new { text-decoration-color: currentColor; }
+.dark .l-new { color: var(--dark-fg); text-decoration-color: var(--underline-soft-dark); }
+.dark .l-new:hover, .show-hover .dark .l-new { text-decoration-color: currentColor; }
+
+/* Chamadas: texto + seta */
+.cta-now { display: inline-flex; align-items: center; gap: 4px; font-size: 0.875rem; color: var(--muted); }
+.cta-new { display: inline-flex; align-items: center; gap: 6px; font-size: 0.9375rem; font-weight: 600; color: var(--ink); }
+.cta-new svg { transition: transform .15s; }
+.cta-new:hover svg, .show-hover .cta-new svg { transform: translateX(3px); }
+.cta-new:hover, .show-hover .cta-new { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.cta-new.lead { margin-top: 6px; color: var(--ink); }
+
+/* Card do último episódio (variante escura) */
+.dark { background: var(--dark); color: var(--dark-fg); border-radius: 10px; padding: 24px; position: relative; overflow: hidden; }
+.dark h3 { margin: 0 0 10px; font-size: 1.625rem; font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; text-wrap: balance; max-width: 18ch; }
+.dark .meta { margin: 0 0 8px; font-size: 0.875rem; color: var(--dark-muted); }
+.dark .prods { margin: 0; font-size: 0.875rem; }
+.dark .prods .lbl { color: var(--dark-muted); }
+.dark .num { position: absolute; right: 16px; bottom: -14px; font-size: 5rem; font-weight: 800; letter-spacing: -0.04em; color: var(--coral); line-height: 1; pointer-events: none; }
+.dark .l-now.semi { color: var(--dark-fg); }
+.dark .body { position: relative; padding-bottom: 56px; }
+
+/* Lista de menções (página de pessoa) */
+.mentions { list-style: none; margin: 0; padding: 0; display: grid; }
+.mentions li { display: grid; gap: 2px; padding: 12px 0; border-top: 1px solid var(--border); font-size: 0.9375rem; }
+.mentions li:last-child { border-bottom: 1px solid var(--border); }
+.mentions .ctx { color: var(--muted); font-size: 0.875rem; }
+
+/* Card com "Ver todos" */
+.minicard { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.minicard strong { font-size: 1rem; }
+
+/* Regra resumida */
+.rules { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+.rules th, .rules td { text-align: left; padding: 14px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+.rules th { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 700; border-top: 0; }
+.rules td:first-child { font-weight: 700; white-space: nowrap; }
+.table-scroll { overflow-x: auto; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+</head>
+<body>
+<div class="wrap" id="root">
+  <header class="intro">
+    <h1>Como os links aparecem no Radar<span>.</span></h1>
+    <p>Comparação entre o tratamento atual e a proposta, em quatro lugares do site. Nada aqui está no ar: é só para decidir.</p>
+    <p>No computador, passe o mouse nos links para ver o hover. No celular não existe hover: ligue a opção abaixo para ver como fica o estado de hover, ou desligue para ver o que quem usa celular vê.</p>
+    <label class="toggle" for="hover-toggle">
+      <input type="checkbox" id="hover-toggle">
+      Mostrar todos os links em estado de hover
+    </label>
+  </header>
+
+  <!-- 1. Cabeçalho da home -->
+  <section class="cmp">
+    <div class="cmp-head">
+      <h2>1. Cabeçalho da página inicial</h2>
+      <p>Hoje os nomes em negrito parecem links e não são; o único link ("Saiba mais") parece texto comum.</p>
+    </div>
+    <div class="pair">
+      <div class="panel">
+        <span class="tag">Hoje</span>
+        <div class="stage">
+          <h3 class="page-title">Papo na Arena Radar<span>.</span></h3>
+          <p class="page-lead">
+            Radar dos produtos e serviços citados no podcast <span class="strong">Papo na Arena</span>, com <span class="strong">Arthur Castro</span> e <span class="strong">Aíquis Rodrigues</span>.
+            <a href="#" class="l-now block">Saiba mais</a>
+          </p>
+        </div>
+        <ul class="notes">
+          <li>"Papo na Arena", "Arthur Castro" e "Aíquis Rodrigues": negrito, <b>sem link</b>.</li>
+          <li>"Saiba mais": link, cinza, sublinhado só no hover.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <span class="tag new">Proposta</span>
+        <div class="stage">
+          <h3 class="page-title">Papo na Arena Radar<span>.</span></h3>
+          <p class="page-lead">
+            Radar dos produtos e serviços citados no podcast <span class="plain-ink">Papo na Arena</span>, com <a href="#" class="l-new">Arthur Castro</a> e <a href="#" class="l-new">Aíquis Rodrigues</a>.
+          </p>
+          <a href="#" class="cta-new lead">Saiba mais sobre o Radar
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <ul class="notes">
+          <li>Arthur e Aíquis: <b>links para as páginas deles</b>, semibold com sublinhado suave.</li>
+          <li>"Papo na Arena": sem link e <b>sem negrito</b>, só na cor do texto principal.</li>
+          <li>"Saiba mais sobre o Radar →": chamada com seta, como o "Ver todos".</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Card do último episódio -->
+  <section class="cmp">
+    <div class="cmp-head">
+      <h2>2. Card do último episódio</h2>
+      <p>Os produtos citados são links. No celular, hoje, nada indica isso além do negrito.</p>
+    </div>
+    <div class="pair">
+      <div class="panel">
+        <span class="tag">Hoje</span>
+        <div class="dark">
+          <div class="body">
+            <h3><a href="#" class="l-now">Como sobreviver a mais um planejamento anual?</a></h3>
+            <p class="meta">Último episódio · 25 de novembro de 2026 · com Arthur e Aíquis</p>
+            <p class="prods"><span class="lbl">15 menções: </span><a href="#" class="l-now semi">GTA 6</a> · <a href="#" class="l-now semi">Snapmaker U1</a> · <a href="#" class="l-now semi">BTS</a> · <a href="#" class="l-now semi">Graveyard Keeper</a> · <a href="#" class="l-now semi">Wispr Flow</a> <span class="lbl">· +7</span></p>
+          </div>
+          <span class="num" aria-hidden="true">#144</span>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="tag new">Proposta</span>
+        <div class="dark">
+          <div class="body">
+            <h3><a href="#" class="l-now">Como sobreviver a mais um planejamento anual?</a></h3>
+            <p class="meta">Último episódio · 25 de novembro de 2026 · com Arthur e Aíquis</p>
+            <p class="prods"><span class="lbl">15 menções: </span><a href="#" class="l-new">GTA 6</a> · <a href="#" class="l-new">Snapmaker U1</a> · <a href="#" class="l-new">BTS</a> · <a href="#" class="l-new">Graveyard Keeper</a> · <a href="#" class="l-new">Wispr Flow</a> <span class="lbl">· +7</span></p>
+          </div>
+          <span class="num" aria-hidden="true">#144</span>
+        </div>
+        <ul class="notes">
+          <li>Produtos com sublinhado suave, em tom escuro sobre o fundo escuro.</li>
+          <li>O título do episódio continua como está: título grande já é lido como clicável.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Menções na página de pessoa -->
+  <section class="cmp">
+    <div class="cmp-head">
+      <h2>3. Menções na página de uma pessoa</h2>
+      <p>Lista com o produto como link e o contexto da menção. Exemplo da página de Carlos Bronze.</p>
+    </div>
+    <div class="pair">
+      <div class="panel">
+        <span class="tag">Hoje</span>
+        <div class="stage">
+          <ul class="mentions">
+            <li><a href="#" class="l-now semi">Claude Code + PostHog</a><span class="ctx">Ep144 · Como sobreviver a mais um planejamento anual?</span></li>
+            <li><a href="#" class="l-now semi">Granola</a><span class="ctx">Agora com voice typing · Ep143</span></li>
+            <li><a href="#" class="l-now semi">Claude Code</a><span class="ctx">Ep137 · Agentes de IA como usuário: o que muda para Produto</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="tag new">Proposta</span>
+        <div class="stage">
+          <ul class="mentions">
+            <li><a href="#" class="l-new" style="width:fit-content">Claude Code + PostHog</a><span class="ctx">Ep144 · Como sobreviver a mais um planejamento anual?</span></li>
+            <li><a href="#" class="l-new" style="width:fit-content">Granola</a><span class="ctx">Agora com voice typing · Ep143</span></li>
+            <li><a href="#" class="l-new" style="width:fit-content">Claude Code</a><span class="ctx">Ep137 · Agentes de IA como usuário: o que muda para Produto</span></li>
+          </ul>
+        </div>
+        <ul class="notes">
+          <li>Mesma regra dos nomes em frase. Listas em que a linha inteira é clicável (rankings) ficam como estão.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Chamadas -->
+  <section class="cmp">
+    <div class="cmp-head">
+      <h2>4. Chamadas para outra página</h2>
+      <p>Hoje "Ver todos" tem seta e "Saiba mais" não tem. A proposta é um padrão só: texto e seta.</p>
+    </div>
+    <div class="pair">
+      <div class="panel">
+        <span class="tag">Hoje</span>
+        <div class="stage" style="display:grid;gap:12px">
+          <div class="minicard">
+            <strong>Top 10 Produtos</strong>
+            <a href="#" class="cta-now">Ver todos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <a href="#" class="l-now block" style="color:var(--muted)">Saiba mais</a>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="tag new">Proposta</span>
+        <div class="stage" style="display:grid;gap:12px">
+          <div class="minicard">
+            <strong>Top 10 Produtos</strong>
+            <a href="#" class="cta-new">Ver todos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <a href="#" class="cta-new">Saiba mais sobre o Radar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+        <ul class="notes">
+          <li>Semibold na cor do texto principal, seta de 16px que anda no hover.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regra -->
+  <section class="cmp">
+    <div class="cmp-head">
+      <h2>A regra proposta, em resumo</h2>
+    </div>
+    <div class="table-scroll">
+      <table class="rules">
+        <thead><tr><th>Tipo</th><th>Como fica</th><th>Muda?</th></tr></thead>
+        <tbody>
+          <tr><td>Nome em frase</td><td>Semibold, sublinhado fino e claro sempre visível, que escurece no hover</td><td>Sim</td></tr>
+          <tr><td>Chamada</td><td>Texto semibold + seta (→)</td><td>Sim</td></tr>
+          <tr><td>Negrito sem link</td><td>Não usar. Ênfase sem link vai só na cor do texto principal</td><td>Sim</td></tr>
+          <tr><td>Linha inteira clicável</td><td>Fundo muda no hover (rankings, listas)</td><td>Não</td></tr>
+          <tr><td>Botões e pílulas</td><td>"Ver episódio", YouTube, Spotify</td><td>Não</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+  const toggle = document.getElementById("hover-toggle");
+  const root = document.getElementById("root");
+  toggle.addEventListener("change", () => root.classList.toggle("show-hover", toggle.checked));
+  document.querySelectorAll('a[href="#"]').forEach((a) => a.addEventListener("click", (e) => e.preventDefault()));
+</script>
+
+</body>
+</html>

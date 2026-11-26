@@ -121,7 +121,7 @@ function PersonRow({ row, query, byEpisodes, max }: { row: PersonRowData; query:
             {shown.map((product, i) => (
               <span key={product.id}>
                 {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-                <Link href={`/produtos/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+                <Link href={`/produtos/${product.id}`} className="link-inline relative z-10">
                   {product.name}
                 </Link>
               </span>
@@ -229,7 +229,7 @@ function MentionedProduct({ mention }: { mention: Mention }) {
           {credits.map((creditId, idx) => (
             <span key={creditId}>
               {idx > 0 && <span className="text-muted-foreground"> + </span>}
-              <Link href={`/produtos/${creditId}`} className="font-semibold underline-offset-2 hover:underline">
+              <Link href={`/produtos/${creditId}`} className="link-inline">
                 {getProduct(creditId)?.name || creditId}
               </Link>
             </span>
@@ -237,7 +237,7 @@ function MentionedProduct({ mention }: { mention: Mention }) {
           <span className="text-muted-foreground"> (combo)</span>
         </>
       ) : (
-        <Link href={`/produtos/${mention.productId}`} className="font-semibold underline-offset-2 hover:underline">
+        <Link href={`/produtos/${mention.productId}`} className="link-inline">
           {product?.name || mention.productId}
         </Link>
       )}
@@ -372,7 +372,7 @@ function PersonDetail() {
                   <li key={productId} className="flex items-center justify-between gap-3 border-b border-border/40 py-2 last:border-0">
                     <div className="flex min-w-0 items-baseline gap-2.5">
                       <span className="w-5 shrink-0 text-right text-xs tabular-nums text-muted-foreground">{index + 1}</span>
-                      <Link href={`/produtos/${productId}`} className="text-sm font-medium hover:underline">
+                      <Link href={`/produtos/${productId}`} className="link-inline text-sm">
                         {product?.name || productId}
                       </Link>
                       {product?.category && <span className="shrink-0 text-xs text-muted-foreground">{categoryLabel(product.category)}</span>}
@@ -405,7 +405,7 @@ function PersonDetail() {
                 const epMentions = personMentions.filter((m) => m.episodeId === epId);
                 return (
                   <li key={epId} className="space-y-1 border-b border-border/40 py-3 first:pt-0 last:border-0">
-                    <Link href={`/episodios/${epId}`} className="block text-sm font-medium leading-snug hover:underline">
+                    <Link href={`/episodios/${epId}`} className="link-inline block text-sm leading-snug">
                       <span className="font-bold tabular-nums">#{epId}</span>
                       {episode && <span className="text-muted-foreground"> · </span>}
                       {episode?.title}

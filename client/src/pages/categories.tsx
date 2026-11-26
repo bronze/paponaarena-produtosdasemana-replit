@@ -50,7 +50,7 @@ function CategoryRow({ row, max, query }: { row: CategoryRowData; max: number; q
         {shown.map((product, i) => (
           <span key={product.id}>
             {i > 0 && <span className="text-muted-foreground" aria-hidden="true"> · </span>}
-            <Link href={`/produtos/${product.id}`} className="relative z-10 font-semibold underline-offset-2 hover:underline">
+            <Link href={`/produtos/${product.id}`} className="link-inline relative z-10">
               {product.name}
             </Link>
           </span>
