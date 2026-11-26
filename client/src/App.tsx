@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { RouteSeo } from "@/components/route-seo";
+import { ScrollToTop } from "@/components/scroll-to-top";
 const Dashboard = lazy(() => import("@/pages/dashboard"));
 const EpisodesPage = lazy(() => import("@/pages/episodes"));
 const ProductsPage = lazy(() => import("@/pages/products"));
@@ -38,6 +39,7 @@ function App() {
     <TooltipProvider>
       <Toaster />
       <RouteSeo />
+      <ScrollToTop />
       <SidebarProvider style={{ "--sidebar-width": "16rem" } as React.CSSProperties}>
         <AppSidebar />
         <SidebarInset>
