@@ -36,7 +36,7 @@ const allowlist = [
 async function buildAll() {
   const dataErrors = checkData();
   if (dataErrors.length) {
-    throw new Error(`data.ts inválido:\n- ${dataErrors.join("\n- ")}`);
+    throw new Error(`dados inválidos:\n- ${dataErrors.join("\n- ")}`);
   }
   const prerenderErrors = checkPrerender();
   if (prerenderErrors.length) {

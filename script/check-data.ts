@@ -3,7 +3,7 @@ import { categoryLabel, categoryPath } from "../client/src/lib/categories";
 import { getUniqueCategories, resolveParent } from "../client/src/lib/data-utils";
 import { prerender } from "../server/prerender";
 
-/** Valida a consistência de data.ts. Retorna a lista de problemas (vazia = ok). */
+/** Valida a consistência dos dados em client/src/lib/data/. Retorna a lista de problemas (vazia = ok). */
 export function checkData(): string[] {
   const errors: string[] = [];
   const personIds = new Set(people.map((p) => p.id));
@@ -99,8 +99,8 @@ export function checkPrerender(): string[] {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const errors = [...checkData(), ...checkPrerender()];
   if (errors.length) {
-    console.error(`data.ts/prerender com ${errors.length} problema(s):\n- ${errors.join("\n- ")}`);
+    console.error(`dados/prerender com ${errors.length} problema(s):\n- ${errors.join("\n- ")}`);
     process.exit(1);
   }
-  console.log("data.ts e prerender ok");
+  console.log("dados e prerender ok");
 }

@@ -7,7 +7,7 @@ import { getEpisodeMentionCount, getTotalStats } from "../client/src/lib/data-ut
 
 /**
  * Gera client/public/og-image.jpg (1200×630) a partir de script/og/og-image.html,
- * com totais e onda sonora de fundo (menções por episódio) tirados de data.ts. Uso: `npm run og`.
+ * com totais e onda sonora de fundo (menções por episódio) tirados de client/src/lib/data/. Uso: `npm run og`.
  * Precisa de google-chrome (ou CHROME_PATH), do `convert` do ImageMagick e de internet (Google Fonts).
  */
 const root = path.resolve(import.meta.dirname, "..");

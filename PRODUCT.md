@@ -30,13 +30,13 @@ Sucesso significa:
 ## Operating Context
 
 - Projeto de fã independente, sem vínculo formal com o podcast nem com a Product Arena.
-- O mantenedor (Carlos Bronze) adiciona as menções manualmente a cada episódio novo, em `client/src/lib/data.ts` (há uma skill `add-produtos` para isso).
+- O mantenedor (Carlos Bronze) adiciona as menções manualmente a cada episódio novo, em `client/src/lib/data/` (há uma skill `add-produtos` para isso).
 - O site vive em https://paponaarena-produtosdasemana.replit.app e é feito com Replit.
 - O podcast está no YouTube (`@PaponaArena`) e no Spotify; cada episódio no site aponta para os dois.
 
 ## Capabilities and Constraints
 
-- Dados ficam no próprio código (`client/src/lib/data.ts`); não há banco de dados nem API para o conteúdo. O schema em `shared/schema.ts` não é usado.
+- Dados ficam no próprio código (`client/src/lib/data/`, um arquivo por tipo); não há banco de dados nem API para o conteúdo. O schema em `shared/schema.ts` não é usado.
 - Regras de agregação: produtos com `parentId` somam no produto-pai; produtos combo (`alsoCredits`) creditam vários produtos com uma única menção; rankings e categorias contam só produtos-raiz.
 - Páginas: Dashboard, Episódios (lista por ano e detalhe), Produtos (ranking com busca e detalhe), Categorias, Pessoas e Sobre.
 - O servidor Express pré-renderiza o HTML de cada rota e gera `sitemap.xml` para SEO; títulos e descrições por rota ficam em `client/src/lib/seo.ts`.
@@ -53,7 +53,7 @@ Sucesso significa:
 
 ## Evidence on Hand
 
-- Dados reais de todos os episódios registrados em `client/src/lib/data.ts` (episódios, produtos, pessoas, menções); os totais crescem a cada episódio.
+- Dados reais de todos os episódios registrados em `client/src/lib/data/` (episódios, produtos, pessoas, menções); os totais crescem a cada episódio.
 - Fotos dos hosts em `attached_assets/`.
 - Não existem depoimentos, números de audiência, endosso dos hosts ou parcerias; nada disso deve ser inventado.
 

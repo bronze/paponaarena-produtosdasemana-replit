@@ -34,12 +34,12 @@ Preferred communication style: Simple, everyday language.
 - **UI Components:** shadcn/ui (New York style) built on Radix UI primitives
 - **Styling:** Tailwind CSS with CSS variables for theming; custom light-only tokens in `client/src/index.css` (palette, typography and usage rules documented in `DESIGN.md`)
 - **Charts:** Recharts (BarChart, PieChart, LineChart via ResponsiveContainer)
-- **State/Data Fetching:** TanStack React Query is installed, but all app data is currently served from in-memory static arrays in `client/src/lib/data.ts` — no API calls are made for podcast data
+- **State/Data Fetching:** TanStack React Query is installed, but all app data is currently served from in-memory static arrays in `client/src/lib/data/` — no API calls are made for podcast data
 - **Theme:** Light only — there is no theme toggle and no dark mode
 
 ### Data Model (Frontend, Hardcoded)
 
-All core data lives in `client/src/lib/data.ts` as typed arrays:
+All core data lives in `client/src/lib/data/` as typed arrays, one file per entity (`episodes.ts`, `products.ts`, `people.ts`, `mentions.ts`), re-exported by `index.ts`:
 
 | Entity | Key Fields |
 |--------|-----------|

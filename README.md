@@ -28,7 +28,7 @@ Este site foi feito com [Replit](https://replit.com).
 | Servidor | Node.js, Express 5 (serve o app e gera `sitemap.xml` e o HTML de cada rota) |
 | Analytics | [PostHog](https://posthog.com) (opcional) |
 
-Os dados do podcast ficam **no próprio código** (`client/src/lib/data.ts`). Não há banco de dados nem chamadas de API para o conteúdo. O esquema de banco em `shared/schema.ts` existe, mas não é usado pelo app.
+Os dados do podcast ficam **no próprio código** (`client/src/lib/data/`). Não há banco de dados nem chamadas de API para o conteúdo. O esquema de banco em `shared/schema.ts` existe, mas não é usado pelo app.
 
 ## Rodando localmente
 
@@ -62,7 +62,7 @@ Sem elas, o app funciona normalmente e o PostHog simplesmente não é iniciado. 
 | `npm run build` | Valida os dados e gera o build de produção em `dist/` |
 | `npm start` | Roda o build de produção (`dist/index.cjs`) |
 | `npm run check` | Checagem de tipos (`tsc`) |
-| `npm run check:data` | Valida a consistência de `data.ts` (ids, menções, hosts/cohosts) |
+| `npm run check:data` | Valida a consistência dos dados (ids, menções, hosts/cohosts) |
 
 ## Estrutura do projeto
 
@@ -74,7 +74,8 @@ client/
     pages/            # dashboard, episódios, produtos, categorias, pessoas, sobre
     components/       # UI (shadcn/ui), sidebar, SEO por rota
     lib/
-      data.ts         # TODOS os dados: episódios, produtos, pessoas, menções
+      data/           # TODOS os dados, um arquivo por tipo:
+                      #   episodes.ts, products.ts, people.ts, mentions.ts
       data-utils.ts   # agregações e rankings
       seo.ts          # title, description, canonical e JSON-LD por rota
 server/
@@ -89,7 +90,7 @@ attached_assets/      # avatares e áudios usados nas páginas de pessoa
 
 ## Modelo de dados
 
-Tudo vive em `client/src/lib/data.ts`, em quatro listas:
+Tudo vive em `client/src/lib/data/`, uma lista por arquivo (`episodes.ts`, `products.ts`, `people.ts`, `mentions.ts`), reexportadas por `index.ts`:
 
 | Entidade | Campos principais |
 |---|---|
@@ -112,9 +113,9 @@ Tudo vive em `client/src/lib/data.ts`, em quatro listas:
 
 ## Como adicionar um episódio
 
-1. Em `client/src/lib/data.ts`, adicione o episódio ao final de `episodes`, **com `hosts`** (e `cohosts`, se houver).
-2. Cadastre em `people` e `products` quem ou o que ainda não existir (ids em kebab-case, sem acento).
-3. Adicione as menções ao final de `mentions`, com ids no formato `m{episodio}-{n}` (ex.: `m137-1`).
+1. Em `client/src/lib/data/episodes.ts`, adicione o episódio ao final de `episodes`, **com `hosts`** (e `cohosts`, se houver).
+2. Cadastre em `people.ts` e `products.ts` quem ou o que ainda não existir (ids em kebab-case, sem acento).
+3. Adicione as menções ao final de `mentions.ts`, com ids no formato `m{episodio}-{n}` (ex.: `m137-1`).
 4. Valide:
 
    ```bash
@@ -150,7 +151,7 @@ O sitemap e o HTML das rotas são gerados quando o servidor sobe, então basta r
 
 ## Contribuindo
 
-Sugestões e correções são bem-vindas. Se encontrou uma menção errada, um produto faltando ou uma pessoa duplicada, abra uma *issue* ou um *pull request* alterando `client/src/lib/data.ts`. Rode `npx tsc && npm run check:data` antes de enviar.
+Sugestões e correções são bem-vindas. Se encontrou uma menção errada, um produto faltando ou uma pessoa duplicada, abra uma *issue* ou um *pull request* alterando os arquivos em `client/src/lib/data/`. Rode `npx tsc && npm run check:data` antes de enviar.
 
 ## Licença
 

@@ -164,7 +164,7 @@ Todas com pelo menos 3:1 sobre branco. Série única (ex.: ranking de menções)
 
 ## Imagem OpenGraph
 
-A prévia de link (WhatsApp, LinkedIn, X, Slack) é gerada por `npm run og`: o template `script/og/og-image.html` é preenchido com dados de `data.ts` por `script/og-image.ts` e exportado para `client/public/og-image.jpg` (1200×630) com Chrome headless.
+A prévia de link (WhatsApp, LinkedIn, X, Slack) é gerada por `npm run og`: o template `script/og/og-image.html` é preenchido com dados de `client/src/lib/data/` por `script/og-image.ts` e exportado para `client/public/og-image.jpg` (1200×630) com Chrome headless.
 
 - **Escura de propósito.** É a única peça em fundo `ink`, a exceção ao "light only": nos feeds, quase sempre claros, o card escuro se destaca. Segue as regras de cor sobre preto (coral como texto só sobre `ink`/`ink-2`).
 - **"Radar." é o herói.** "Papo na Arena" vem menor, em `on-dark-muted`, acima; o ponto final coral fica depois de "Radar". Assim o card não se passa pelo podcast.
