@@ -114,6 +114,7 @@ export const episodes: Episode[] = [
   { id: 139, title: "Storytelling e comunicação são as habilidades mais importantes para PMs?", date: "2026-10-21", description: "Discussão sobre se storytelling e comunicação são as habilidades mais importantes para PMs, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=EE2GEzKL-4A", spotifyLink: "https://open.spotify.com/episode/6EccJknRQyl7qAcNq6M9xq", hosts: ["arthur", "aiquis"] },
   { id: 140, title: "Como escolher o modelo de IA certo pro trabalho de produto", date: "2026-10-29", description: "Discussão sobre como escolher o modelo de IA certo pro trabalho de produto, e os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=YkHYZ-IMTJE", spotifyLink: "https://open.spotify.com/episode/6LhCzWzmnPCFcZLty9IBl3", hosts: ["arthur", "aiquis"] },
   { id: 143, title: "Como foi o Product Leader Summit 2026?", date: "2026-11-19", description: "Como foi o Product Leader Summit 2026? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=S6j-DbuXBwE", spotifyLink: "https://open.spotify.com/episode/4Y23u1ENzeIgpwof5sgsCn", hosts: ["arthur", "aiquis"] },
+  { id: 144, title: "Como sobreviver a mais um planejamento anual?", date: "2026-11-25", description: "Como sobreviver a mais um planejamento anual? E os produtos da semana.", youtubeLink: "https://www.youtube.com/watch?v=oiKnIXOKcG0", spotifyLink: "https://open.spotify.com/episode/3DKR0bg6g83fNZeV0FHKin", hosts: ["arthur", "aiquis"] },
 ];
 
 export const products: Product[] = [
@@ -872,6 +873,13 @@ export const products: Product[] = [
   { id: "ductus", name: "Ductus", category: "Productivity", url: "https://ductus.sorenblank.com/" },
   { id: "graveyard-keeper", name: "Graveyard Keeper", category: "Entertainment", url: "https://store.steampowered.com/app/599140/Graveyard_Keeper/" },
   { id: "lego-dragon-ball-z", name: "Lego do Dragon Ball Z", category: "Lifestyle" },
+  { id: "gta-6", name: "GTA 6", category: "Entertainment", url: "https://www.rockstargames.com/VI" },
+  { id: "bts", name: "BTS", category: "Entertainment" },
+  { id: "claude-code-mobile", name: "Claude Code no celular", category: "AI Tools", url: "https://claude.ai", parentId: "claude-code" },
+  { id: "maquina-de-pao", name: "Máquina de fazer pão", category: "Hardware" },
+  { id: "icloud", name: "iCloud", category: "Productivity", url: "https://www.icloud.com" },
+  { id: "macbook-pro-m5", name: "MacBook Pro M5", category: "Hardware", url: "https://www.apple.com/macbook-pro/" },
+  { id: "combo-claude-code-posthog", name: "Claude Code + PostHog", category: "AI Tools", alsoCredits: ["claude-code", "posthog"] },
 ];
 
 export const people: Person[] = [
@@ -1295,6 +1303,7 @@ export const people: Person[] = [
   { id: "brunno-matias", name: "Brunno Matias" },
   { id: "juliana-assuncao", name: "Juliana Assunção" },
   { id: "luana-rodrigues", name: "Luana Rodrigues" },
+  { id: "rafa-brandao", name: "Rafa Brandão" },
 ];
 
 export const mentions: Mention[] = [
@@ -2855,4 +2864,19 @@ export const mentions: Mention[] = [
   { id: "m143-19", episodeId: 143, personId: "lucao", productId: "antigravity", context: "Com Gemini Hydrogen" },
   { id: "m143-20", episodeId: 143, personId: "lucao", productId: "graveyard-keeper" },
   { id: "m143-21", episodeId: 143, personId: "matt-lopes", productId: "lego-dragon-ball-z" },
+  { id: "m144-1", episodeId: 144, personId: "arthur", productId: "snapmaker-u1", context: "A melhor coisa que inventaram depois da AI; impressora 3D com AI é imbatível" },
+  { id: "m144-2", episodeId: 144, personId: "aiquis", productId: "gta-6", context: "A obra-prima da Rockstar Games e o último grande fenômeno cultural sem AI; 18 horas de jogo e ainda no capítulo 1" },
+  { id: "m144-3", episodeId: 144, personId: "portinho", productId: "bts", context: "Recebeu uma encomenda na loja de impressão 3D (dito.3d) e descobriu que BTS é fenômeno" },
+  { id: "m144-4", episodeId: 144, personId: "matt-lopes", productId: "gta-6" },
+  { id: "m144-5", episodeId: 144, personId: "rafael-mathias", productId: "gta-6" },
+  { id: "m144-6", episodeId: 144, personId: "danilera", productId: "gta-6" },
+  { id: "m144-7", episodeId: 144, personId: "lucao", productId: "graveyard-keeper" },
+  { id: "m144-8", episodeId: 144, personId: "andrezinho", productId: "wisprflow" },
+  { id: "m144-9", episodeId: 144, personId: "rafa-brandao", productId: "airbnb" },
+  { id: "m144-10", episodeId: 144, personId: "huxley", productId: "claude-code-mobile" },
+  { id: "m144-11", episodeId: 144, personId: "henrique-boz", productId: "maquina-de-pao" },
+  { id: "m144-12", episodeId: 144, personId: "silvinha", productId: "whoop" },
+  { id: "m144-13", episodeId: 144, personId: "lucas-mattos", productId: "icloud" },
+  { id: "m144-14", episodeId: 144, personId: "fabio-beico", productId: "macbook-pro-m5" },
+  { id: "m144-15", episodeId: 144, personId: "carlos-bronze", productId: "combo-claude-code-posthog" },
 ];
