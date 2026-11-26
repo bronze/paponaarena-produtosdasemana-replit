@@ -34,3 +34,12 @@ export interface Mention {
   productId: string;
   context?: string;
 }
+
+/** Todos os dados do site, como saem de client/src/lib/data/ e chegam ao navegador em JSON. */
+export interface RadarData {
+  episodes: Episode[];
+  products: Product[];
+  people: Person[];
+  mentions: Mention[];
+  dataRevisedAt: string;
+}

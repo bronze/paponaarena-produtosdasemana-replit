@@ -28,7 +28,9 @@ Este site foi feito com [Replit](https://replit.com).
 | Servidor | Node.js, Express 5 (serve o app e gera `sitemap.xml` e o HTML de cada rota) |
 | Analytics | [PostHog](https://posthog.com) (opcional) |
 
-Os dados do podcast ficam **no próprio código** (`client/src/lib/data/`). Não há banco de dados nem chamadas de API para o conteúdo. O esquema de banco em `shared/schema.ts` existe, mas não é usado pelo app.
+Os dados do podcast ficam **no próprio código** (`client/src/lib/data/`). Não há banco de dados nem API para o conteúdo.
+
+No build, esses dados viram um JSON separado do JavaScript (`assets/radar-data-[hash].json`, gerado por `script/vite-radar-data.ts`). O HTML aponta para o JSON atual, e o navegador baixa o JSON antes de renderizar. Assim código e dados têm caches independentes: um episódio novo não obriga a baixar o código de novo, e vice-versa. No servidor e nos scripts, `client/src/lib/data-static.ts` carrega os dados direto dos arquivos. O esquema de banco em `shared/schema.ts` existe, mas não é usado pelo app.
 
 ## Rodando localmente
 
@@ -76,7 +78,8 @@ client/
     lib/
       data/           # TODOS os dados, um arquivo por tipo:
                       #   episodes.ts, products.ts, people.ts, mentions.ts
-      data-utils.ts   # agregações e rankings
+      data-utils.ts   # agregações e rankings (recebe os dados via initData)
+      data-static.ts  # carrega os dados no Node (servidor e scripts); nunca no navegador
       seo.ts          # title, description, canonical e JSON-LD por rota
 server/
   index.ts            # Express

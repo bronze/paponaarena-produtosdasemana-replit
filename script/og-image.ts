@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import "../client/src/lib/data-static";
 import { episodes } from "../client/src/lib/data";
 import { getEpisodeMentionCount, getTotalStats } from "../client/src/lib/data-utils";
 

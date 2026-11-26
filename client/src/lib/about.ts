@@ -1,5 +1,4 @@
-import { mentions } from "./data";
-import { getEpisode, getPerson, getProduct, getTotalStats } from "./data-utils";
+import { getEpisode, getPerson, getProduct, getTotalStats, mentions } from "./data-utils";
 
 export const REPLIT_URL = "https://replit.com";
 

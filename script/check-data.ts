@@ -1,3 +1,4 @@
+import "../client/src/lib/data-static";
 import { episodes, mentions, people, products } from "../client/src/lib/data";
 import { categoryLabel, categoryPath } from "../client/src/lib/categories";
 import { getUniqueCategories, resolveParent } from "../client/src/lib/data-utils";

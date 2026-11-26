@@ -1,3 +1,4 @@
+import "../client/src/lib/data-static";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";

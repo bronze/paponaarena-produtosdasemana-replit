@@ -13,7 +13,18 @@ export function serveStatic(app: Express) {
   }
 
   // index: false -> "/" também passa pelo prerender, em vez de servir o index.html cru
-  app.use(express.static(distPath, { index: false }));
+  // Arquivos em /assets têm hash no nome (código e o JSON de dados): o conteúdo nunca muda
+  // sob o mesmo nome, então o navegador pode guardá-los para sempre.
+  app.use(
+    express.static(distPath, {
+      index: false,
+      setHeaders(res, filePath) {
+        if (filePath.startsWith(path.join(distPath, "assets") + path.sep)) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        }
+      },
+    }),
+  );
 
   const template = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
   const pages = new Map<string, string>();
@@ -30,6 +41,7 @@ export function serveStatic(app: Express) {
       if (known) pages.set(pathname, html);
     }
 
-    res.status(known ? 200 : 404).type("html").send(html);
+    // O HTML aponta para os arquivos atuais (código e dados): sempre confere se há versão nova
+    res.status(known ? 200 : 404).type("html").set("Cache-Control", "no-cache").send(html);
   });
 }

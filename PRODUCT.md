@@ -36,7 +36,7 @@ Sucesso significa:
 
 ## Capabilities and Constraints
 
-- Dados ficam no próprio código (`client/src/lib/data/`, um arquivo por tipo); não há banco de dados nem API para o conteúdo. O schema em `shared/schema.ts` não é usado.
+- Dados ficam no próprio código (`client/src/lib/data/`, um arquivo por tipo); não há banco de dados nem API para o conteúdo. No build, viram um JSON separado do JavaScript, com cache próprio. O schema em `shared/schema.ts` não é usado.
 - Regras de agregação: produtos com `parentId` somam no produto-pai; produtos combo (`alsoCredits`) creditam vários produtos com uma única menção; rankings e categorias contam só produtos-raiz.
 - Páginas: Dashboard, Episódios (lista por ano e detalhe), Produtos (ranking com busca e detalhe), Categorias, Pessoas e Sobre.
 - O servidor Express pré-renderiza o HTML de cada rota e gera `sitemap.xml` para SEO; títulos e descrições por rota ficam em `client/src/lib/seo.ts`.

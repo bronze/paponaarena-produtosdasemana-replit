@@ -36,9 +36,8 @@ function RadarIcon({ className }: { className?: string }) {
   );
 }
 
-const lastUpdated = getLastUpdated();
-
 export function AppSidebar() {
+  const lastUpdated = getLastUpdated();
   const [location] = useLocation();
   const { setOpenMobile } = useSidebar();
   // No mobile a sidebar é um painel sobreposto: fecha ao clicar em qualquer link interno

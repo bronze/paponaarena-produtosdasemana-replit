@@ -1,10 +1,27 @@
-import { episodes, products, people, mentions, dataRevisedAt } from "./data";
-import type { Product, Mention, Person } from "./types";
+import type { Episode, Product, Mention, Person, RadarData } from "./types";
 import { categorySlug } from "./categories";
 
-const productMap = new Map(products.map((p) => [p.id, p]));
-const episodeMap = new Map(episodes.map((e) => [e.id, e]));
-const personMap = new Map(people.map((p) => [p.id, p]));
+/*
+ * Os dados não são importados aqui, para não entrarem no JavaScript do site.
+ * - No navegador, main.tsx busca o JSON gerado no build e chama initData antes de renderizar.
+ * - No Node (servidor e scripts), data-static.ts chama initData com client/src/lib/data/.
+ */
+let episodes: Episode[] = [];
+let products: Product[] = [];
+let people: Person[] = [];
+let mentions: Mention[] = [];
+let dataRevisedAt = "";
+
+let productMap = new Map<string, Product>();
+let episodeMap = new Map<number, Episode>();
+let personMap = new Map<string, Person>();
+
+export function initData(data: RadarData) {
+  ({ episodes, products, people, mentions, dataRevisedAt } = data);
+  productMap = new Map(products.map((p) => [p.id, p]));
+  episodeMap = new Map(episodes.map((e) => [e.id, e]));
+  personMap = new Map(people.map((p) => [p.id, p]));
+}
 
 export function getProduct(id: string) {
   return productMap.get(id);
